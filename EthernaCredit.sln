@@ -25,6 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EthernaCredit.Persistence", "src\EthernaCredit.Persistence\EthernaCredit.Persistence.csproj", "{270D03AE-3F41-4EC6-9FB8-10E050F7384F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{64A1A3D7-3D00-43B2-B358-096DB512A6E7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-test-deploy_master.yml = .github\workflows\build-test-deploy_master.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +63,7 @@ Global
 		{348028FA-211D-453B-AAB0-5C597B0723BF} = {A3F99BAF-09E6-4076-AA1B-6AAC468B4FF7}
 		{FD6B74E2-E724-4CAA-9888-51B366BFBCEE} = {E57379A3-D247-4A43-9EC9-FB300A683E12}
 		{270D03AE-3F41-4EC6-9FB8-10E050F7384F} = {FD6B74E2-E724-4CAA-9888-51B366BFBCEE}
+		{64A1A3D7-3D00-43B2-B358-096DB512A6E7} = {9D5E69FC-70B7-41B0-89B4-72893F5C8822}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE6C260F-4757-4FA4-A87D-50DEC21FA9EE}
