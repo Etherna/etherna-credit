@@ -14,6 +14,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MongODM.Core" Version="0.21.0" />
+    <PackageReference Include="Nethereum.Util" Version="3.8.0" />
   </ItemGroup>
 
 </Project>
