@@ -169,16 +169,18 @@ namespace Etherna.EthernaCredit
             {
                 if (env.IsDevelopment())
                 {
-                    builder.AllowAnyOrigin()
+                    builder.SetIsOriginAllowed(_ => true)
                            .AllowAnyHeader()
-                           .AllowAnyMethod();
+                           .AllowAnyMethod()
+                           .AllowCredentials();
                 }
                 else
                 {
                     builder.WithOrigins("https://*.etherna.io")
                            .SetIsOriginAllowedToAllowWildcardSubdomains()
                            .AllowAnyHeader()
-                           .AllowAnyMethod();
+                           .AllowAnyMethod()
+                           .AllowCredentials();
                 }
             });
 
