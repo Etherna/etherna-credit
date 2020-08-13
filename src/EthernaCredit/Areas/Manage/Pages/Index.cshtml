@@ -1,0 +1,20 @@
+﻿@page
+@model Etherna.EthernaCredit.Areas.Credit.Pages.IndexModel
+@{
+    ViewData["Title"] = "Credit profile";
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="EthereumAddress"></label>
+            <p>@Model.EthereumAddress</p>
+        </div>
+        <div class="form-group">
+            <label asp-for="CreditBalance"></label>
+            <p>$@Model.CreditBalance</p>
+        </div>
+    </div>
+</div>
