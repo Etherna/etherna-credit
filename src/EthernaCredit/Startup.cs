@@ -46,7 +46,11 @@ namespace Etherna.EthernaCredit
                 .PersistKeysToDbContext(new DbContextOptions { ConnectionString = Configuration["ConnectionStrings:SystemDb"] });
 
             services.AddCors();
-            services.AddRazorPages();
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizeAreaFolder("Deposit", "/");
+                options.Conventions.AuthorizeAreaFolder("Manage", "/");
+            });
             services.AddControllers()
                 .AddJsonOptions(options =>
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
