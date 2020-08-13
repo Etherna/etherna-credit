@@ -7,6 +7,7 @@ namespace Etherna.EthernaCredit.Domain
 {
     public interface ICreditContext : IDbContext
     {
+        ICollectionRepository<OperationLogBase, string> OperationLogs { get; }
         ICollectionRepository<User, string> Users { get; }
 
         IEventDispatcher EventDispatcher { get; }

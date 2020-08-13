@@ -33,6 +33,14 @@ namespace Etherna.EthernaCredit.Persistence
 
         // Properties.
         //repositories
+        public ICollectionRepository<OperationLogBase, string> OperationLogs { get; } = new DomainCollectionRepository<OperationLogBase, string>(
+            new CollectionRepositoryOptions<OperationLogBase>("logs")
+            {
+                IndexBuilders = new[]
+                {
+                    (Builders<OperationLogBase>.IndexKeys.Ascending(l => l.User.Address), new CreateIndexOptions<OperationLogBase>()),
+                }
+            });
         public ICollectionRepository<User, string> Users { get; } = new DomainCollectionRepository<User, string>(
             new CollectionRepositoryOptions<User>("users")
             {
