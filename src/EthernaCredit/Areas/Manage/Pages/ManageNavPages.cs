@@ -6,18 +6,18 @@ namespace Etherna.EthernaCredit.Areas.Manage.Pages
     public static class ManageNavPages
     {
         // Properties.
-        public static string Index => "Index";
+        public static string Status => "Status";
         public static string Logs => "Logs";
         public static string Deposit => "Deposit";
         public static string Withdraw => "Withdraw";
 
         // Methods.
-        public static string? IndexNavClass(ViewContext viewContext)
+        public static string? StatusNavClass(ViewContext viewContext)
         {
             if (viewContext is null)
                 throw new ArgumentNullException(nameof(viewContext));
 
-            return PageNavClass(viewContext, Index);
+            return PageNavClass(viewContext, Status);
         }
 
         public static string? LogsNavClass(ViewContext viewContext)

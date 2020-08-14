@@ -10,5 +10,8 @@
             : base(ammount, author, user)
         { }
         protected DepositOperationLog() { }
+
+        // Properties.
+        public override string OperationName => "Deposit";
     }
 }

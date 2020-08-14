@@ -31,13 +31,6 @@ namespace Etherna.EthernaCredit.Areas.Credit.Pages
         // Methods.
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadAsync();
-            return Page();
-        }
-
-        // Helpers.
-        private async Task LoadAsync()
-        {
             var address = User.GetEtherAddress();
             var prevAddresses = User.GetEtherPrevAddresses();
 
@@ -49,6 +42,8 @@ namespace Etherna.EthernaCredit.Areas.Credit.Pages
 
             EthereumAddress = user.Address;
             CreditBalance = user.CreditBalance;
+
+            return Page();
         }
     }
 }

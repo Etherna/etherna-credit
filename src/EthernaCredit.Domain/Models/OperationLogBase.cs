@@ -2,7 +2,7 @@
 
 namespace Etherna.EthernaCredit.Domain.Models
 {
-    public class OperationLogBase : EntityModelBase<string>
+    public abstract class OperationLogBase : EntityModelBase<string>
     {
         // Constructors.
         public OperationLogBase(
@@ -19,6 +19,7 @@ namespace Etherna.EthernaCredit.Domain.Models
         // Properties.
         public virtual double Ammount { get; protected set; }
         public virtual string Author { get; protected set; } = default!;
+        public abstract string OperationName { get; }
         public virtual User User { get; protected set; } = default!;
     }
 }
