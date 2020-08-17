@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-6">
         <p>How much do you want to load into your account? (Hint: it's free for now)</p>
-        <form id="deposit" asp-area="Deposit" asp-page="DepositConfirm" method="post" class="form-horizontal">
+        <form id="deposit" asp-area="Deposit" asp-page="DepositProcess" method="post" class="form-horizontal">
             <div>
                 <p>
                     @foreach (var ammount in new[] { "$0.10", "$0.50", "$1", "$5", "$10" })

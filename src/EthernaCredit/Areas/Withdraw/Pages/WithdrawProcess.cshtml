@@ -1,0 +1,20 @@
+﻿@page
+@model Etherna.EthernaCredit.Areas.Withdraw.Pages.WithdrawProcessModel
+@{
+    ViewData["Title"] = "Withdraw confirm";
+}
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-6">
+        @if (Model.SucceededResult)
+        {
+            <p>An ammount of $@Model.WithdrawAmmount has been withdrawn from your account</p>
+        }
+        else
+        {
+            <p>Sorry, we was not able to withdraw an ammount of $@Model.WithdrawAmmount from your account</p>
+        }
+        <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
+    </div>
+</div>

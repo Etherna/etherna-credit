@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Etherna.EthernaCredit.Areas.Deposit.Pages
 {
-    public class DepositConfirmModel : PageModel
+    public class DepositProcessModel : PageModel
     {
         // Fields.
         private readonly ICreditContext creditContext;
 
         // Constructor.
-        public DepositConfirmModel(ICreditContext creditContext)
+        public DepositProcessModel(ICreditContext creditContext)
         {
             this.creditContext = creditContext;
         }
@@ -41,7 +41,7 @@ namespace Etherna.EthernaCredit.Areas.Deposit.Pages
 
             // Deposit.
             await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                Builders<User>.Filter.Eq(u => u.Address, address),
+                u => u.Address == address,
                 Builders<User>.Update.Inc(u => u.CreditBalance, ammountValue));
 
             // Report log.
