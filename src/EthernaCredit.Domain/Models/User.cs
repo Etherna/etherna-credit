@@ -14,6 +14,7 @@ namespace Etherna.EthernaCredit.Domain.Models
 
         // Properties.
         public virtual string Address { get; protected set; } = default!;
+        public virtual double CreditBalance { get; protected set; }
 
         // Helpers.
         private void SetAddress(string address)

@@ -1,0 +1,13 @@
+﻿@page
+@model Etherna.EthernaCredit.Areas.Deposit.Pages.DepositProcessModel
+@{
+    ViewData["Title"] = "Deposit confirm";
+}
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-6">
+        <p>An ammount of $@Model.DepositAmmount has been deposited to your account</p>
+        <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
+    </div>
+</div>

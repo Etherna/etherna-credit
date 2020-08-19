@@ -2,7 +2,7 @@
     @if (User?.Identity.IsAuthenticated == true)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark">Welcome!</a>
+            <a class="nav-link text-dark" asp-area="Manage">Manage credit</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Account" asp-page="/Logout" title="Logout">Logout</a>

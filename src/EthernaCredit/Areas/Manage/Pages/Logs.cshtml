@@ -1,0 +1,34 @@
+﻿@page
+@model Etherna.EthernaCredit.Areas.Credit.Pages.LogsModel
+@{
+    ViewData["Title"] = "Operation logs";
+    ViewData["ActivePage"] = ManageNavPages.Logs;
+
+    var pageSelectorModel = new PageSelectorModel(HttpContext.Request.Path.Value, Model.CurrentPage, Model.MaxPage);
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<div class="row">
+    <div class="col-md-6">
+        @foreach (var log in Model.Logs)
+        {
+            <div class="border-top">
+                <p>
+                    <b>@log.OperationName</b> - @log.CreationDateTime<br />
+                    @switch (log)
+                    {
+                        case UpdateOperationLog update:
+                            <span>$@update.Ammount - @update.Author - @update.Reason</span>
+                            break;
+                        default:
+                            <span>$@log.Ammount</span>
+                            break;
+                    }
+                </p>
+            </div>
+        }
+
+        <partial name="_PageSelector" model="pageSelectorModel" />
+    </div>
+</div>
