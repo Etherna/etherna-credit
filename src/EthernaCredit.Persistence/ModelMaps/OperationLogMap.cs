@@ -21,6 +21,8 @@ namespace Etherna.EthernaCredit.Persistence.ModelMaps
 
             dbContext.DocumentSchemaRegister.RegisterModelSchema<DepositOperationLog>("0.2.0");
 
+            dbContext.DocumentSchemaRegister.RegisterModelSchema<UpdateOperationLog>("0.2.0");
+
             dbContext.DocumentSchemaRegister.RegisterModelSchema<WithdrawOperationLog>("0.2.0");
         }
     }

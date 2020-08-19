@@ -60,7 +60,7 @@ namespace Etherna.EthernaCredit.Areas.Withdraw.Pages
             SucceededResult = true;
 
             // Report log.
-            var withdrawLog = new WithdrawOperationLog(WithdrawAmmount, address, user);
+            var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, address, user);
             await creditContext.OperationLogs.CreateAsync(withdrawLog);
         }
     }

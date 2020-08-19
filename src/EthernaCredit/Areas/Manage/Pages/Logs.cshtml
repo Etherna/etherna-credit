@@ -16,7 +16,15 @@
             <div class="border-top">
                 <p>
                     <b>@log.OperationName</b> - @log.CreationDateTime<br />
-                    $@log.Ammount
+                    @switch (log)
+                    {
+                        case UpdateOperationLog update:
+                            <span>$@update.Ammount - @update.Author - @update.Reason</span>
+                            break;
+                        default:
+                            <span>$@log.Ammount</span>
+                            break;
+                    }
                 </p>
             </div>
         }
