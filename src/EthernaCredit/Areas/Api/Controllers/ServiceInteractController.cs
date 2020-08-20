@@ -33,7 +33,7 @@ namespace Etherna.EthernaCredit.Areas.Api.Controllers
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task<double> GetUserBalanceAsync(string address) =>
+        public Task<double> GetUserBalanceAsync([Required] string address) =>
             service.GetUserBalanceAsync(address);
 
         // Put.
@@ -48,7 +48,7 @@ namespace Etherna.EthernaCredit.Areas.Api.Controllers
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task RegisterBalanceUpdateAsync(string address, [Required]double ammount, [Required]string reason) =>
+        public Task RegisterBalanceUpdateAsync([Required] string address, [Required]double ammount, [Required]string reason) =>
             service.RegisterBalanceUpdateAsync(address, ammount, reason);
     }
 }
