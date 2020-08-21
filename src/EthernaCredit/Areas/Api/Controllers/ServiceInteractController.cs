@@ -1,5 +1,6 @@
 ﻿using Etherna.EthernaCredit.Areas.Api.Services;
 using Etherna.EthernaCredit.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,7 @@ namespace Etherna.EthernaCredit.Areas.Api.Controllers
     [ApiController]
     [ApiVersion("0.2")]
     [Route("api/v{api-version:apiVersion}/[controller]")]
+    [Authorize("ServiceInteractApiScope")]
     public class ServiceInteractController : ControllerBase
     {
         // Fields.
