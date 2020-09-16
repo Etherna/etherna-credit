@@ -10,24 +10,25 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - uses: actions/checkout@main
+    - name: Checkout
+      uses: actions/checkout@main
       with:
         fetch-depth: 0
-
+        
     - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@main
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
-
+        
     - name: Build with dotnet
       run: dotnet build --configuration Release
-      
+
     - name: Run unit tests
       run: dotnet test --configuration Release
 
-    - name: dotnet publish
+    - name: Dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
     - name: Deploy to Azure Web App
