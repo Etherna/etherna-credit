@@ -1,4 +1,4 @@
-﻿namespace Etherna.EthernaCredit.Services.Settings
+﻿namespace Etherna.EthernaCredit.Configs
 {
     public class SsoServerSettings
     {

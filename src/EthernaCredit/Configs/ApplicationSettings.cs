@@ -1,10 +1,11 @@
-﻿namespace Etherna.EthernaCredit.Services.Settings
+﻿namespace Etherna.EthernaCredit.Configs
 {
     public class ApplicationSettings
     {
+        // Fields.
         string? _assemblyVersion;
 
+        // Properties.
         public string AssemblyVersion { get => _assemblyVersion ?? "1.0.0"; set => _assemblyVersion = value; }
-        public string SimpleAssemblyVersion => AssemblyVersion.Split('+')[0];
     }
 }

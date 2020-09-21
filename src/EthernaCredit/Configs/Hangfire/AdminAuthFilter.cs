@@ -1,10 +1,6 @@
 ﻿using Hangfire.Dashboard;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Hangfire
+namespace Etherna.EthernaCredit.Configs.Hangfire
 {
     public class AdminAuthFilter : IDashboardAuthorizationFilter
     {

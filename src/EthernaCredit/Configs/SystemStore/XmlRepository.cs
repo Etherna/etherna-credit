@@ -9,7 +9,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Etherna.EthernaCredit.SystemStore
+namespace Etherna.EthernaCredit.Configs.SystemStore
 {
     public class XmlRepository : IXmlRepository
     {

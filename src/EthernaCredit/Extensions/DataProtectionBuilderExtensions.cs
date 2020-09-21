@@ -1,4 +1,4 @@
-﻿using Etherna.EthernaCredit.SystemStore;
+﻿using Etherna.EthernaCredit.Configs.SystemStore;
 using Etherna.MongODM;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;

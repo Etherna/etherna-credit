@@ -1,11 +1,11 @@
+using Etherna.EthernaCredit.Configs;
+using Etherna.EthernaCredit.Configs.Hangfire;
+using Etherna.EthernaCredit.Configs.Swagger;
 using Etherna.EthernaCredit.Domain;
 using Etherna.EthernaCredit.Domain.Models;
 using Etherna.EthernaCredit.Extensions;
-using Etherna.EthernaCredit.Hangfire;
 using Etherna.EthernaCredit.Persistence;
 using Etherna.EthernaCredit.Services;
-using Etherna.EthernaCredit.Services.Settings;
-using Etherna.EthernaCredit.Swagger;
 using Etherna.MongODM;
 using Etherna.MongODM.HF.Tasks;
 using Hangfire;
@@ -155,17 +155,10 @@ namespace Etherna.EthernaCredit
             });
 
             // Configure setting.
-            var appSettings = new ApplicationSettings
-            {
-                AssemblyVersion = GetType()
-                    .GetTypeInfo()
-                    .Assembly
-                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                    ?.InformationalVersion!
-            };
+            var assemblyVersion = new AssemblyVersion(GetType().GetTypeInfo().Assembly);
             services.Configure<ApplicationSettings>(options =>
             {
-                options.AssemblyVersion = appSettings.AssemblyVersion;
+                options.AssemblyVersion = assemblyVersion.Version;
             });
             services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer"));
 
@@ -173,7 +166,7 @@ namespace Etherna.EthernaCredit
             services.UseMongODM<HangfireTaskRunner, ModelBase>()
                 .AddDbContext<ICreditContext, CreditContext>(options =>
                 {
-                    options.ApplicationVersion = appSettings.SimpleAssemblyVersion;
+                    options.ApplicationVersion = assemblyVersion.SimpleVersion;
                     options.ConnectionString = Configuration["ConnectionStrings:CreditDb"];
                 });
 

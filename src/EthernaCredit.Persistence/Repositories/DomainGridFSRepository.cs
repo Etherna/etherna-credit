@@ -1,5 +1,5 @@
 ﻿using Etherna.DomainEvents;
-using Etherna.EthernaCredit.Domain.Events;
+using Etherna.DomainEvents.Events;
 using Etherna.MongODM;
 using Etherna.MongODM.Models;
 using Etherna.MongODM.Repositories;
