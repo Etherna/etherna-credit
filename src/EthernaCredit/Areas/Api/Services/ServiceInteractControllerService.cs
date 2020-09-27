@@ -35,12 +35,11 @@ namespace Etherna.EthernaCredit.Areas.Api.Services
 
             // Apply update.
             var user = await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Address == address &&
-                     u.CreditBalance >= -ammount, //verify disponibility
+                u => u.Address == address,
                 Builders<User>.Update.Inc(u => u.CreditBalance, ammount));
 
             // Verify result.
-            if (user is null) //doesn't exists or unavailable ammount for debit
+            if (user is null)
                 throw new InvalidOperationException();
 
             // Report log.
