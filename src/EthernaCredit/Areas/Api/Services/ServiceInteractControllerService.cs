@@ -29,10 +29,8 @@ namespace Etherna.EthernaCredit.Areas.Api.Services
             return user?.CreditBalance ?? 0;
         }
 
-        public async Task RegisterBalanceUpdateAsync(string address, double ammount, string reason)
+        public async Task RegisterBalanceUpdateAsync(string clientId, string address, double ammount, string reason)
         {
-            var clientName = "currentClient"; //get from authentication claims
-
             // Apply update.
             var user = await creditContext.Users.Collection.FindOneAndUpdateAsync(
                 u => u.Address == address,
@@ -43,7 +41,7 @@ namespace Etherna.EthernaCredit.Areas.Api.Services
                 throw new InvalidOperationException();
 
             // Report log.
-            var withdrawLog = new UpdateOperationLog(ammount, clientName, reason, user);
+            var withdrawLog = new UpdateOperationLog(ammount, clientId, reason, user);
             await creditContext.OperationLogs.CreateAsync(withdrawLog);
         }
     }
