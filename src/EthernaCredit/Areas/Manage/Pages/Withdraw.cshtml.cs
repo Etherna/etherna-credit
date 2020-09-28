@@ -1,6 +1,6 @@
+using Etherna.Authentication.Extensions;
 using Etherna.EthernaCredit.Areas.Withdraw.Pages;
 using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver.Linq;

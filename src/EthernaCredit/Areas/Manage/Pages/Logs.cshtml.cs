@@ -1,6 +1,6 @@
+using Etherna.Authentication.Extensions;
 using Etherna.EthernaCredit.Domain;
 using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Extensions;
 using Etherna.MongODM.Extensions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;

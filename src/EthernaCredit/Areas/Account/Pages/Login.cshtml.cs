@@ -1,6 +1,6 @@
+using Etherna.Authentication.Extensions;
 using Etherna.EthernaCredit.Domain;
 using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

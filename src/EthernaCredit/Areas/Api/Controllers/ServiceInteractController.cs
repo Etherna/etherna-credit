@@ -1,4 +1,5 @@
-﻿using Etherna.EthernaCredit.Areas.Api.Services;
+﻿using Etherna.Authentication.Extensions;
+using Etherna.EthernaCredit.Areas.Api.Services;
 using Etherna.EthernaCredit.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +52,6 @@ namespace Etherna.EthernaCredit.Areas.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task RegisterBalanceUpdateAsync([Required] string address, [Required]double ammount, [Required]string reason) =>
-            service.RegisterBalanceUpdateAsync(address, ammount, reason);
+            service.RegisterBalanceUpdateAsync(User.GetClientId(), address, ammount, reason);
     }
 }
