@@ -17,10 +17,10 @@ namespace Etherna.EthernaCredit.Areas.Credit.Pages
         public const int DefaultTakeElements = 20;
 
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext creditContext;
 
         // Constructor.
-        public LogsModel(ICreditContext creditContext)
+        public LogsModel(ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
         }

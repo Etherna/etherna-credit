@@ -7,6 +7,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Etherna.EthernaCredit.Areas.Api.Services
@@ -14,29 +15,26 @@ namespace Etherna.EthernaCredit.Areas.Api.Services
     public class UserControllerService : IUserControllerService
     {
         // Fields.
-        private readonly ICreditContext creditContext;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly ICreditDbContext creditContext;
 
         // Constructor.
         public UserControllerService(
-            ICreditContext creditContext,
-            IHttpContextAccessor httpContextAccessor)
+            ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
-            this.httpContextAccessor = httpContextAccessor;
         }
 
         // Methods.
-        public async Task<double> GetCreditAsync()
+        public async Task<double> GetCreditAsync(ClaimsPrincipal user)
         {
-            var address = httpContextAccessor.HttpContext.User.GetEtherAddress();
-            var user = await creditContext.Users.TryFindOneAsync(u => u.Address == address);
-            return user?.CreditBalance ?? 0;
+            var address = user.GetEtherAddress();
+            var userModel = await creditContext.Users.TryFindOneAsync(u => u.Address == address);
+            return userModel?.CreditBalance ?? 0;
         }
 
-        public async Task<IEnumerable<LogDto>> GetLogsAsync(int page, int take)
+        public async Task<IEnumerable<LogDto>> GetLogsAsync(ClaimsPrincipal user, int page, int take)
         {
-            var address = httpContextAccessor.HttpContext.User.GetEtherAddress();
+            var address = user.GetEtherAddress();
             return (await creditContext.OperationLogs.QueryElementsAsync(elements =>
                 elements.Where(l => l.User.Address == address)
                         .PaginateDescending(u => u.CreationDateTime, page, take)

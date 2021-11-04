@@ -32,7 +32,7 @@ namespace Etherna.EthernaCredit.Areas.Api.Controllers
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public Task<double> GetCreditAsync() =>
-            service.GetCreditAsync();
+            service.GetCreditAsync(User);
 
         /// <summary>
         /// Get transaction logs for current user
@@ -46,6 +46,6 @@ namespace Etherna.EthernaCredit.Areas.Api.Controllers
         public Task<IEnumerable<LogDto>> GetLogsAsync(
             [Range(0, int.MaxValue)] int page,
             [Range(1, 100)] int take = 25) =>
-            service.GetLogsAsync(page, take);
+            service.GetLogsAsync(User, page, take);
     }
 }

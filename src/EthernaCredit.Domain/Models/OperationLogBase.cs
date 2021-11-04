@@ -5,7 +5,7 @@ namespace Etherna.EthernaCredit.Domain.Models
     public abstract class OperationLogBase : EntityModelBase<string>
     {
         // Constructors.
-        public OperationLogBase(
+        protected OperationLogBase(
             double ammount,
             string author,
             User user)

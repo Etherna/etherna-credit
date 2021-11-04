@@ -15,10 +15,10 @@ namespace Etherna.EthernaCredit.Areas.Account.Pages
     public class LoginModel : PageModel
     {
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext creditContext;
 
         // Constructors.
-        public LoginModel(ICreditContext creditContext)
+        public LoginModel(ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
         }

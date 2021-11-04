@@ -16,10 +16,10 @@ namespace Etherna.EthernaCredit.Areas.Withdraw.Pages
         public const double MinimumWithdraw = 1.0;
 
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext creditContext;
 
         // Constructor.
-        public WithdrawProcessModel(ICreditContext creditContext)
+        public WithdrawProcessModel(ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
         }

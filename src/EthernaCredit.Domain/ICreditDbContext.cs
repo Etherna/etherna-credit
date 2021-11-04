@@ -5,7 +5,7 @@ using Etherna.MongODM.Repositories;
 
 namespace Etherna.EthernaCredit.Domain
 {
-    public interface ICreditContext : IDbContext
+    public interface ICreditDbContext : IDbContext
     {
         ICollectionRepository<OperationLogBase, string> OperationLogs { get; }
         ICollectionRepository<User, string> Users { get; }
