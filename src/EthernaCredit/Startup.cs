@@ -164,7 +164,7 @@ namespace Etherna.EthernaCredit
 
             // Configure persistence.
             services.UseMongODM<HangfireTaskRunner, ModelBase>()
-                .AddDbContext<ICreditContext, CreditContext>(options =>
+                .AddDbContext<ICreditDbContext, CreditDbContext>(options =>
                 {
                     options.ApplicationVersion = assemblyVersion.SimpleVersion;
                     options.ConnectionString = Configuration["ConnectionStrings:CreditDb"];

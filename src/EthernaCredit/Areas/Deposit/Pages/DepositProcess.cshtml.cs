@@ -14,10 +14,10 @@ namespace Etherna.EthernaCredit.Areas.Deposit.Pages
     public class DepositProcessModel : PageModel
     {
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext creditContext;
 
         // Constructor.
-        public DepositProcessModel(ICreditContext creditContext)
+        public DepositProcessModel(ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
         }

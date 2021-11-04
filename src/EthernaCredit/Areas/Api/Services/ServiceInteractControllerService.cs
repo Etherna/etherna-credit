@@ -11,10 +11,10 @@ namespace Etherna.EthernaCredit.Areas.Api.Services
     public class ServiceInteractControllerService : IServiceInteractControllerService
     {
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext creditContext;
 
         // Constructor.
-        public ServiceInteractControllerService(ICreditContext creditContext)
+        public ServiceInteractControllerService(ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
         }

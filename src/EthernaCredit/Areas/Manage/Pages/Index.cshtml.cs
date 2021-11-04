@@ -12,10 +12,10 @@ namespace Etherna.EthernaCredit.Areas.Credit.Pages
     public class IndexModel : PageModel
     {
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext creditContext;
 
         // Constructor.
-        public IndexModel(ICreditContext creditContext)
+        public IndexModel(ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
         }

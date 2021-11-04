@@ -16,16 +16,16 @@ using System.Threading.Tasks;
 
 namespace Etherna.EthernaCredit.Persistence
 {
-    public class CreditContext : DbContext, ICreditContext, IEventDispatcherDbContext
+    public class CreditDbContext : DbContext, ICreditDbContext, IEventDispatcherDbContext
     {
         // Consts.
         private const string SerializersNamespace = "Etherna.EthernaCredit.Persistence.ModelMaps";
 
         // Constructor.
-        public CreditContext(
+        public CreditDbContext(
             IDbDependencies dbDependencies,
             IEventDispatcher eventDispatcher,
-            DbContextOptions<CreditContext> options)
+            DbContextOptions<CreditDbContext> options)
             : base(dbDependencies, options)
         {
             EventDispatcher = eventDispatcher;
@@ -55,7 +55,7 @@ namespace Etherna.EthernaCredit.Persistence
 
         // Protected properties.
         protected override IEnumerable<IModelMapsCollector> ModelMapsCollectors =>
-            from t in typeof(CreditContext).GetTypeInfo().Assembly.GetTypes()
+            from t in typeof(CreditDbContext).GetTypeInfo().Assembly.GetTypes()
             where t.IsClass && t.Namespace == SerializersNamespace
             where t.GetInterfaces().Contains(typeof(IModelMapsCollector))
             select Activator.CreateInstance(t) as IModelMapsCollector;

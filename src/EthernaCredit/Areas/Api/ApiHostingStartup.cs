@@ -27,6 +27,8 @@ namespace Etherna.EthernaCredit.Areas.Api
                                             select t)
                 {
                     var serviceInterfaceType = serviceType.GetInterface($"I{serviceType.Name}");
+                    if (serviceInterfaceType is null)
+                        throw new InvalidOperationException();
                     services.AddScoped(serviceInterfaceType, serviceType);
                 }
             });

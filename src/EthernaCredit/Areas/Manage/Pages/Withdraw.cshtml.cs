@@ -22,10 +22,10 @@ namespace Etherna.EthernaCredit.Areas.Credit.Pages
         }
 
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext creditContext;
 
         // Constructor.
-        public WithdrawModel(ICreditContext creditContext)
+        public WithdrawModel(ICreditDbContext creditContext)
         {
             this.creditContext = creditContext;
         }
