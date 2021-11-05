@@ -1,7 +1,7 @@
 ﻿using Etherna.DomainEvents;
 using Etherna.EthernaCredit.Domain.Models;
-using Etherna.MongODM;
-using Etherna.MongODM.Repositories;
+using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Repositories;
 
 namespace Etherna.EthernaCredit.Domain
 {

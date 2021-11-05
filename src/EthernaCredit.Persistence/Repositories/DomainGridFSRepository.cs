@@ -1,8 +1,8 @@
 ﻿using Etherna.DomainEvents;
 using Etherna.DomainEvents.Events;
-using Etherna.MongODM;
-using Etherna.MongODM.Models;
-using Etherna.MongODM.Repositories;
+using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Domain.Models;
+using Etherna.MongODM.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

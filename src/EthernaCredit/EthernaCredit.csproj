@@ -25,8 +25,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
-    <PackageReference Include="MongODM.AspNetCore" Version="0.21.0" />
-    <PackageReference Include="MongODM.Hangfire" Version="0.21.0" />
+    <PackageReference Include="MongODM" Version="0.23.0-alpha.35" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

@@ -1,8 +1,7 @@
 ﻿using Etherna.Authentication.Extensions;
 using Etherna.EthernaCredit.Areas.Api.DtoModels;
 using Etherna.EthernaCredit.Domain;
-using Etherna.MongODM.Extensions;
-using Microsoft.AspNetCore.Http;
+using Etherna.MongODM.Core.Extensions;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;

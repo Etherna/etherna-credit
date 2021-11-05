@@ -1,5 +1,5 @@
 ﻿using Etherna.DomainEvents;
-using Etherna.MongODM;
+using Etherna.MongODM.Core;
 
 namespace Etherna.EthernaCredit.Persistence
 {

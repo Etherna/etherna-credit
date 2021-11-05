@@ -1,4 +1,4 @@
-﻿using Etherna.MongODM.Models;
+﻿using Etherna.MongODM.Core.Domain.Models;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
