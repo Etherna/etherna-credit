@@ -1,8 +1,8 @@
 ﻿using Etherna.EthernaCredit.Domain.Models;
 using Etherna.EthernaCredit.Domain.Models.OperationLogs;
-using Etherna.MongODM;
-using Etherna.MongODM.Extensions;
-using Etherna.MongODM.Serialization;
+using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Extensions;
+using Etherna.MongODM.Core.Serialization;
 
 namespace Etherna.EthernaCredit.Persistence.ModelMaps
 {
@@ -10,20 +10,20 @@ namespace Etherna.EthernaCredit.Persistence.ModelMaps
     {
         public void Register(IDbContext dbContext)
         {
-            dbContext.DocumentSchemaRegister.RegisterModelSchema<OperationLogBase>("0.2.0",
-                cm =>
+            dbContext.SchemaRegister.AddModelMapsSchema<OperationLogBase>("780ae0cc-070a-4099-a4c0-0494304e4093",
+                mm =>
                 {
-                    cm.AutoMap();
+                    mm.AutoMap();
 
                     // Set members with custom serializers.
-                    cm.SetMemberSerializer(l => l.User, UserMap.InformationSerializer(dbContext));
+                    mm.SetMemberSerializer(l => l.User, UserMap.InformationSerializer(dbContext));
                 });
 
-            dbContext.DocumentSchemaRegister.RegisterModelSchema<DepositOperationLog>("0.2.0");
+            dbContext.SchemaRegister.AddModelMapsSchema<DepositOperationLog>("7fc7abe8-9a55-40a2-90ce-f3cba34bc005");
 
-            dbContext.DocumentSchemaRegister.RegisterModelSchema<UpdateOperationLog>("0.2.0");
+            dbContext.SchemaRegister.AddModelMapsSchema<UpdateOperationLog>("74e021d4-6d86-4deb-b952-0c328839cfe2");
 
-            dbContext.DocumentSchemaRegister.RegisterModelSchema<WithdrawOperationLog>("0.2.0");
+            dbContext.SchemaRegister.AddModelMapsSchema<WithdrawOperationLog>("b0ffe059-c985-4f3d-8677-238ab9551ec3");
         }
     }
 }

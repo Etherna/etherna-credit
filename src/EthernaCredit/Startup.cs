@@ -1,3 +1,4 @@
+using Etherna.DomainEvents;
 using Etherna.EthernaCredit.Configs;
 using Etherna.EthernaCredit.Configs.Hangfire;
 using Etherna.EthernaCredit.Configs.Swagger;
@@ -6,8 +7,9 @@ using Etherna.EthernaCredit.Domain.Models;
 using Etherna.EthernaCredit.Extensions;
 using Etherna.EthernaCredit.Persistence;
 using Etherna.EthernaCredit.Services;
+using Etherna.EthernaCredit.Services.Tasks;
 using Etherna.MongODM;
-using Etherna.MongODM.HF.Tasks;
+using Etherna.MongODM.Core.Options;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -132,21 +134,6 @@ namespace Etherna.EthernaCredit
                 });
             });
 
-            // Configure Hangfire services.
-            services.AddHangfire(options =>
-            {
-                options.UseMongoStorage(
-                    Configuration["ConnectionStrings:HangfireDb"],
-                    new MongoStorageOptions
-                    {
-                        MigrationOptions = new MongoMigrationOptions //don't remove, could throw exception
-                        {
-                            MigrationStrategy = new MigrateMongoMigrationStrategy(),
-                            BackupStrategy = new CollectionMongoBackupStrategy()
-                        }
-                    });
-            });
-
             // Configure Hangfire server.
             if (!Environment.IsStaging()) //don't start server in staging
             {
@@ -155,7 +142,7 @@ namespace Etherna.EthernaCredit
                 {
                     options.Queues = new[]
                     {
-                        MongODM.Tasks.Queues.DB_MAINTENANCE,
+                        Queues.DB_MAINTENANCE,
                         "default"
                     };
                     options.WorkerCount = System.Environment.ProcessorCount * 2;
@@ -184,12 +171,30 @@ namespace Etherna.EthernaCredit
             services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer"));
 
             // Configure persistence.
-            services.UseMongODM<HangfireTaskRunner, ModelBase>()
-                .AddDbContext<ICreditDbContext, CreditDbContext>(options =>
+            services.AddMongODMWithHangfire<ModelBase>(configureHangfireOptions: options =>
+            {
+                options.ConnectionString = Configuration["ConnectionStrings:HangfireDb"];
+                options.StorageOptions = new MongoStorageOptions
                 {
-                    options.ApplicationVersion = assemblyVersion.SimpleVersion;
-                    options.ConnectionString = Configuration["ConnectionStrings:CreditDb"];
-                });
+                    MigrationOptions = new MongoMigrationOptions //don't remove, could throw exception
+                    {
+                        MigrationStrategy = new MigrateMongoMigrationStrategy(),
+                        BackupStrategy = new CollectionMongoBackupStrategy()
+                    }
+                };
+            }, configureMongODMOptions: options =>
+            {
+                options.DbMaintenanceQueueName = Queues.DB_MAINTENANCE;
+            }).AddDbContext<ICreditDbContext, CreditDbContext>(sp =>
+            {
+                var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
+                return new CreditDbContext(eventDispatcher);
+            },
+            options =>
+            {
+                options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
+                options.ConnectionString = Configuration["ConnectionStrings:CreditDb"];
+            });
 
             // Configure domain services.
             services.AddDomainServices();

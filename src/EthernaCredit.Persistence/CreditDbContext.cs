@@ -2,10 +2,9 @@
 using Etherna.EthernaCredit.Domain;
 using Etherna.EthernaCredit.Domain.Models;
 using Etherna.EthernaCredit.Persistence.Repositories;
-using Etherna.MongODM;
-using Etherna.MongODM.Repositories;
-using Etherna.MongODM.Serialization;
-using Etherna.MongODM.Utility;
+using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Repositories;
+using Etherna.MongODM.Core.Serialization;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -23,10 +22,7 @@ namespace Etherna.EthernaCredit.Persistence
 
         // Constructor.
         public CreditDbContext(
-            IDbDependencies dbDependencies,
-            IEventDispatcher eventDispatcher,
-            DbContextOptions<CreditDbContext> options)
-            : base(dbDependencies, options)
+            IEventDispatcher eventDispatcher)
         {
             EventDispatcher = eventDispatcher;
         }

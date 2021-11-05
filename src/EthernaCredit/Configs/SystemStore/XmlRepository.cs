@@ -1,4 +1,4 @@
-﻿using Etherna.MongODM;
+﻿using Etherna.MongODM.Core.Options;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using MongoDB.Bson;
 using MongoDB.Driver;

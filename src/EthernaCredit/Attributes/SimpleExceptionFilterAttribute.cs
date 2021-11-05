@@ -1,4 +1,4 @@
-﻿using Etherna.MongODM.Exceptions;
+﻿using Etherna.MongODM.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -18,11 +18,11 @@ namespace Etherna.EthernaCredit.Attributes
                 case ArgumentException _:
                 case FormatException _:
                 case InvalidOperationException _:
-                case InvalidEntityTypeException _:
+                case MongodmInvalidEntityTypeException _:
                     context.Result = new BadRequestObjectResult(context.Exception.Message);
                     break;
-                case EntityNotFoundException _:
                 case KeyNotFoundException _:
+                case MongodmEntityNotFoundException _:
                     context.Result = new NotFoundObjectResult(context.Exception.Message);
                     break;
                 case UnauthorizedAccessException _:
