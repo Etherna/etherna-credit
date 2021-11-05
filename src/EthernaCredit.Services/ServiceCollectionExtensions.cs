@@ -1,4 +1,5 @@
 ﻿using Etherna.DomainEvents;
+using Etherna.DomainEvents.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -21,19 +22,7 @@ namespace Etherna.EthernaCredit.Services
                                     where t.IsClass && t.Namespace == eventHandlersNamespace
                                     where t.GetInterfaces().Contains(typeof(IEventHandler))
                                     select t;
-            foreach (var handlerType in eventHandlerTypes)
-                services.AddScoped(handlerType);
-
-            services.AddSingleton<IEventDispatcher>(sp =>
-            {
-                var dispatcher = new EventDispatcher(sp);
-
-                //subscrive handlers to dispatcher
-                foreach (var handlerType in eventHandlerTypes)
-                    dispatcher.AddHandler(handlerType);
-
-                return dispatcher;
-            });
+            services.AddDomainEvents(eventHandlerTypes);
         }
     }
 }

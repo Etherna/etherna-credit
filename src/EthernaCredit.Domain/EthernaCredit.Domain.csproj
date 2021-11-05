@@ -13,9 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Etherna.DomainEvents" Version="1.2.0" />
+    <PackageReference Include="Etherna.DomainEvents" Version="1.3.0" />
     <PackageReference Include="MongODM.Core" Version="0.21.0" />
-    <PackageReference Include="Nethereum.Util" Version="3.8.0" />
+    <PackageReference Include="Nethereum.Util" Version="4.1.1" />
   </ItemGroup>
 
 </Project>

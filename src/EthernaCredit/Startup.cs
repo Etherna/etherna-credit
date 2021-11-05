@@ -36,14 +36,20 @@ namespace Etherna.EthernaCredit
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        // Constructor.
+        public Startup(
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
+        // Properties.
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // Methods.
         public void ConfigureServices(IServiceCollection services)
         {
             // Configure Asp.Net Core framework services.
@@ -141,6 +147,21 @@ namespace Etherna.EthernaCredit
                     });
             });
 
+            // Configure Hangfire server.
+            if (!Environment.IsStaging()) //don't start server in staging
+            {
+                //register hangfire server
+                services.AddHangfireServer(options =>
+                {
+                    options.Queues = new[]
+                    {
+                        MongODM.Tasks.Queues.DB_MAINTENANCE,
+                        "default"
+                    };
+                    options.WorkerCount = System.Environment.ProcessorCount * 2;
+                });
+            }
+
             // Configure Swagger services.
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen(options =>
@@ -175,9 +196,9 @@ namespace Etherna.EthernaCredit
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider apiProvider)
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider apiProvider)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -190,7 +211,7 @@ namespace Etherna.EthernaCredit
 
             app.UseCors(builder =>
             {
-                if (env.IsDevelopment())
+                if (Environment.IsDevelopment())
                 {
                     builder.SetIsOriginAllowed(_ => true)
                            .AllowAnyHeader()
@@ -221,16 +242,6 @@ namespace Etherna.EthernaCredit
                 new DashboardOptions
                 {
                     Authorization = new[] { new AdminAuthFilter() }
-                });
-            if (!env.IsStaging()) //don't init server in staging
-                app.UseHangfireServer(new BackgroundJobServerOptions
-                {
-                    Queues = new[]
-                    {
-                        MongODM.Tasks.Queues.DB_MAINTENANCE,
-                        "default"
-                    },
-                    WorkerCount = Environment.ProcessorCount * 2
                 });
 
             // Add Swagger and SwaggerUI.
