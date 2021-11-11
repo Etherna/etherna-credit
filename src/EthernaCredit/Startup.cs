@@ -118,11 +118,6 @@ namespace Etherna.EthernaCredit
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.Authority = Configuration["SsoServer:BaseUrl"];
-
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
                 });
             services.AddAuthorization(options =>
             {
