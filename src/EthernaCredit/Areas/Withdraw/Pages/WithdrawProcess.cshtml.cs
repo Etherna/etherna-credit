@@ -1,14 +1,14 @@
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Withdraw.Pages
+namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 {
     public class WithdrawProcessModel : PageModel
     {

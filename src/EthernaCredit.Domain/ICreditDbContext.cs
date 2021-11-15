@@ -1,9 +1,9 @@
 ﻿using Etherna.DomainEvents;
-using Etherna.EthernaCredit.Domain.Models;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
 
-namespace Etherna.EthernaCredit.Domain
+namespace Etherna.CreditSystem.Domain
 {
     public interface ICreditDbContext : IDbContext
     {

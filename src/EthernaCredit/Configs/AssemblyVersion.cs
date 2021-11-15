@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Etherna.EthernaCredit.Configs
+namespace Etherna.CreditSystem.Configs
 {
     public class AssemblyVersion
     {

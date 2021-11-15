@@ -1,7 +1,7 @@
-﻿using Etherna.EthernaCredit.Domain.Models;
+﻿using Etherna.CreditSystem.Domain.Models;
 using System;
 
-namespace Etherna.EthernaCredit.Areas.Api.DtoModels
+namespace Etherna.CreditSystem.Areas.Api.DtoModels
 {
     public class LogDto
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Api.Services
+namespace Etherna.CreditSystem.Areas.Api.Services
 {
     public interface IServiceInteractControllerService
     {

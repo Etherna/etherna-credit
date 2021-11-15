@@ -1,7 +1,7 @@
 ﻿using Etherna.DomainEvents;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Persistence.Repositories;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Persistence.Repositories;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
 using Etherna.MongODM.Core.Serialization;
@@ -13,12 +13,12 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Persistence
+namespace Etherna.CreditSystem.Persistence
 {
     public class CreditDbContext : DbContext, ICreditDbContext, IEventDispatcherDbContext
     {
         // Consts.
-        private const string SerializersNamespace = "Etherna.EthernaCredit.Persistence.ModelMaps";
+        private const string SerializersNamespace = "Etherna.CreditSystem.Persistence.ModelMaps";
 
         // Constructor.
         public CreditDbContext(

@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Etherna.EthernaCredit.Services
+namespace Etherna.CreditSystem.Services
 {
     public static class ServiceCollectionExtensions
     {

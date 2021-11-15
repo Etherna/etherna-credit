@@ -1,4 +1,4 @@
-﻿namespace Etherna.EthernaCredit.Domain.Models.OperationLogs
+﻿namespace Etherna.CreditSystem.Domain.Models.OperationLogs
 {
     public class WithdrawOperationLog : OperationLogBase
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Etherna.EthernaCredit.Pages.SharedModels
+namespace Etherna.CreditSystem.Pages.SharedModels
 {
     public class PageSelectorModel
     {

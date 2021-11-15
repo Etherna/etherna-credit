@@ -1,7 +1,7 @@
 ﻿using Etherna.DomainEvents;
 using Etherna.MongODM.Core;
 
-namespace Etherna.EthernaCredit.Persistence
+namespace Etherna.CreditSystem.Persistence
 {
     public interface IEventDispatcherDbContext : IDbContext
     {

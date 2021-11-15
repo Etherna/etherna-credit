@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Etherna.EthernaCredit.Configs.Swagger
+namespace Etherna.CreditSystem.Configs.Swagger
 {
     /// <summary>
     /// Configures the Swagger generation options.

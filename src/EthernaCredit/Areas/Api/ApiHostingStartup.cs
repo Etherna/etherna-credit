@@ -4,8 +4,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-[assembly: HostingStartup(typeof(Etherna.EthernaCredit.Areas.Api.ApiHostingStartup))]
-namespace Etherna.EthernaCredit.Areas.Api
+[assembly: HostingStartup(typeof(Etherna.CreditSystem.Areas.Api.ApiHostingStartup))]
+namespace Etherna.CreditSystem.Areas.Api
 {
     public class ApiHostingStartup : IHostingStartup
     {

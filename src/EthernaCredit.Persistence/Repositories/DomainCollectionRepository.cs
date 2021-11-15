@@ -1,6 +1,6 @@
 ﻿using Etherna.DomainEvents;
 using Etherna.DomainEvents.Events;
-using Etherna.EthernaCredit.Domain.Models;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
 using System;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Persistence.Repositories
+namespace Etherna.CreditSystem.Persistence.Repositories
 {
     public class DomainCollectionRepository<TModel, TKey> :
         CollectionRepository<TModel, TKey>

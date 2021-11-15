@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 
-namespace Etherna.EthernaCredit.Areas.Manage.Pages
+namespace Etherna.CreditSystem.Areas.Manage.Pages
 {
     public static class ManageNavPages
     {

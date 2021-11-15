@@ -1,4 +1,4 @@
-﻿namespace Etherna.EthernaCredit.Services.Tasks
+﻿namespace Etherna.CreditSystem.Services.Tasks
 {
     public static class Queues
     {
