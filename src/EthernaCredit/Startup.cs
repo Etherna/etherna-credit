@@ -89,6 +89,7 @@ namespace Etherna.CreditSystem
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     options.Cookie.Name = Configuration["Application:CompactName"];
+                    options.AccessDeniedPath = "/AccessDenied";
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //client config
                 {

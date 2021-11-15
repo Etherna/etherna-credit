@@ -40,7 +40,6 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                 {
                     mm.MapMember(u => u.Address);
                 });
-                config.AddModelMapsSchema<User>("117b4635-8bb3-428b-af09-81258e4a1b9b");
             });
     }
 }
