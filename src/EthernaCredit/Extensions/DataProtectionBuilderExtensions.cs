@@ -1,11 +1,11 @@
-﻿using Etherna.EthernaCredit.Configs.SystemStore;
+﻿using Etherna.CreditSystem.Configs.SystemStore;
 using Etherna.MongODM.Core.Options;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Etherna.EthernaCredit.Extensions
+namespace Etherna.CreditSystem.Extensions
 {
     public static class DataProtectionBuilderExtensions
     {

@@ -1,6 +1,6 @@
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.MongODM.Core.Extensions;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Credit.Pages
+namespace Etherna.CreditSystem.Areas.Credit.Pages
 {
     public class LogsModel : PageModel
     {

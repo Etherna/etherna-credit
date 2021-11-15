@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Etherna.EthernaCredit
+namespace Etherna.CreditSystem
 {
     public static class Program
     {

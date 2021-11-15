@@ -3,7 +3,7 @@ using Etherna.MongODM.Core.Domain.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Etherna.EthernaCredit.Domain.Models
+namespace Etherna.CreditSystem.Domain.Models
 {
     public abstract class EntityModelBase : ModelBase, IEntityModel
     {

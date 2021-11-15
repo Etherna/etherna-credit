@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Etherna.EthernaCredit.Domain</RootNamespace>
+    <RootNamespace>Etherna.CreditSystem.Domain</RootNamespace>
 
     <Authors>Etherna Sagl</Authors>
     

@@ -1,6 +1,6 @@
 ﻿using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Areas.Api.DtoModels;
-using Etherna.EthernaCredit.Domain;
+using Etherna.CreditSystem.Areas.Api.DtoModels;
+using Etherna.CreditSystem.Domain;
 using Etherna.MongODM.Core.Extensions;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Api.Services
+namespace Etherna.CreditSystem.Areas.Api.Services
 {
     public class UserControllerService : IUserControllerService
     {

@@ -1,6 +1,6 @@
-﻿using Etherna.EthernaCredit.Areas.Api.DtoModels;
-using Etherna.EthernaCredit.Areas.Api.Services;
-using Etherna.EthernaCredit.Attributes;
+﻿using Etherna.CreditSystem.Areas.Api.DtoModels;
+using Etherna.CreditSystem.Areas.Api.Services;
+using Etherna.CreditSystem.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Api.Controllers
+namespace Etherna.CreditSystem.Areas.Api.Controllers
 {
     [ApiController]
     [ApiVersion("0.2")]

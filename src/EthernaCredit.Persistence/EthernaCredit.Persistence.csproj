@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Etherna.EthernaCredit.Persistence</RootNamespace>
+    <RootNamespace>Etherna.CreditSystem.Persistence</RootNamespace>
 
     <Authors>Etherna Sagl</Authors>
     

@@ -1,12 +1,12 @@
-﻿using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Domain.Models.OperationLogs;
+﻿using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Api.Services
+namespace Etherna.CreditSystem.Areas.Api.Services
 {
     public class ServiceInteractControllerService : IServiceInteractControllerService
     {

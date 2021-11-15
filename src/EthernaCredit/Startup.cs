@@ -1,13 +1,13 @@
 using Etherna.DomainEvents;
-using Etherna.EthernaCredit.Configs;
-using Etherna.EthernaCredit.Configs.Hangfire;
-using Etherna.EthernaCredit.Configs.Swagger;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Extensions;
-using Etherna.EthernaCredit.Persistence;
-using Etherna.EthernaCredit.Services;
-using Etherna.EthernaCredit.Services.Tasks;
+using Etherna.CreditSystem.Configs;
+using Etherna.CreditSystem.Configs.Hangfire;
+using Etherna.CreditSystem.Configs.Swagger;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Extensions;
+using Etherna.CreditSystem.Persistence;
+using Etherna.CreditSystem.Services;
+using Etherna.CreditSystem.Services.Tasks;
 using Etherna.MongODM;
 using Etherna.MongODM.Core.Options;
 using Hangfire;
@@ -34,7 +34,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit
+namespace Etherna.CreditSystem
 {
     public class Startup
     {

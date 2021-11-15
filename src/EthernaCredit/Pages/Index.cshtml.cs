@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Etherna.EthernaCredit.Pages
+namespace Etherna.CreditSystem.Pages
 {
     public class IndexModel : PageModel
     {

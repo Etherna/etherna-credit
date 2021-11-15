@@ -1,7 +1,7 @@
 ﻿using Nethereum.Util;
 using System;
 
-namespace Etherna.EthernaCredit.Domain.Models
+namespace Etherna.CreditSystem.Domain.Models
 {
     public class User : EntityModelBase<string>
     {

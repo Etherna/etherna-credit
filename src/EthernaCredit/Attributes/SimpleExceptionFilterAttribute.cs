@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
 
-namespace Etherna.EthernaCredit.Attributes
+namespace Etherna.CreditSystem.Attributes
 {
     public sealed class SimpleExceptionFilterAttribute : ExceptionFilterAttribute
     {

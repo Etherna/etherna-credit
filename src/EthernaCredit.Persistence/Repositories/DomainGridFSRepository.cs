@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Persistence.Repositories
+namespace Etherna.CreditSystem.Persistence.Repositories
 {
     public class DomainGridFSRepository<TModel> :
         GridFSRepository<TModel>

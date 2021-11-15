@@ -1,6 +1,6 @@
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,7 +9,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Account.Pages
+namespace Etherna.CreditSystem.Areas.Account.Pages
 {
     [Authorize]
     public class LoginModel : PageModel

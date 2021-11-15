@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposable objects are instanced and returned by properties", Scope = "NamespaceAndDescendants", Target = "~N:Etherna.EthernaCredit.Persistence.ModelMaps")]
+[assembly: SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposable objects are instanced and returned by properties", Scope = "NamespaceAndDescendants", Target = "~N:Etherna.CreditSystem.Persistence.ModelMaps")]

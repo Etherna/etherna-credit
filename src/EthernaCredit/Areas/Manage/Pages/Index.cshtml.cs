@@ -1,5 +1,5 @@
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
+using Etherna.CreditSystem.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver.Linq;
@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Credit.Pages
+namespace Etherna.CreditSystem.Areas.Credit.Pages
 {
     public class IndexModel : PageModel
     {

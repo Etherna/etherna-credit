@@ -1,10 +1,10 @@
-﻿using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Domain.Models.OperationLogs;
+﻿using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.EthernaCredit.Persistence.ModelMaps
+namespace Etherna.CreditSystem.Persistence.ModelMaps
 {
     class OperationLogMap : IModelMapsCollector
     {

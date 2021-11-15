@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Etherna.EthernaCredit.Domain.Models
+namespace Etherna.CreditSystem.Domain.Models
 {
     public abstract class ModelBase : IModel
     {
