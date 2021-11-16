@@ -1,4 +1,3 @@
-using Etherna.DomainEvents;
 using Etherna.CreditSystem.Configs;
 using Etherna.CreditSystem.Configs.Hangfire;
 using Etherna.CreditSystem.Configs.Swagger;
@@ -7,7 +6,9 @@ using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Extensions;
 using Etherna.CreditSystem.Persistence;
 using Etherna.CreditSystem.Services;
+using Etherna.CreditSystem.Services.Settings;
 using Etherna.CreditSystem.Services.Tasks;
+using Etherna.DomainEvents;
 using Etherna.MongODM;
 using Etherna.MongODM.Core.Options;
 using Hangfire;
@@ -18,13 +19,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,6 @@ using System.Net;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace Etherna.CreditSystem
 {
