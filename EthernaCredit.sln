@@ -9,8 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E57379A3-D24
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D5E69FC-70B7-41B0-89B4-72893F5C8822}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		Dockerfile = Dockerfile
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
@@ -26,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EthernaCredit.Persistence",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{64A1A3D7-3D00-43B2-B358-096DB512A6E7}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build-test-deploy_master.yml = .github\workflows\build-test-deploy_master.yml
+		.github\workflows\stable-release.yml = .github\workflows\stable-release.yml
 	EndProjectSection
 EndProject
 Global
