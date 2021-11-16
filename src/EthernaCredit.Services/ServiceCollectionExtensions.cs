@@ -1,4 +1,5 @@
-﻿using Etherna.DomainEvents;
+﻿using Etherna.CreditSystem.Services.Domain;
+using Etherna.DomainEvents;
 using Etherna.DomainEvents.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -23,6 +24,10 @@ namespace Etherna.CreditSystem.Services
                                     where t.GetInterfaces().Contains(typeof(IEventHandler))
                                     select t;
             services.AddDomainEvents(eventHandlerTypes);
+
+            // Services.
+            //domain
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
