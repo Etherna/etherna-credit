@@ -33,6 +33,7 @@ using System.Net;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Etherna.CreditSystem
 {
@@ -56,7 +57,8 @@ namespace Etherna.CreditSystem
         {
             // Configure Asp.Net Core framework services.
             services.AddDataProtection()
-                .PersistKeysToDbContext(new DbContextOptions { ConnectionString = Configuration["ConnectionStrings:SystemDb"] });
+                .PersistKeysToDbContext(new DbContextOptions { ConnectionString = Configuration["ConnectionStrings:DataProtectionDb"] })
+                .SetApplicationName(CommonConsts.SharedCookieApplicationName);
 
             services.AddCors();
             services.AddRazorPages(options =>
@@ -88,8 +90,13 @@ namespace Etherna.CreditSystem
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
-                    options.Cookie.Name = Configuration["Application:CompactName"];
+                    options.Cookie.Name = CommonConsts.SharedCookieApplicationName;
                     options.AccessDeniedPath = "/AccessDenied";
+
+                    if (Environment.IsProduction())
+                    {
+                        options.Cookie.Domain = ".etherna.io";
+                    }
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //client config
                 {
