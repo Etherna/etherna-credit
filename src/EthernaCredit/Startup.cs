@@ -10,6 +10,7 @@ using Etherna.CreditSystem.Services.Settings;
 using Etherna.CreditSystem.Services.Tasks;
 using Etherna.DomainEvents;
 using Etherna.MongODM;
+using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
 using Hangfire;
 using Hangfire.Mongo;
@@ -32,6 +33,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -63,6 +65,8 @@ namespace Etherna.CreditSystem
             services.AddCors();
             services.AddRazorPages(options =>
             {
+                options.Conventions.AuthorizeAreaFolder(CommonConsts.AdminArea, "/", CommonConsts.RequireAdministratorClaimPolicy);
+
                 options.Conventions.AuthorizeAreaFolder("Deposit", "/");
                 options.Conventions.AuthorizeAreaFolder("Manage", "/");
             });
@@ -119,9 +123,8 @@ namespace Etherna.CreditSystem
 
                     options.SaveTokens = true;
 
-                    options.Scope.Clear();
-                    options.Scope.Add("openid");
                     options.Scope.Add("ether_accounts");
+                    options.Scope.Add("role");
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -129,7 +132,14 @@ namespace Etherna.CreditSystem
                 });
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ServiceInteractApiScope", policy =>
+                options.AddPolicy(CommonConsts.RequireAdministratorClaimPolicy,
+                    policy =>
+                    {
+                        policy.RequireAuthenticatedUser();
+                        policy.RequireClaim(ClaimTypes.Role, CommonConsts.AdministratorRoleName);
+                    });
+
+                options.AddPolicy(CommonConsts.ServiceInteractApiScopePolicy, policy =>
                 {
                     policy.AuthenticationSchemes = new List<string> { JwtBearerDefaults.AuthenticationScheme };
                     policy.RequireAuthenticatedUser();
@@ -199,6 +209,12 @@ namespace Etherna.CreditSystem
                 options.ConnectionString = Configuration["ConnectionStrings:CreditDb"];
             });
 
+            services.AddMongODMAdminDashboard(new MongODM.AspNetCore.UI.DashboardOptions
+            {
+                AuthFilters = new[] { new Configs.MongODM.AdminAuthFilter() },
+                BasePath = CommonConsts.DatabaseAdminPath
+            });
+
             // Configure domain services.
             services.AddDomainServices();
         }
@@ -246,8 +262,8 @@ namespace Etherna.CreditSystem
 
             // Add Hangfire.
             app.UseHangfireDashboard(
-                "/admin/hangfire",
-                new DashboardOptions
+                CommonConsts.HangfireAdminPath,
+                new Hangfire.DashboardOptions
                 {
                     Authorization = new[] { new AdminAuthFilter() }
                 });
