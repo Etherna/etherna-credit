@@ -1,4 +1,6 @@
 ﻿using Hangfire.Dashboard;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Etherna.CreditSystem.Configs.Hangfire
 {
@@ -7,7 +9,15 @@ namespace Etherna.CreditSystem.Configs.Hangfire
         public bool Authorize(DashboardContext context)
         {
             var httpContext = context.GetHttpContext();
-            return httpContext.User.Identity?.IsAuthenticated ?? false;
+            if (httpContext.User is null)
+                return false;
+            var authorizationService = httpContext.RequestServices.GetService<IAuthorizationService>()!;
+
+            var authTask = authorizationService.AuthorizeAsync(httpContext.User, CommonConsts.RequireAdministratorClaimPolicy);
+            authTask.Wait();
+            var result = authTask.Result;
+
+            return result.Succeeded;
         }
     }
 }
