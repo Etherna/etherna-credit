@@ -29,8 +29,9 @@ namespace Etherna.CreditSystem.Services.Domain
         {
             // Search user.
             var user = await dbContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.Address == etherAddress ||
-                                    prevEtherAddresses.Contains(u.Address))
+                elements.Where(u => u.EtherAddress == etherAddress ||                        //case: service and invoker are synced
+                                    prevEtherAddresses.Contains(u.EtherAddress) ||           //case: invoker is ahead than service (update db)
+                                    u.EtherPreviousAddresses.Contains(etherAddress))    //case: service is ahead than invoker (do nothing)
                         .FirstOrDefaultAsync());
 
             // If user doesn't exist.
@@ -41,14 +42,14 @@ namespace Etherna.CreditSystem.Services.Domain
                 await dbContext.Users.CreateAsync(user);
 
                 // Get again, because of https://etherna.atlassian.net/browse/MODM-83
-                user = await dbContext.Users.FindOneAsync(u => u.Address == etherAddress);
+                user = await dbContext.Users.FindOneAsync(u => u.EtherAddress == etherAddress);
             }
             else //if already exist
             {
-                // Verify if current address is updated, or update it.
-                if (user.Address != etherAddress)
+                // Verify if invoker is ahead of service. In case, update on db.
+                if (prevEtherAddresses.Contains(user.EtherAddress))
                 {
-                    user.UpdateAddress(etherAddress);
+                    user.UpdateAddresses(etherAddress, prevEtherAddresses);
                     await dbContext.SaveChangesAsync();
                 }
             }
@@ -58,12 +59,14 @@ namespace Etherna.CreditSystem.Services.Domain
 
         public async Task<User> FindUserByAddressAsync(string address) =>
             await dbContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.Address == address)
+                elements.Where(u => u.EtherAddress == address ||
+                                    u.EtherPreviousAddresses.Contains(address))
                         .FirstAsync());
 
         public async Task<User?> TryFindUserByAddressAsync(string address) =>
             await dbContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.Address == address)
+                elements.Where(u => u.EtherAddress == address ||
+                                    u.EtherPreviousAddresses.Contains(address))
                         .FirstOrDefaultAsync());
     }
 }

@@ -32,7 +32,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
             // Get user.
             var user = await userService.FindAndUpdateUserAsync(User);
 
-            EthereumAddress = user.Address;
+            EthereumAddress = user.EtherAddress;
             CreditBalance = user.CreditBalance;
 
             return Page();

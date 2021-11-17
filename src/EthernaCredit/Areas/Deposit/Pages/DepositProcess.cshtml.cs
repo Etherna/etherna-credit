@@ -44,11 +44,11 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
             // Deposit.
             await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Address == user.Address,
+                u => u.EtherAddress == user.EtherAddress,
                 Builders<User>.Update.Inc(u => u.CreditBalance, ammountValue));
 
             // Report log.
-            var depositLog = new DepositOperationLog(ammountValue, user.Address, user);
+            var depositLog = new DepositOperationLog(ammountValue, user.EtherAddress, user);
             await creditContext.OperationLogs.CreateAsync(depositLog);
 
             DepositAmmount = ammountValue;

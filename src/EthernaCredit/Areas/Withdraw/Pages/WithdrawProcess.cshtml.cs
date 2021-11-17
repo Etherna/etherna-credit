@@ -64,7 +64,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             SucceededResult = true;
 
             // Report log.
-            var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, user.Address, user);
+            var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, user.EtherAddress, user);
             await creditContext.OperationLogs.CreateAsync(withdrawLog);
         }
     }
