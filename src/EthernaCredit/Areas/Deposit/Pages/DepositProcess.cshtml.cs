@@ -14,15 +14,15 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
     public class DepositProcessModel : PageModel
     {
         // Fields.
-        private readonly ICreditDbContext creditContext;
+        private readonly ICreditDbContext dbContext;
         private readonly IUserService userService;
 
         // Constructor.
         public DepositProcessModel(
-            ICreditDbContext creditContext,
+            ICreditDbContext dbContext,
             IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.dbContext = dbContext;
             this.userService = userService;
         }
 
@@ -43,13 +43,13 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             var user = await userService.FindAndUpdateUserAsync(User);
 
             // Deposit.
-            await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.EtherAddress == user.EtherAddress,
+            await dbContext.Users.Collection.FindOneAndUpdateAsync(
+                u => u.Id == user.Id,
                 Builders<User>.Update.Inc(u => u.CreditBalance, ammountValue));
 
             // Report log.
             var depositLog = new DepositOperationLog(ammountValue, user.EtherAddress, user);
-            await creditContext.OperationLogs.CreateAsync(depositLog);
+            await dbContext.OperationLogs.CreateAsync(depositLog);
 
             DepositAmmount = ammountValue;
         }

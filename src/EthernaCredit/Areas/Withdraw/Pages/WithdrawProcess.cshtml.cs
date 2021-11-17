@@ -16,15 +16,15 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
         public const double MinimumWithdraw = 1.0;
 
         // Fields.
-        private readonly ICreditDbContext creditContext;
+        private readonly ICreditDbContext dbContext;
         private readonly IUserService userService;
 
         // Constructor.
         public WithdrawProcessModel(
-            ICreditDbContext creditContext,
+            ICreditDbContext dbContext,
             IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.dbContext = dbContext;
             this.userService = userService;
         }
 
@@ -50,7 +50,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             }
 
             // Update user balance.
-            var userResult = await creditContext.Users.Collection.FindOneAndUpdateAsync(
+            var userResult = await dbContext.Users.Collection.FindOneAndUpdateAsync(
                 u => u.Id == user.Id &&
                      u.CreditBalance >= WithdrawAmmount, //verify disponibility
                 Builders<User>.Update.Inc(u => u.CreditBalance, -WithdrawAmmount));
@@ -65,7 +65,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
             // Report log.
             var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, user.EtherAddress, user);
-            await creditContext.OperationLogs.CreateAsync(withdrawLog);
+            await dbContext.OperationLogs.CreateAsync(withdrawLog);
         }
     }
 }
