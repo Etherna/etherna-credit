@@ -1,7 +1,7 @@
-using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
 using System;
@@ -17,11 +17,15 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
         // Fields.
         private readonly ICreditDbContext creditContext;
+        private readonly IUserService userService;
 
         // Constructor.
-        public WithdrawProcessModel(ICreditDbContext creditContext)
+        public WithdrawProcessModel(
+            ICreditDbContext creditContext,
+            IUserService userService)
         {
             this.creditContext = creditContext;
+            this.userService = userService;
         }
 
         // Properties.
@@ -36,7 +40,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
             // Get data.
             WithdrawAmmount = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
-            var address = User.GetEtherAddress();
+            var user = await userService.FindAndUpdateUserAsync(User); //create or update address, if required
 
             // Preliminary check.
             if (WithdrawAmmount < MinimumWithdraw)
@@ -45,14 +49,14 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
                 return;
             }
 
-            // Withdraw.
-            var user = await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Address == address &&
+            // Update user balance.
+            var userResult = await creditContext.Users.Collection.FindOneAndUpdateAsync(
+                u => u.Id == user.Id &&
                      u.CreditBalance >= WithdrawAmmount, //verify disponibility
                 Builders<User>.Update.Inc(u => u.CreditBalance, -WithdrawAmmount));
 
             // Result check.
-            if (user is null)
+            if (userResult is null)
             {
                 SucceededResult = false;
                 return;
@@ -60,7 +64,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             SucceededResult = true;
 
             // Report log.
-            var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, address, user);
+            var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, user.Address, user);
             await creditContext.OperationLogs.CreateAsync(withdrawLog);
         }
     }

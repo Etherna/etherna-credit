@@ -1,7 +1,7 @@
-using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
@@ -15,11 +15,15 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
     {
         // Fields.
         private readonly ICreditDbContext creditContext;
+        private readonly IUserService userService;
 
         // Constructor.
-        public DepositProcessModel(ICreditDbContext creditContext)
+        public DepositProcessModel(
+            ICreditDbContext creditContext,
+            IUserService userService)
         {
             this.creditContext = creditContext;
+            this.userService = userService;
         }
 
         // Properties.
@@ -36,16 +40,15 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
             // Get data.
             var ammountValue = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
-            var address = User.GetEtherAddress();
-            var user = await creditContext.Users.FindOneAsync(u => u.Address == address);
+            var user = await userService.FindAndUpdateUserAsync(User);
 
             // Deposit.
             await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Address == address,
+                u => u.Address == user.Address,
                 Builders<User>.Update.Inc(u => u.CreditBalance, ammountValue));
 
             // Report log.
-            var depositLog = new DepositOperationLog(ammountValue, address, user);
+            var depositLog = new DepositOperationLog(ammountValue, user.Address, user);
             await creditContext.OperationLogs.CreateAsync(depositLog);
 
             DepositAmmount = ammountValue;

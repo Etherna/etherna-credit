@@ -1,15 +1,13 @@
-using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
-using Etherna.MongODM.Core.Extensions;
+using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Credit.Pages
+namespace Etherna.CreditSystem.Areas.Manage.Pages
 {
     public class LogsModel : PageModel
     {
@@ -17,12 +15,16 @@ namespace Etherna.CreditSystem.Areas.Credit.Pages
         public const int DefaultTakeElements = 20;
 
         // Fields.
-        private readonly ICreditDbContext creditContext;
+        private readonly ICreditDbContext dbContext;
+        private readonly IUserService userService;
 
         // Constructor.
-        public LogsModel(ICreditDbContext creditContext)
+        public LogsModel(
+            ICreditDbContext dbContext,
+            IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.dbContext = dbContext;
+            this.userService = userService;
         }
 
         // Properties.
@@ -33,18 +35,18 @@ namespace Etherna.CreditSystem.Areas.Credit.Pages
         // Methods.
         public async Task OnGetAsync(int p)
         {
-            var address = User.GetEtherAddress();
-            var totLogs = await creditContext.OperationLogs.QueryElementsAsync(elements =>
-                elements.Where(l => l.User.Address == address)
-                        .CountAsync());
+            // Get user.
+            var user = await userService.FindAndUpdateUserAsync(User);
 
-            MaxPage = (totLogs - 1) / DefaultTakeElements;
-            CurrentPage = Math.Min(p, MaxPage);
+            // Get paginated logs.
+            var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
+                elements => elements.Where(l => l.User.Id == user.Id),
+                l => l.CreationDateTime,
+                p, DefaultTakeElements);
 
-            Logs = await creditContext.OperationLogs.QueryElementsAsync(elements =>
-                elements.Where(l => l.User.Address == address)
-                        .PaginateDescending(l => l.CreationDateTime, CurrentPage, DefaultTakeElements)
-                        .ToListAsync());
+            CurrentPage = paginatedLogs.CurrentPage;
+            MaxPage = paginatedLogs.MaxPage;
+            Logs = paginatedLogs.Elements;
         }
     }
 }

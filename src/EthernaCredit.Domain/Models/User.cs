@@ -8,7 +8,7 @@ namespace Etherna.CreditSystem.Domain.Models
         // Constructors.
         public User(string address)
         {
-            SetAddress(address);
+            SetAddressHelper(address);
         }
         protected User() { }
 
@@ -16,8 +16,12 @@ namespace Etherna.CreditSystem.Domain.Models
         public virtual string Address { get; protected set; } = default!;
         public virtual double CreditBalance { get; protected set; }
 
-        // Helpers.
-        private void SetAddress(string address)
+        // Methods.
+        public virtual void UpdateAddress(string address) =>
+            SetAddressHelper(address);
+
+        // Methods.
+        private void SetAddressHelper(string address)
         {
             if (address is null)
                 throw new ArgumentNullException(nameof(address));

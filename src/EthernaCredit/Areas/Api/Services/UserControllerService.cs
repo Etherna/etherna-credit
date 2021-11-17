@@ -1,8 +1,6 @@
-﻿using Etherna.Authentication.Extensions;
-using Etherna.CreditSystem.Areas.Api.DtoModels;
+﻿using Etherna.CreditSystem.Areas.Api.DtoModels;
 using Etherna.CreditSystem.Domain;
-using Etherna.MongODM.Core.Extensions;
-using MongoDB.Driver;
+using Etherna.CreditSystem.Services.Domain;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,31 +12,35 @@ namespace Etherna.CreditSystem.Areas.Api.Services
     public class UserControllerService : IUserControllerService
     {
         // Fields.
-        private readonly ICreditDbContext creditContext;
+        private readonly ICreditDbContext dbContext;
+        private readonly IUserService userService;
 
         // Constructor.
         public UserControllerService(
-            ICreditDbContext creditContext)
+            ICreditDbContext dbContext,
+            IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.dbContext = dbContext;
+            this.userService = userService;
         }
 
         // Methods.
         public async Task<double> GetCreditAsync(ClaimsPrincipal user)
         {
-            var address = user.GetEtherAddress();
-            var userModel = await creditContext.Users.TryFindOneAsync(u => u.Address == address);
-            return userModel?.CreditBalance ?? 0;
+            var userModel = await userService.FindAndUpdateUserAsync(user);
+            return userModel.CreditBalance;
         }
 
         public async Task<IEnumerable<LogDto>> GetLogsAsync(ClaimsPrincipal user, int page, int take)
         {
-            var address = user.GetEtherAddress();
-            return (await creditContext.OperationLogs.QueryElementsAsync(elements =>
-                elements.Where(l => l.User.Address == address)
-                        .PaginateDescending(u => u.CreationDateTime, page, take)
-                        .ToListAsync()))
-                        .Select(l => new LogDto(l));
+            var userModel = await userService.FindAndUpdateUserAsync(user);
+            var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
+                elements => elements.Where(l => l.User.Id == userModel.Id),
+                l => l.CreationDateTime,
+                page,
+                take);
+
+            return paginatedLogs.Elements.Select(l => new LogDto(l));
         }
     }
 }
