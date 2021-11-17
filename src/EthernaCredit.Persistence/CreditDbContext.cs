@@ -29,20 +29,14 @@ namespace Etherna.CreditSystem.Persistence
 
         // Properties.
         //repositories
-        public ICollectionRepository<OperationLogBase, string> OperationLogs { get; } = new DomainCollectionRepository<OperationLogBase, string>(
-            new CollectionRepositoryOptions<OperationLogBase>("logs")
-            {
-                IndexBuilders = new[]
-                {
-                    (Builders<OperationLogBase>.IndexKeys.Ascending(l => l.User.Address), new CreateIndexOptions<OperationLogBase>()),
-                }
-            });
+        public ICollectionRepository<OperationLogBase, string> OperationLogs { get; } =
+            new DomainCollectionRepository<OperationLogBase, string>("logs");
         public ICollectionRepository<User, string> Users { get; } = new DomainCollectionRepository<User, string>(
             new CollectionRepositoryOptions<User>("users")
             {
                 IndexBuilders = new[]
                 {
-                    (Builders<User>.IndexKeys.Ascending(u => u.Address), new CreateIndexOptions<User> { Unique = true }),
+                    (Builders<User>.IndexKeys.Ascending(u => u.EtherAddress), new CreateIndexOptions<User> { Unique = true }),
                 }
             });
 
