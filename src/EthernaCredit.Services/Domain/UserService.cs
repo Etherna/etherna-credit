@@ -22,10 +22,10 @@ namespace Etherna.CreditSystem.Services.Domain
         }
 
         // Methods.
-        public Task<User> FindUserAsync(ClaimsPrincipal userClaims) =>
-            FindUserAsync(userClaims.GetEtherAddress(), userClaims.GetEtherPrevAddresses());
+        public Task<User> FindAndUpdateUserAsync(ClaimsPrincipal userClaims) =>
+            FindAndUpdateUserAsync(userClaims.GetEtherAddress(), userClaims.GetEtherPrevAddresses());
 
-        public async Task<User> FindUserAsync(string etherAddress, IEnumerable<string> prevEtherAddresses)
+        public async Task<User> FindAndUpdateUserAsync(string etherAddress, IEnumerable<string> prevEtherAddresses)
         {
             // Search user.
             var user = await dbContext.Users.QueryElementsAsync(elements =>
@@ -55,5 +55,15 @@ namespace Etherna.CreditSystem.Services.Domain
 
             return user;
         }
+
+        public async Task<User> FindUserByAddressAsync(string address) =>
+            await dbContext.Users.QueryElementsAsync(elements =>
+                elements.Where(u => u.Address == address)
+                        .FirstAsync());
+
+        public async Task<User?> TryFindUserByAddressAsync(string address) =>
+            await dbContext.Users.QueryElementsAsync(elements =>
+                elements.Where(u => u.Address == address)
+                        .FirstOrDefaultAsync());
     }
 }

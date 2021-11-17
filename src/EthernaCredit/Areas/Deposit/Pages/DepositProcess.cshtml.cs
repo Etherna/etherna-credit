@@ -40,7 +40,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
             // Get data.
             var ammountValue = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
-            var user = await userService.FindUserAsync(User);
+            var user = await userService.FindAndUpdateUserAsync(User);
 
             // Deposit.
             await creditContext.Users.Collection.FindOneAndUpdateAsync(

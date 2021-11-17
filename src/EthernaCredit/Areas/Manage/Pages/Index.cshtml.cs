@@ -30,7 +30,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             // Get user.
-            var user = await userService.FindUserAsync(User);
+            var user = await userService.FindAndUpdateUserAsync(User);
 
             EthereumAddress = user.Address;
             CreditBalance = user.CreditBalance;

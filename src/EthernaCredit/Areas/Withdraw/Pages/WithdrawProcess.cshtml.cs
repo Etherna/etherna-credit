@@ -40,7 +40,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
             // Get data.
             WithdrawAmmount = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
-            var user = await userService.FindUserAsync(User);
+            var user = await userService.FindAndUpdateUserAsync(User); //create or update address, if required
 
             // Preliminary check.
             if (WithdrawAmmount < MinimumWithdraw)
@@ -49,9 +49,9 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
                 return;
             }
 
-            // Withdraw.
+            // Update user balance.
             var userResult = await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Address == user.Address &&
+                u => u.Id == user.Id &&
                      u.CreditBalance >= WithdrawAmmount, //verify disponibility
                 Builders<User>.Update.Inc(u => u.CreditBalance, -WithdrawAmmount));
 

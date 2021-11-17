@@ -7,7 +7,9 @@ namespace Etherna.CreditSystem.Services.Domain
 {
     public interface IUserService
     {
-        Task<User> FindUserAsync(ClaimsPrincipal userClaims);
-        Task<User> FindUserAsync(string etherAddress, IEnumerable<string> prevEtherAddresses);
+        Task<User> FindAndUpdateUserAsync(ClaimsPrincipal userClaims);
+        Task<User> FindAndUpdateUserAsync(string etherAddress, IEnumerable<string> prevEtherAddresses);
+        Task<User> FindUserByAddressAsync(string address);
+        Task<User?> TryFindUserByAddressAsync(string address);
     }
 }

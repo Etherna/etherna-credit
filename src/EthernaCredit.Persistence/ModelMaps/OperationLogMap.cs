@@ -16,7 +16,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                     mm.AutoMap();
 
                     // Set members with custom serializers.
-                    mm.SetMemberSerializer(l => l.User, UserMap.InformationSerializer(dbContext));
+                    mm.SetMemberSerializer(l => l.User, UserMap.ReferenceSerializer(dbContext));
                 });
 
             dbContext.SchemaRegister.AddModelMapsSchema<DepositOperationLog>("7fc7abe8-9a55-40a2-90ce-f3cba34bc005");

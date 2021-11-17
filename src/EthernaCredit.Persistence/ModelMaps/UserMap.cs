@@ -21,9 +21,9 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
         }
 
         /// <summary>
-        /// The full entity serializer without relations
+        /// The document reference with only Id.
         /// </summary>
-        public static ReferenceSerializer<User, string> InformationSerializer(
+        public static ReferenceSerializer<User, string> ReferenceSerializer(
             IDbContext dbContext,
             bool useCascadeDelete = false) =>
             new(dbContext, config =>
@@ -36,10 +36,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                     mm.MapIdMember(m => m.Id);
                     mm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.ObjectId));
                 });
-                config.AddModelMapsSchema<User>("b309c982-f30f-46ad-b076-c6030c8dbcd8", mm =>
-                {
-                    mm.MapMember(u => u.Address);
-                });
+                config.AddModelMapsSchema<User>("b309c982-f30f-46ad-b076-c6030c8dbcd8", mm => { });
             });
     }
 }
