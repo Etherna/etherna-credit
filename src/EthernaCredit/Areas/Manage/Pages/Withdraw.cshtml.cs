@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Credit.Pages
+namespace Etherna.CreditSystem.Areas.Manage.Pages
 {
     public class WithdrawModel : PageModel
     {

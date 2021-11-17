@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Credit.Pages
+namespace Etherna.CreditSystem.Areas.Manage.Pages
 {
     public class LogsModel : PageModel
     {
