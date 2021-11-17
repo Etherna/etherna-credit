@@ -29,8 +29,8 @@ namespace Etherna.CreditSystem.Services.Domain
         {
             // Search user.
             var user = await dbContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.EtherAddress == etherAddress ||                        //case: service and invoker are synced
-                                    prevEtherAddresses.Contains(u.EtherAddress) ||           //case: invoker is ahead than service (update db)
+                elements.Where(u => u.EtherAddress == etherAddress ||                   //case: service and invoker are synced
+                                    prevEtherAddresses.Contains(u.EtherAddress) ||      //case: invoker is ahead than service (update db)
                                     u.EtherPreviousAddresses.Contains(etherAddress))    //case: service is ahead than invoker (do nothing)
                         .FirstOrDefaultAsync());
 
