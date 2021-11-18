@@ -1,7 +1,8 @@
-﻿using Etherna.DomainEvents;
-using Etherna.CreditSystem.Domain;
+﻿using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.UserAgg;
 using Etherna.CreditSystem.Persistence.Repositories;
+using Etherna.DomainEvents;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
 using Etherna.MongODM.Core.Serialization;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Persistence
 {
-    public class CreditDbContext : DbContext, ICreditDbContext, IEventDispatcherDbContext
+    public class CreditDbContext : DbContext, ICreditDbContextInternal, IEventDispatcherDbContext
     {
         // Consts.
         private const string SerializersNamespace = "Etherna.CreditSystem.Persistence.ModelMaps";
@@ -37,6 +38,16 @@ namespace Etherna.CreditSystem.Persistence
                 IndexBuilders = new[]
                 {
                     (Builders<User>.IndexKeys.Ascending(u => u.EtherAddress), new CreateIndexOptions<User> { Unique = true }),
+                }
+            });
+
+        //internal repositories
+        public ICollectionRepository<UserBalance, string> UserBalances { get; } = new DomainCollectionRepository<UserBalance, string>(
+            new CollectionRepositoryOptions<UserBalance>("userBalances")
+            {
+                IndexBuilders = new[]
+                {
+                    (Builders<UserBalance>.IndexKeys.Ascending(b => b.User.Id), new CreateIndexOptions<UserBalance> { Unique = true }),
                 }
             });
 

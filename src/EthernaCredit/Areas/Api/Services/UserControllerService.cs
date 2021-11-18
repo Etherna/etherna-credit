@@ -25,11 +25,8 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         }
 
         // Methods.
-        public async Task<double> GetCreditAsync(ClaimsPrincipal user)
-        {
-            var userModel = await userService.FindAndUpdateUserAsync(user);
-            return userModel.CreditBalance;
-        }
+        public Task<double> GetCreditAsync(ClaimsPrincipal user) =>
+            userService.GetUserBalanceAsync(user);
 
         public async Task<IEnumerable<LogDto>> GetLogsAsync(ClaimsPrincipal user, int page, int take)
         {

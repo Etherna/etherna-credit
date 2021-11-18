@@ -23,7 +23,6 @@ namespace Etherna.CreditSystem.Domain.Models
         protected User() { }
 
         // Properties.
-        public virtual double CreditBalance { get; protected set; }
         public virtual string EtherAddress { get; protected set; } = default!;
         public virtual IEnumerable<string> EtherPreviousAddresses
         {

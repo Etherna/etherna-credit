@@ -1,5 +1,7 @@
 ﻿using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.UserAgg;
 using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
 using Etherna.MongODM.Core.Serialization.Serializers;
 using MongoDB.Bson;
@@ -11,12 +13,14 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
     {
         public void Register(IDbContext dbContext)
         {
-            dbContext.SchemaRegister.AddModelMapsSchema<User>("0ff83163-b49f-4182-895d-bed59e73a976",
+            dbContext.SchemaRegister.AddModelMapsSchema<User>("0ff83163-b49f-4182-895d-bed59e73a976");
+            dbContext.SchemaRegister.AddModelMapsSchema<UserBalance>("873c5ee4-122b-4021-8dc9-524b9f50b73b",
                 mm =>
                 {
                     mm.AutoMap();
 
                     // Set members with custom serializers.
+                    mm.SetMemberSerializer(b => b.User, ReferenceSerializer(dbContext));
                 });
         }
 

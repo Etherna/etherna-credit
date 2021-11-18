@@ -33,7 +33,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
             var user = await userService.FindAndUpdateUserAsync(User);
 
             EthereumAddress = user.EtherAddress;
-            CreditBalance = user.CreditBalance;
+            CreditBalance = await userService.GetUserBalanceAsync(user);
 
             return Page();
         }
