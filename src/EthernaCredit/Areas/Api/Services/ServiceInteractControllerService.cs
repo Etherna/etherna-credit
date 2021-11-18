@@ -24,11 +24,8 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         }
 
         // Methods.
-        public async Task<double> GetUserBalanceAsync(string address)
-        {
-            var user = await userService.TryFindUserByAddressAsync(address);
-            return user?.CreditBalance ?? 0;
-        }
+        public Task<double> GetUserBalanceAsync(string address) =>
+            userService.GetUserBalanceAsync(address);
 
         public async Task RegisterBalanceUpdateAsync(string clientId, string address, double ammount, string reason)
         {
@@ -36,12 +33,8 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             var user = await userService.FindUserByAddressAsync(address);
 
             // Apply update (balance can go negative).
-            var userResult = await dbContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Id == user.Id,
-                Builders<User>.Update.Inc(u => u.CreditBalance, ammount));
-
-            // Verify result.
-            if (userResult is null)
+            var result = await userService.IncrementUserBalanceAsync(user, ammount, true);
+            if (!result)
                 throw new InvalidOperationException();
 
             // Report log.

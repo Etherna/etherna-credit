@@ -39,11 +39,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         // Methods.
         public async Task<IActionResult> OnGetAsync()
         {
-            // Get user.
-            var user = await userService.FindAndUpdateUserAsync(User);
-
-            CreditBalance = user.CreditBalance;
-
+            CreditBalance = await userService.GetUserBalanceAsync(User);
             return Page();
         }
 

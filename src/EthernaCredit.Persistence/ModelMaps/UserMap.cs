@@ -1,4 +1,5 @@
 ﻿using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.UserAgg;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Serialization;
 using Etherna.MongODM.Core.Serialization.Serializers;
@@ -18,6 +19,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
 
                     // Set members with custom serializers.
                 });
+            dbContext.SchemaRegister.AddModelMapsSchema<UserBalance>("873c5ee4-122b-4021-8dc9-524b9f50b73b");
         }
 
         /// <summary>

@@ -50,18 +50,9 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             }
 
             // Update user balance.
-            var userResult = await dbContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Id == user.Id &&
-                     u.CreditBalance >= WithdrawAmmount, //verify disponibility
-                Builders<User>.Update.Inc(u => u.CreditBalance, -WithdrawAmmount));
-
-            // Result check.
-            if (userResult is null)
-            {
-                SucceededResult = false;
+            SucceededResult = await userService.IncrementUserBalanceAsync(user, -WithdrawAmmount, false);
+            if (!SucceededResult)
                 return;
-            }
-            SucceededResult = true;
 
             // Report log.
             var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, user.EtherAddress, user);

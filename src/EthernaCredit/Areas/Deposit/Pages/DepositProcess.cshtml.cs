@@ -43,9 +43,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             var user = await userService.FindAndUpdateUserAsync(User);
 
             // Deposit.
-            await dbContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Id == user.Id,
-                Builders<User>.Update.Inc(u => u.CreditBalance, ammountValue));
+            await userService.IncrementUserBalanceAsync(user, ammountValue, false);
 
             // Report log.
             var depositLog = new DepositOperationLog(ammountValue, user.EtherAddress, user);
