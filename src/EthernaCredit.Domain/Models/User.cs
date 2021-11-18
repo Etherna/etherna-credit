@@ -29,6 +29,7 @@ namespace Etherna.CreditSystem.Domain.Models
             get => _etherPreviousAddresses;
             protected set => _etherPreviousAddresses = new HashSet<string>(value ?? Array.Empty<string>());
         }
+        public virtual bool HasUnlimitedCredit { get; protected set; }
 
         // Methods.
         public virtual void UpdateAddresses(string newAddress, IEnumerable<string> newEtherPreviousAddresses)

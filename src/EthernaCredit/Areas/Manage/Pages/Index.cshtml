@@ -6,7 +6,7 @@
 }
 
 <h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
@@ -17,5 +17,11 @@
             <label asp-for="CreditBalance"></label>
             <p>$@Model.CreditBalance</p>
         </div>
+        @if (Model.HasUnlimitedCredit)
+        {
+            <div class="form-group">
+                <p>Your account has unlimited credit, deposits and withdrawals are disabled.</p>
+            </div>
+        }
     </div>
 </div>

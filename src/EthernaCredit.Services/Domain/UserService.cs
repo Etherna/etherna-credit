@@ -92,6 +92,9 @@ namespace Etherna.CreditSystem.Services.Domain
 
         public async Task<bool> IncrementUserBalanceAsync(User user, double ammount, bool allowBalanceDecreaseNegative)
         {
+            if (user.HasUnlimitedCredit)
+                return true;
+
             if (allowBalanceDecreaseNegative || ammount >= 0)
             {
                 var balanceResult = await dbContext.UserBalances.Collection.FindOneAndUpdateAsync(

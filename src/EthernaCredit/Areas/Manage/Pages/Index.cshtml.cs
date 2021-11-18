@@ -20,11 +20,10 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
         // Properties.
         [Display(Name = "Credit balance")]
-        public double CreditBalance { get; set; }
+        public double CreditBalance { get; private set; }
         [Display(Name = "Ethereum address")]
-        public string EthereumAddress { get; set; } = default!;
-        [TempData]
-        public string? StatusMessage { get; set; }
+        public string EthereumAddress { get; private set; } = default!;
+        public bool HasUnlimitedCredit { get; private set; }
 
         // Methods.
         public async Task<IActionResult> OnGetAsync()
@@ -34,6 +33,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
             EthereumAddress = user.EtherAddress;
             CreditBalance = await userService.GetUserBalanceAsync(user);
+            HasUnlimitedCredit = user.HasUnlimitedCredit;
 
             return Page();
         }
