@@ -8,13 +8,14 @@
     public class UserBalance : EntityModelBase<string>
     {
         // Constructors.
-        public UserBalance(string id)
+        public UserBalance(User user)
         {
-            Id = id;
+            User = user;
         }
         protected UserBalance() { }
 
         // Properties.
         public virtual double Credit { get; protected set; }
+        public virtual User User { get; protected set; } = default!;
     }
 }

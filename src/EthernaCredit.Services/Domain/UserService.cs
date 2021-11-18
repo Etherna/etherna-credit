@@ -44,7 +44,7 @@ namespace Etherna.CreditSystem.Services.Domain
                 await dbContext.Users.CreateAsync(user);
 
                 // Create balance record.
-                var balance = new UserBalance(user.Id);
+                var balance = new UserBalance(user);
                 await dbContext.UserBalances.CreateAsync(balance);
 
                 // Get again, because of https://etherna.atlassian.net/browse/MODM-83
@@ -86,7 +86,7 @@ namespace Etherna.CreditSystem.Services.Domain
 
         public async Task<double> GetUserBalanceAsync(User user)
         {
-            var userBalance = await dbContext.UserBalances.FindOneAsync(user.Id);
+            var userBalance = await dbContext.UserBalances.FindOneAsync(balance => balance.User.Id == user.Id);
             return userBalance.Credit;
         }
 
@@ -95,7 +95,7 @@ namespace Etherna.CreditSystem.Services.Domain
             if (allowBalanceDecreaseNegative || ammount >= 0)
             {
                 var balanceResult = await dbContext.UserBalances.Collection.FindOneAndUpdateAsync(
-                    balance => balance.Id == user.Id,
+                    balance => balance.User.Id == user.Id,
                     Builders<UserBalance>.Update.Inc(balance => balance.Credit, ammount));
 
                 return balanceResult is not null;
@@ -103,7 +103,7 @@ namespace Etherna.CreditSystem.Services.Domain
             else
             {
                 var balanceResult = await dbContext.UserBalances.Collection.FindOneAndUpdateAsync(
-                    balance => balance.Id == user.Id &&
+                    balance => balance.User.Id == user.Id &&
                                balance.Credit >= -ammount, //verify disponibility
                     Builders<UserBalance>.Update.Inc(balance => balance.Credit, ammount));
 

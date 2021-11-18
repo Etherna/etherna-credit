@@ -42,8 +42,14 @@ namespace Etherna.CreditSystem.Persistence
             });
 
         //internal repositories
-        public ICollectionRepository<UserBalance, string> UserBalances { get; } =
-            new DomainCollectionRepository<UserBalance, string>("userBalances");
+        public ICollectionRepository<UserBalance, string> UserBalances { get; } = new DomainCollectionRepository<UserBalance, string>(
+            new CollectionRepositoryOptions<UserBalance>("userBalances")
+            {
+                IndexBuilders = new[]
+                {
+                    (Builders<UserBalance>.IndexKeys.Ascending(b => b.User.Id), new CreateIndexOptions<UserBalance> { Unique = true }),
+                }
+            });
 
         //other properties
         public IEventDispatcher EventDispatcher { get; }
