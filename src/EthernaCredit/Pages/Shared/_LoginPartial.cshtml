@@ -2,16 +2,25 @@
     @if (User?.Identity?.IsAuthenticated == true)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Manage">Manage credit</a>
+            <a asp-area="@CommonConsts.ManageArea"
+               asp-page="/Index"
+               class="nav-link text-dark"
+               title="Manage credits">Manage credits</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Account" asp-page="/Logout" title="Logout">Logout</a>
+            <a asp-area="@CommonConsts.AccountArea"
+               asp-page="/Logout"
+               class="nav-link text-dark"
+               title="Logout">Logout</a>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Account" asp-page="/Login" title="Login">Login</a>
+            <a asp-area="@CommonConsts.AccountArea"
+               asp-page="/Login"
+               class="nav-link text-dark"
+               title="Login">Login</a>
         </li>
     }
 </ul>

@@ -11,14 +11,22 @@ namespace Etherna.CreditSystem.Domain.Models
         private HashSet<string> _etherPreviousAddresses = new();
 
         // Constructors.
-        public User(string address)
+        public User(string address, IEnumerable<string> prevAddresses)
         {
             if (address is null)
                 throw new ArgumentNullException(nameof(address));
             if (!address.IsValidEthereumAddressHexFormat())
                 throw new ArgumentException("The value is not a valid ethereum address", nameof(address));
 
+            if (prevAddresses is null)
+                throw new ArgumentNullException(nameof(prevAddresses));
+            foreach (var prevAddress in prevAddresses)
+                if (!prevAddress.IsValidEthereumAddressHexFormat())
+                    throw new ArgumentException("Some values are not valid ethereum addresses", nameof(prevAddresses));
+
             EtherAddress = address.ConvertToEthereumChecksumAddress();
+            _etherPreviousAddresses = prevAddresses.Select(a => a.ConvertToEthereumChecksumAddress())
+                                                   .ToHashSet();
         }
         protected User() { }
 
@@ -29,7 +37,7 @@ namespace Etherna.CreditSystem.Domain.Models
             get => _etherPreviousAddresses;
             protected set => _etherPreviousAddresses = new HashSet<string>(value ?? Array.Empty<string>());
         }
-        public virtual bool HasUnlimitedCredit { get; protected set; }
+        public virtual bool HasUnlimitedCredit { get; set; }
 
         // Methods.
         public virtual void UpdateAddresses(string newAddress, IEnumerable<string> newEtherPreviousAddresses)
@@ -45,7 +53,9 @@ namespace Etherna.CreditSystem.Domain.Models
                 if (!address.IsValidEthereumAddressHexFormat())
                     throw new ArgumentException("Some values are not valid ethereum addresses", nameof(newEtherPreviousAddresses));
 
-            var mergedPrevEtherAddresses = _etherPreviousAddresses.Union(newEtherPreviousAddresses).ToHashSet();
+            var mergedPrevEtherAddresses = _etherPreviousAddresses.Union(newEtherPreviousAddresses)
+                                                                  .Select(a => a.ConvertToEthereumChecksumAddress())
+                                                                  .ToHashSet();
 
             if (mergedPrevEtherAddresses.Contains(newAddress))
                 throw new ArgumentException("Old addresses can't contain also the new one", nameof(newEtherPreviousAddresses));

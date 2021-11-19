@@ -4,6 +4,7 @@ using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Nethereum.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace Etherna.CreditSystem.Services.Domain
             if (user is null)
             {
                 // Create a new user.
-                user = new User(etherAddress);
+                user = new User(etherAddress, prevEtherAddresses);
                 await dbContext.Users.CreateAsync(user);
 
                 // Create balance record.
@@ -63,11 +64,18 @@ namespace Etherna.CreditSystem.Services.Domain
             return user;
         }
 
-        public async Task<User> FindUserByAddressAsync(string address) =>
-            await dbContext.Users.QueryElementsAsync(elements =>
+        public async Task<User> FindUserByAddressAsync(string address)
+        {
+            if (!address.IsValidEthereumAddressHexFormat())
+                throw new ArgumentException("The value is not a valid ethereum address", nameof(address));
+
+            address = address.ConvertToEthereumChecksumAddress();
+
+            return await dbContext.Users.QueryElementsAsync(elements =>
                 elements.Where(u => u.EtherAddress == address ||
                                     u.EtherPreviousAddresses.Contains(address))
                         .FirstAsync());
+        }
 
         public async Task<double> GetUserBalanceAsync(string address)
         {
@@ -114,10 +122,17 @@ namespace Etherna.CreditSystem.Services.Domain
             }
         }
 
-        public async Task<User?> TryFindUserByAddressAsync(string address) =>
-            await dbContext.Users.QueryElementsAsync(elements =>
+        public async Task<User?> TryFindUserByAddressAsync(string address)
+        {
+            if (!address.IsValidEthereumAddressHexFormat())
+                return null;
+
+            address = address.ConvertToEthereumChecksumAddress();
+
+            return await dbContext.Users.QueryElementsAsync(elements =>
                 elements.Where(u => u.EtherAddress == address ||
                                     u.EtherPreviousAddresses.Contains(address))
                         .FirstOrDefaultAsync());
+        }
     }
 }
