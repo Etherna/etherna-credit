@@ -1,8 +1,7 @@
-﻿using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
+﻿using Etherna.CreditSystem.Areas.Api.DtoModels;
+using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
-using MongoDB.Driver;
 using System;
 using System.Threading.Tasks;
 
@@ -24,8 +23,16 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         }
 
         // Methods.
-        public Task<double> GetUserBalanceAsync(string address) =>
-            userService.GetUserBalanceAsync(address);
+        public async Task<CreditDto> GetUserCreditAsync(string address)
+        {
+            var user = await userService.TryFindUserByAddressAsync(address);
+            if (user is null)
+                return new CreditDto(0, false);
+
+            var balance = await userService.GetUserBalanceAsync(user);
+
+            return new CreditDto(balance, user.HasUnlimitedCredit);
+        }
 
         public async Task RegisterBalanceUpdateAsync(string clientId, string address, double ammount, string reason)
         {
