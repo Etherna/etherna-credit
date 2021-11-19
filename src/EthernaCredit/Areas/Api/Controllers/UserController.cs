@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Etherna.CreditSystem.Areas.Api.Controllers
 {
     [ApiController]
-    [ApiVersion("0.2")]
+    [ApiVersion("0.3")]
     [Route("api/v{api-version:apiVersion}/[controller]")]
     [Authorize]
     public class UserController : ControllerBase
@@ -31,7 +31,7 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         [HttpGet("credit")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public Task<double> GetCreditAsync() =>
+        public Task<CreditDto> GetCreditAsync() =>
             service.GetCreditAsync(User);
 
         /// <summary>

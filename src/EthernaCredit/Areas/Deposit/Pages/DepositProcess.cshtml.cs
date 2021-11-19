@@ -1,10 +1,8 @@
 using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -28,6 +26,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
         // Properties.
         public double DepositAmmount { get; set; }
+        public bool SucceededResult { get; set; }
 
         // Methods
         public IActionResult OnGet() =>
@@ -39,17 +38,24 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
                 throw new ArgumentNullException(nameof(ammount));
 
             // Get data.
-            var ammountValue = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
+            DepositAmmount = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
             var user = await userService.FindAndUpdateUserAsync(User);
 
+            // Preliminary check.
+            if (user.HasUnlimitedCredit) //disable deposit if unlimited credit
+            {
+                SucceededResult = false;
+                return;
+            }
+
             // Deposit.
-            await userService.IncrementUserBalanceAsync(user, ammountValue, false);
+            await userService.IncrementUserBalanceAsync(user, DepositAmmount, false);
 
             // Report log.
-            var depositLog = new DepositOperationLog(ammountValue, user.EtherAddress, user);
+            var depositLog = new DepositOperationLog(DepositAmmount, user.EtherAddress, user);
             await dbContext.OperationLogs.CreateAsync(depositLog);
 
-            DepositAmmount = ammountValue;
+            SucceededResult = true;
         }
     }
 }

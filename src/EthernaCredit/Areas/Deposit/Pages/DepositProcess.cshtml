@@ -7,7 +7,14 @@
 <h4>@ViewData["Title"]</h4>
 <div class="row">
     <div class="col-md-6">
-        <p>An ammount of $@Model.DepositAmmount has been deposited to your account</p>
+        @if (Model.SucceededResult)
+        {
+            <p>An ammount of $@Model.DepositAmmount has been deposited to your account</p>
+        }
+        else
+        {
+            <p>Sorry, we was not able to deposit an ammount of $@Model.DepositAmmount to your account</p>
+        }
         <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
     </div>
 </div>

@@ -43,7 +43,8 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             var user = await userService.FindAndUpdateUserAsync(User); //create or update address, if required
 
             // Preliminary check.
-            if (WithdrawAmmount < MinimumWithdraw)
+            if (user.HasUnlimitedCredit || //***** disable withdraw if unlimited credit (SECURITY!) *****
+                WithdrawAmmount < MinimumWithdraw)
             {
                 SucceededResult = false;
                 return;
