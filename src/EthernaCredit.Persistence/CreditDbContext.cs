@@ -38,7 +38,7 @@ namespace Etherna.CreditSystem.Persistence
                 IndexBuilders = new[]
                 {
                     (Builders<User>.IndexKeys.Ascending(u => u.EtherAddress), new CreateIndexOptions<User> { Unique = true }),
-                    (Builders<User>.IndexKeys.Ascending(u => u.EtherPreviousAddresses), new CreateIndexOptions<User> { Unique = true })
+                    (Builders<User>.IndexKeys.Ascending(u => u.EtherPreviousAddresses), new CreateIndexOptions<User>())
                 }
             });
 
