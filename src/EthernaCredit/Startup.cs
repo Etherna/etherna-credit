@@ -12,6 +12,7 @@ using Etherna.DomainEvents;
 using Etherna.MongODM;
 using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
+using Etherna.RCL.Exceptions;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -59,7 +60,10 @@ namespace Etherna.CreditSystem
         {
             // Configure Asp.Net Core framework services.
             services.AddDataProtection()
-                .PersistKeysToDbContext(new DbContextOptions { ConnectionString = Configuration["ConnectionStrings:DataProtectionDb"] })
+                .PersistKeysToDbContext(new DbContextOptions
+                {
+                    ConnectionString = Configuration["ConnectionStrings:DataProtectionDb"] ?? throw new ServiceConfigurationException()
+                })
                 .SetApplicationName(CommonConsts.SharedCookieApplicationName);
 
             services.AddCors();
@@ -104,7 +108,7 @@ namespace Etherna.CreditSystem
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //client config
                 {
-                    options.Authority = Configuration["SsoServer:BaseUrl"];
+                    options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
 
                     // Response 401 for unauthorized call on api.
                     options.Events.OnRedirectToIdentityProvider = context =>
@@ -117,8 +121,8 @@ namespace Etherna.CreditSystem
                         return Task.CompletedTask;
                     };
 
-                    options.ClientId = "ethernaCreditClientId";
-                    options.ClientSecret = Configuration["SsoServer:ClientSecret"];
+                    options.ClientId = Configuration["SsoServer:Clients:Webapp:ClientId"] ?? throw new ServiceConfigurationException();
+                    options.ClientSecret = Configuration["SsoServer:Clients:Webapp:Secret"] ?? throw new ServiceConfigurationException();
                     options.ResponseType = "code";
 
                     options.SaveTokens = true;
@@ -128,7 +132,8 @@ namespace Etherna.CreditSystem
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    options.Authority = Configuration["SsoServer:BaseUrl"];
+                    options.Audience = "ethernaCreditServiceInteract";
+                    options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
                 });
             services.AddAuthorization(options =>
             {
@@ -175,18 +180,24 @@ namespace Etherna.CreditSystem
                 options.IncludeXmlComments(xmlPath);
             });
 
+            // Configure Etherna SSO Client services.
+            services.AddEthernaSsoClientForServices(
+                new Uri(Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException()),
+                Configuration["SsoServer:Clients:SsoServer:ClientId"] ?? throw new ServiceConfigurationException(),
+                Configuration["SsoServer:Clients:SsoServer:Secret"] ?? throw new ServiceConfigurationException());
+
             // Configure setting.
             var assemblyVersion = new AssemblyVersion(GetType().GetTypeInfo().Assembly);
             services.Configure<ApplicationSettings>(options =>
             {
                 options.AssemblyVersion = assemblyVersion.Version;
             });
-            services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer"));
+            services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
 
             // Configure persistence.
             services.AddMongODMWithHangfire<ModelBase>(configureHangfireOptions: options =>
             {
-                options.ConnectionString = Configuration["ConnectionStrings:HangfireDb"];
+                options.ConnectionString = Configuration["ConnectionStrings:HangfireDb"] ?? throw new ServiceConfigurationException();
                 options.StorageOptions = new MongoStorageOptions
                 {
                     MigrationOptions = new MongoMigrationOptions //don't remove, could throw exception
@@ -206,7 +217,7 @@ namespace Etherna.CreditSystem
             options =>
             {
                 options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
-                options.ConnectionString = Configuration["ConnectionStrings:CreditDb"];
+                options.ConnectionString = Configuration["ConnectionStrings:CreditDb"] ?? throw new ServiceConfigurationException();
             });
 
             services.AddMongODMAdminDashboard(new MongODM.AspNetCore.UI.DashboardOptions
@@ -272,7 +283,7 @@ namespace Etherna.CreditSystem
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                // build a swagger endpoint for each discovered API version
+                //build a swagger endpoint for each discovered API version
                 foreach (var description in apiProvider.ApiVersionDescriptions)
                 {
                     options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
