@@ -1,6 +1,8 @@
 using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
+using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
@@ -13,14 +15,17 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
     {
         // Fields.
         private readonly ICreditDbContext dbContext;
+        private readonly IEventDispatcher eventDispatcher;
         private readonly IUserService userService;
 
         // Constructor.
         public DepositProcessModel(
             ICreditDbContext dbContext,
+            IEventDispatcher eventDispatcher,
             IUserService userService)
         {
             this.dbContext = dbContext;
+            this.eventDispatcher = eventDispatcher;
             this.userService = userService;
         }
 
@@ -54,6 +59,10 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             // Report log.
             var depositLog = new DepositOperationLog(DepositAmmount, user.EtherAddress, user);
             await dbContext.OperationLogs.CreateAsync(depositLog);
+
+            // Dispatch event.
+            await eventDispatcher.DispatchAsync(new UserDepositEvent(
+                DepositAmmount, user));
 
             SucceededResult = true;
         }

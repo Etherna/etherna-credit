@@ -13,6 +13,7 @@ using Etherna.MongODM;
 using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
 using Etherna.RCL.Exceptions;
+using Etherna.RCL.Settings;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -192,6 +193,7 @@ namespace Etherna.CreditSystem
             {
                 options.AssemblyVersion = assemblyVersion.Version;
             });
+            services.Configure<EmailSettings>(Configuration.GetSection("Email") ?? throw new ServiceConfigurationException());
             services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
 
             // Configure persistence.
