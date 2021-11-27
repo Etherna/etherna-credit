@@ -1,9 +1,9 @@
 using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
+using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -17,14 +17,17 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
         // Fields.
         private readonly ICreditDbContext dbContext;
+        private readonly IEventDispatcher eventDispatcher;
         private readonly IUserService userService;
 
         // Constructor.
         public WithdrawProcessModel(
             ICreditDbContext dbContext,
+            IEventDispatcher eventDispatcher,
             IUserService userService)
         {
             this.dbContext = dbContext;
+            this.eventDispatcher = eventDispatcher;
             this.userService = userService;
         }
 
@@ -58,6 +61,10 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             // Report log.
             var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, user.EtherAddress, user);
             await dbContext.OperationLogs.CreateAsync(withdrawLog);
+
+            // Dispatch event.
+            await eventDispatcher.DispatchAsync(new UserWithdrawEvent(
+                -WithdrawAmmount, user));
         }
     }
 }

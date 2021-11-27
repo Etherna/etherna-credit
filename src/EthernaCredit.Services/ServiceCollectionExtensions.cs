@@ -17,6 +17,9 @@ namespace Etherna.CreditSystem.Services
             var currentType = typeof(ServiceCollectionExtensions).GetTypeInfo();
             var eventHandlersNamespace = $"{currentType.Namespace}.{EventHandlersSubNamespace}";
 
+            // Dependencies.
+            services.AddEthernaRCL();
+
             // Events.
             //register handlers in Ioc
             var eventHandlerTypes = from t in typeof(ServiceCollectionExtensions).GetTypeInfo().Assembly.GetTypes()
