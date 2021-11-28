@@ -32,6 +32,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{64A1A3D7-3D00-43B2-B358-096DB512A6E7}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\stable-release.yml = .github\workflows\stable-release.yml
+		.github\workflows\unstable-release.yml = .github\workflows\unstable-release.yml
 	EndProjectSection
 EndProject
 Global
