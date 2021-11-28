@@ -1,4 +1,5 @@
-﻿using Etherna.CreditSystem.Areas.Api.DtoModels;
+﻿using Etherna.Authentication.Extensions;
+using Etherna.CreditSystem.Areas.Api.DtoModels;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Services.Domain;
 using MongoDB.Driver.Linq;
@@ -25,6 +26,9 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         }
 
         // Methods.
+        public string GetAddress(ClaimsPrincipal user) =>
+            user.GetEtherAddress();
+
         public async Task<CreditDto> GetCreditAsync(ClaimsPrincipal user)
         {
             var userModel = await userService.FindAndUpdateUserAsync(user);
