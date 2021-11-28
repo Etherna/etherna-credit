@@ -1,8 +1,8 @@
 ﻿using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Services.Views.Emails;
 using Etherna.DomainEvents;
-using Etherna.RCL.Services;
 using Etherna.ServicesClient.Clients.Sso;
+using Etherna.SSL.Services;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.EventHandlers

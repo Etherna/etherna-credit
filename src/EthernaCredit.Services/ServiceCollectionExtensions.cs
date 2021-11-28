@@ -1,6 +1,7 @@
 ﻿using Etherna.CreditSystem.Services.Domain;
 using Etherna.DomainEvents;
 using Etherna.DomainEvents.AspNetCore;
+using Etherna.SSL;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Etherna.CreditSystem.Services
             var eventHandlersNamespace = $"{currentType.Namespace}.{EventHandlersSubNamespace}";
 
             // Dependencies.
-            services.AddEthernaRCL();
+            services.AddEthernaServicesSharedLibrary();
 
             // Events.
             //register handlers in Ioc

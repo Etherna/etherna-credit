@@ -1,5 +1,5 @@
-using Etherna.RCL.Exceptions;
-using Etherna.RCL.Filters;
+using Etherna.SSL.Exceptions;
+using Etherna.SSL.Filters;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
