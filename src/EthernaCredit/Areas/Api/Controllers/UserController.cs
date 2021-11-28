@@ -28,6 +28,10 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
 
         // GET.
 
+        /// <summary>
+        /// Get address for current user
+        /// </summary>
+        /// <returns>Ethereum address</returns>
         [HttpGet("address")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
