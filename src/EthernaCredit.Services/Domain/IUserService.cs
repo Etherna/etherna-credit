@@ -10,10 +10,10 @@ namespace Etherna.CreditSystem.Services.Domain
         Task<User> FindAndUpdateUserAsync(ClaimsPrincipal user);
         Task<User> FindAndUpdateUserAsync(string etherAddress, IEnumerable<string> prevEtherAddresses);
         Task<User> FindUserByAddressAsync(string address);
-        Task<double> GetUserBalanceAsync(string address);
-        Task<double> GetUserBalanceAsync(ClaimsPrincipal user);
-        Task<double> GetUserBalanceAsync(User user);
-        Task<bool> IncrementUserBalanceAsync(User user, double ammount, bool allowBalanceDecreaseNegative);
+        Task<decimal> GetUserBalanceAsync(string address);
+        Task<decimal> GetUserBalanceAsync(ClaimsPrincipal user);
+        Task<decimal> GetUserBalanceAsync(User user);
+        Task<bool> IncrementUserBalanceAsync(User user, decimal ammount, bool allowBalanceDecreaseNegative);
         Task<User?> TryFindUserByAddressAsync(string address);
     }
 }

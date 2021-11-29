@@ -1,4 +1,6 @@
-﻿namespace Etherna.CreditSystem.Domain.Models.UserAgg
+﻿using MongoDB.Bson;
+
+namespace Etherna.CreditSystem.Domain.Models.UserAgg
 {
     /// <summary>
     /// This class is unmanaged from domain space.
@@ -15,7 +17,7 @@
         protected UserBalance() { }
 
         // Properties.
-        public virtual double Credit { get; protected set; }
+        public virtual Decimal128 Credit { get; protected set; }
         public virtual User User { get; protected set; } = default!;
     }
 }

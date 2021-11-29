@@ -6,7 +6,7 @@ namespace Etherna.CreditSystem.Domain.Models.OperationLogs
     {
         // Constructors.
         public UpdateOperationLog(
-            double ammount,
+            decimal ammount,
             string author,
             string reason,
             User user)

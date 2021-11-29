@@ -4,7 +4,7 @@
     {
         // Constructors.
         public DepositOperationLog(
-            double ammount,
+            decimal ammount,
             string author,
             User user)
             : base(ammount, author, user)

@@ -6,7 +6,7 @@ namespace Etherna.CreditSystem.Domain.Models
     {
         // Constructors.
         protected OperationLogBase(
-            double ammount,
+            decimal ammount,
             string author,
             User user)
         {
@@ -17,7 +17,7 @@ namespace Etherna.CreditSystem.Domain.Models
         protected OperationLogBase() { }
 
         // Properties.
-        public virtual double Ammount { get; protected set; }
+        public virtual decimal Ammount { get; protected set; }
         public virtual string Author { get; protected set; } = default!;
         public abstract string OperationName { get; }
         public virtual User User { get; protected set; } = default!;

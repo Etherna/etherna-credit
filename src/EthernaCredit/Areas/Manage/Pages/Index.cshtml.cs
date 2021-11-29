@@ -20,7 +20,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
         // Properties.
         [Display(Name = "Credit balance")]
-        public double CreditBalance { get; private set; }
+        public decimal CreditBalance { get; private set; }
         [Display(Name = "Ethereum address")]
         public string EthereumAddress { get; private set; } = default!;
         public bool HasUnlimitedCredit { get; private set; }

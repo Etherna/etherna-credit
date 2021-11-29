@@ -6,6 +6,6 @@ namespace Etherna.CreditSystem.Areas.Api.Services
     public interface IServiceInteractControllerService
     {
         Task<CreditDto> GetUserCreditAsync(string address);
-        Task RegisterBalanceUpdateAsync(string clientId, string address, double ammount, string reason);
+        Task RegisterBalanceUpdateAsync(string clientId, string address, decimal ammount, string reason);
     }
 }

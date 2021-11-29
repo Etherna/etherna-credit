@@ -13,7 +13,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
     public class WithdrawProcessModel : PageModel
     {
         // Consts.
-        public const double MinimumWithdraw = 1.0;
+        public const decimal MinimumWithdraw = 1.0M;
 
         // Fields.
         private readonly ICreditDbContext dbContext;
@@ -33,7 +33,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
         // Properties.
         public bool SucceededResult { get; set; }
-        public double WithdrawAmmount { get; set; }
+        public decimal WithdrawAmmount { get; set; }
 
         // Methods
         public async Task OnGetAsync(string ammount)
@@ -42,7 +42,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
                 throw new ArgumentNullException(nameof(ammount));
 
             // Get data.
-            WithdrawAmmount = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
+            WithdrawAmmount = decimal.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
             var user = await userService.FindAndUpdateUserAsync(User); //create or update address, if required
 
             // Preliminary check.

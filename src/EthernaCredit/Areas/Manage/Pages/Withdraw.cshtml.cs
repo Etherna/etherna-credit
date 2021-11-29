@@ -32,9 +32,9 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public InputModel Input { get; set; } = default!;
 
         public bool CanWithdraw => CreditBalance >= MinLimit && CreditBalance != 0;
-        public double CreditBalance { get; private set; }
-        public double MaxLimit => CreditBalance;
-        public double MinLimit => WithdrawProcessModel.MinimumWithdraw;
+        public decimal CreditBalance { get; private set; }
+        public decimal MaxLimit => CreditBalance;
+        public decimal MinLimit => WithdrawProcessModel.MinimumWithdraw;
 
         // Methods.
         public async Task<IActionResult> OnGetAsync()
