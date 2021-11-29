@@ -34,7 +34,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             return new CreditDto(balance, user.HasUnlimitedCredit);
         }
 
-        public async Task RegisterBalanceUpdateAsync(string clientId, string address, double ammount, string reason)
+        public async Task RegisterBalanceUpdateAsync(string clientId, string address, decimal ammount, string reason)
         {
             // Get user.
             var user = await userService.FindUserByAddressAsync(address);

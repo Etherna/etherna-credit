@@ -33,7 +33,7 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         // Properties.
         public string Id { get; private set; } = default!;
 
-        public double Balance { get; private set; }
+        public decimal Balance { get; private set; }
 
         [Display(Name = "Ethereum address")]
         public string? EtherAddress { get; private set; }

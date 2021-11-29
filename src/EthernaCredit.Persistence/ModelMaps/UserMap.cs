@@ -20,6 +20,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                     mm.AutoMap();
 
                     // Set members with custom serializers.
+                    mm.SetMemberSerializer(b => b.Credit, new Decimal128Serializer(BsonType.Decimal128));
                     mm.SetMemberSerializer(b => b.User, ReferenceSerializer(dbContext));
                 });
         }

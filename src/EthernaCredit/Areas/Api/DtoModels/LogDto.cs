@@ -16,7 +16,7 @@ namespace Etherna.CreditSystem.Areas.Api.DtoModels
             OperationName = log.OperationName;
         }
 
-        public virtual double Ammount { get; }
+        public virtual decimal Ammount { get; }
         public virtual string Author { get; }
         public DateTime CreationDateTime { get; }
         public string OperationName { get; }

@@ -53,7 +53,7 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task RegisterBalanceUpdateAsync([Required] string address, [Required]double ammount, [Required]string reason) =>
+        public Task RegisterBalanceUpdateAsync([Required] string address, [Required] decimal ammount, [Required] string reason) =>
             service.RegisterBalanceUpdateAsync(User.GetClientId(), address, ammount, reason);
     }
 }

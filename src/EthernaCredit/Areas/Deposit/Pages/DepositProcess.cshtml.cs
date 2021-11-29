@@ -30,7 +30,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
         }
 
         // Properties.
-        public double DepositAmmount { get; set; }
+        public decimal DepositAmmount { get; set; }
         public bool SucceededResult { get; set; }
 
         // Methods
@@ -43,7 +43,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
                 throw new ArgumentNullException(nameof(ammount));
 
             // Get data.
-            DepositAmmount = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
+            DepositAmmount = decimal.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
             var user = await userService.FindAndUpdateUserAsync(User);
 
             // Preliminary check.
