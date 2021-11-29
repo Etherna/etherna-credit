@@ -43,6 +43,8 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
             // Get data.
             WithdrawAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
+            WithdrawAmount = decimal.Truncate(WithdrawAmount * 100) / 100; //accept 2 digit precision
+
             var user = await userService.FindAndUpdateUserAsync(User); //create or update address, if required
 
             // Preliminary check.
