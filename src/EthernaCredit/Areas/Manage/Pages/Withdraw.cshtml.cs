@@ -14,7 +14,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public class InputModel
         {
             [Required]
-            public string Ammount { get; set; } = default!;
+            public string Amount { get; set; } = default!;
         }
 
         // Fields.
@@ -46,13 +46,13 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public IActionResult OnPostAsync()
         {
             if (!ModelState.IsValid ||
-                !double.TryParse(Input.Ammount, NumberStyles.Any, CultureInfo.InvariantCulture, out var ammountValue))
+                !double.TryParse(Input.Amount, NumberStyles.Any, CultureInfo.InvariantCulture, out var amountValue))
                 return Page();
 
             return RedirectToPage("WithdrawProcess", new
             {
                 area = "Withdraw",
-                ammount = ammountValue
+                amount = amountValue
             });
         }
     }

@@ -44,16 +44,16 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         // Put.
 
         /// <summary>
-        /// Udpate the credit balance of an user by a given ammount
+        /// Udpate the credit balance of an user by a given amount
         /// </summary>
         /// <param name="address">The user address</param>
-        /// <param name="ammount">The ammount to be updated. Positive for credit, negative for debit</param>
+        /// <param name="amount">The amount to be updated. Positive for credit, negative for debit</param>
         /// <param name="reason">The update reason description</param>
         [HttpPut("users/{address}/credit/balance")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task RegisterBalanceUpdateAsync([Required] string address, [Required] decimal ammount, [Required] string reason) =>
-            service.RegisterBalanceUpdateAsync(User.GetClientId(), address, ammount, reason);
+        public Task RegisterBalanceUpdateAsync([Required] string address, [Required] decimal amount, [Required] string reason) =>
+            service.RegisterBalanceUpdateAsync(User.GetClientId(), address, amount, reason);
     }
 }

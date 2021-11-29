@@ -12,9 +12,9 @@
         <form id="deposit" asp-area="Deposit" asp-page="DepositProcess" method="post" class="form-horizontal">
             <div>
                 <p>
-                    @foreach (var ammount in new[] { "$0.10", "$0.50", "$1", "$5", "$10" })
+                    @foreach (var amount in new[] { "$0.10", "$0.50", "$1", "$5", "$10" })
                     {
-                        <button type="submit" name="ammount" class="btn btn-primary" value="@ammount">@ammount</button>
+                        <button type="submit" name="amount" class="btn btn-primary" value="@amount">@amount</button>
                     }
                 </p>
             </div>

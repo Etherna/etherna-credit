@@ -13,7 +13,7 @@ namespace Etherna.CreditSystem.Services.Domain
         Task<decimal> GetUserBalanceAsync(string address);
         Task<decimal> GetUserBalanceAsync(ClaimsPrincipal user);
         Task<decimal> GetUserBalanceAsync(User user);
-        Task<bool> IncrementUserBalanceAsync(User user, decimal ammount, bool allowBalanceDecreaseNegative);
+        Task<bool> IncrementUserBalanceAsync(User user, decimal amount, bool allowBalanceDecreaseNegative);
         Task<User?> TryFindUserByAddressAsync(string address);
     }
 }

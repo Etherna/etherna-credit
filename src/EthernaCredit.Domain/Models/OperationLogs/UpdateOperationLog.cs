@@ -6,11 +6,11 @@ namespace Etherna.CreditSystem.Domain.Models.OperationLogs
     {
         // Constructors.
         public UpdateOperationLog(
-            decimal ammount,
+            decimal amount,
             string author,
             string reason,
             User user)
-            : base(ammount, author, user)
+            : base(amount, author, user)
         {
             Reason = reason ?? throw new ArgumentNullException(nameof(reason));
         }

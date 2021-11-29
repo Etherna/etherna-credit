@@ -30,20 +30,20 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
         }
 
         // Properties.
-        public decimal DepositAmmount { get; set; }
+        public decimal DepositAmount { get; set; }
         public bool SucceededResult { get; set; }
 
         // Methods
         public IActionResult OnGet() =>
             LocalRedirect("~/");
 
-        public async Task OnPostAsync(string ammount)
+        public async Task OnPostAsync(string amount)
         {
-            if (ammount is null)
-                throw new ArgumentNullException(nameof(ammount));
+            if (amount is null)
+                throw new ArgumentNullException(nameof(amount));
 
             // Get data.
-            DepositAmmount = decimal.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
+            DepositAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
             var user = await userService.FindAndUpdateUserAsync(User);
 
             // Preliminary check.
@@ -54,15 +54,15 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             }
 
             // Deposit.
-            await userService.IncrementUserBalanceAsync(user, DepositAmmount, false);
+            await userService.IncrementUserBalanceAsync(user, DepositAmount, false);
 
             // Report log.
-            var depositLog = new DepositOperationLog(DepositAmmount, user.EtherAddress, user);
+            var depositLog = new DepositOperationLog(DepositAmount, user.EtherAddress, user);
             await dbContext.OperationLogs.CreateAsync(depositLog);
 
             // Dispatch event.
             await eventDispatcher.DispatchAsync(new UserDepositEvent(
-                DepositAmmount, user));
+                DepositAmount, user));
 
             SucceededResult = true;
         }

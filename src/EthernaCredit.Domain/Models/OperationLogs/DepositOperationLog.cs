@@ -4,10 +4,10 @@
     {
         // Constructors.
         public DepositOperationLog(
-            decimal ammount,
+            decimal amount,
             string author,
             User user)
-            : base(ammount, author, user)
+            : base(amount, author, user)
         { }
         protected DepositOperationLog() { }
 

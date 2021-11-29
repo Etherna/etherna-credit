@@ -10,13 +10,13 @@ namespace Etherna.CreditSystem.Areas.Api.DtoModels
             if (log is null)
                 throw new ArgumentNullException(nameof(log));
 
-            Ammount = log.Ammount;
+            Amount = log.Amount;
             Author = log.Author;
             CreationDateTime = log.CreationDateTime;
             OperationName = log.OperationName;
         }
 
-        public virtual decimal Ammount { get; }
+        public virtual decimal Amount { get; }
         public virtual string Author { get; }
         public DateTime CreationDateTime { get; }
         public string OperationName { get; }

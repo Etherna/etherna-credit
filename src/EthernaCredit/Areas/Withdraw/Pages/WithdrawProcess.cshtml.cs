@@ -33,38 +33,38 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
         // Properties.
         public bool SucceededResult { get; set; }
-        public decimal WithdrawAmmount { get; set; }
+        public decimal WithdrawAmount { get; set; }
 
         // Methods
-        public async Task OnGetAsync(string ammount)
+        public async Task OnGetAsync(string amount)
         {
-            if (ammount is null)
-                throw new ArgumentNullException(nameof(ammount));
+            if (amount is null)
+                throw new ArgumentNullException(nameof(amount));
 
             // Get data.
-            WithdrawAmmount = decimal.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
+            WithdrawAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
             var user = await userService.FindAndUpdateUserAsync(User); //create or update address, if required
 
             // Preliminary check.
             if (user.HasUnlimitedCredit || //***** disable withdraw if unlimited credit (SECURITY!) *****
-                WithdrawAmmount < MinimumWithdraw)
+                WithdrawAmount < MinimumWithdraw)
             {
                 SucceededResult = false;
                 return;
             }
 
             // Update user balance.
-            SucceededResult = await userService.IncrementUserBalanceAsync(user, -WithdrawAmmount, false);
+            SucceededResult = await userService.IncrementUserBalanceAsync(user, -WithdrawAmount, false);
             if (!SucceededResult)
                 return;
 
             // Report log.
-            var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, user.EtherAddress, user);
+            var withdrawLog = new WithdrawOperationLog(-WithdrawAmount, user.EtherAddress, user);
             await dbContext.OperationLogs.CreateAsync(withdrawLog);
 
             // Dispatch event.
             await eventDispatcher.DispatchAsync(new UserWithdrawEvent(
-                -WithdrawAmmount, user));
+                -WithdrawAmount, user));
         }
     }
 }

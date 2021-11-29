@@ -6,14 +6,14 @@ namespace Etherna.CreditSystem.Domain.Events
     public class UserDepositEvent : IDomainEvent
     {
         // Constructor.
-        public UserDepositEvent(decimal ammount, User user)
+        public UserDepositEvent(decimal amount, User user)
         {
-            Ammount = ammount;
+            Amount = amount;
             User = user;
         }
 
         // Properties.
-        public decimal Ammount { get; }
+        public decimal Amount { get; }
         public User User { get; }
     }
 }

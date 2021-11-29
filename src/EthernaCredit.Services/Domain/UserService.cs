@@ -99,16 +99,16 @@ namespace Etherna.CreditSystem.Services.Domain
             return Decimal128.ToDecimal(userBalance.Credit);
         }
 
-        public async Task<bool> IncrementUserBalanceAsync(User user, decimal ammount, bool allowBalanceDecreaseNegative)
+        public async Task<bool> IncrementUserBalanceAsync(User user, decimal amount, bool allowBalanceDecreaseNegative)
         {
             if (user.HasUnlimitedCredit)
                 return true;
 
-            if (allowBalanceDecreaseNegative || ammount >= 0)
+            if (allowBalanceDecreaseNegative || amount >= 0)
             {
                 var balanceResult = await dbContext.UserBalances.Collection.FindOneAndUpdateAsync(
                     balance => balance.User.Id == user.Id,
-                    Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(ammount)));
+                    Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount)));
 
                 return balanceResult is not null;
             }
@@ -116,8 +116,8 @@ namespace Etherna.CreditSystem.Services.Domain
             {
                 var balanceResult = await dbContext.UserBalances.Collection.FindOneAndUpdateAsync(
                     balance => balance.User.Id == user.Id &&
-                               balance.Credit >= new Decimal128(-ammount), //verify disponibility
-                    Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(ammount)));
+                               balance.Credit >= new Decimal128(-amount), //verify disponibility
+                    Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount)));
 
                 return balanceResult is not null;
             }

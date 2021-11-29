@@ -34,18 +34,18 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             return new CreditDto(balance, user.HasUnlimitedCredit);
         }
 
-        public async Task RegisterBalanceUpdateAsync(string clientId, string address, decimal ammount, string reason)
+        public async Task RegisterBalanceUpdateAsync(string clientId, string address, decimal amount, string reason)
         {
             // Get user.
             var user = await userService.FindUserByAddressAsync(address);
 
             // Apply update (balance can go negative).
-            var result = await userService.IncrementUserBalanceAsync(user, ammount, true);
+            var result = await userService.IncrementUserBalanceAsync(user, amount, true);
             if (!result)
                 throw new InvalidOperationException();
 
             // Report log.
-            var withdrawLog = new UpdateOperationLog(ammount, clientId, reason, user);
+            var withdrawLog = new UpdateOperationLog(amount, clientId, reason, user);
             await dbContext.OperationLogs.CreateAsync(withdrawLog);
         }
     }
