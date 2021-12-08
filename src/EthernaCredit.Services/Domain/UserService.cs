@@ -2,9 +2,9 @@
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
+using Etherna.MongoDB.Bson;
+using Etherna.MongoDB.Driver;
+using Etherna.MongoDB.Driver.Linq;
 using Nethereum.Util;
 using System;
 using System.Collections.Generic;

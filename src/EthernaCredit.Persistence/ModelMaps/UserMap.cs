@@ -1,11 +1,11 @@
 ﻿using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
+using Etherna.MongoDB.Bson;
+using Etherna.MongoDB.Bson.Serialization.Serializers;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
 using Etherna.MongODM.Core.Serialization.Serializers;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Serializers;
 
 namespace Etherna.CreditSystem.Persistence.ModelMaps
 {

@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+﻿using Etherna.MongoDB.Bson;
 
 namespace Etherna.CreditSystem.Domain.Models.UserAgg
 {

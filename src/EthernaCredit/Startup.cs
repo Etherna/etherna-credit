@@ -197,7 +197,7 @@ namespace Etherna.CreditSystem
             services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
 
             // Configure persistence.
-            services.AddMongODMWithHangfire<ModelBase>(configureHangfireOptions: options =>
+            services.AddMongODMWithHangfire(configureHangfireOptions: options =>
             {
                 options.ConnectionString = Configuration["ConnectionStrings:HangfireDb"] ?? throw new ServiceConfigurationException();
                 options.StorageOptions = new MongoStorageOptions

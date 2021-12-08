@@ -2,7 +2,7 @@
 using Etherna.CreditSystem.Areas.Api.DtoModels;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Services.Domain;
-using MongoDB.Driver.Linq;
+using Etherna.MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
