@@ -106,18 +106,20 @@ namespace Etherna.CreditSystem.Services.Domain
 
             if (allowBalanceDecreaseNegative || amount >= 0)
             {
-                var balanceResult = await dbContext.UserBalances.Collection.FindOneAndUpdateAsync(
-                    balance => balance.User.Id == user.Id,
-                    Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount)));
+                var balanceResult = await dbContext.UserBalances.AccessToCollectionAsync(collection =>
+                    collection.FindOneAndUpdateAsync(
+                        balance => balance.User.Id == user.Id,
+                        Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount))));
 
                 return balanceResult is not null;
             }
             else
             {
-                var balanceResult = await dbContext.UserBalances.Collection.FindOneAndUpdateAsync(
-                    balance => balance.User.Id == user.Id &&
-                               balance.Credit >= new Decimal128(-amount), //verify disponibility
-                    Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount)));
+                var balanceResult = await dbContext.UserBalances.AccessToCollectionAsync(collection =>
+                    collection.FindOneAndUpdateAsync(
+                        balance => balance.User.Id == user.Id &&
+                                   balance.Credit >= new Decimal128(-amount), //verify disponibility
+                        Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount))));
 
                 return balanceResult is not null;
             }
