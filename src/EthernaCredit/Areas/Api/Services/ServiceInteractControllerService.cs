@@ -25,7 +25,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         // Methods.
         public async Task<CreditDto> GetUserCreditAsync(string address)
         {
-            var user = await userService.TryFindUserByAddressAsync(address);
+            var (user, _) = await userService.TryFindUserAsync(address);
             if (user is null)
                 return new CreditDto(0, false);
 
@@ -37,7 +37,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         public async Task RegisterBalanceUpdateAsync(string clientId, string address, decimal amount, string reason)
         {
             // Get user.
-            var user = await userService.FindUserByAddressAsync(address);
+            var (user, _) = await userService.FindUserAsync(address);
 
             // Apply update (balance can go negative).
             var result = await userService.IncrementUserBalanceAsync(user, amount, true);

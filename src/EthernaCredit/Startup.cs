@@ -2,7 +2,6 @@ using Etherna.CreditSystem.Configs;
 using Etherna.CreditSystem.Configs.Hangfire;
 using Etherna.CreditSystem.Configs.Swagger;
 using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Extensions;
 using Etherna.CreditSystem.Persistence;
 using Etherna.CreditSystem.Services;
@@ -211,16 +210,23 @@ namespace Etherna.CreditSystem
             }, configureMongODMOptions: options =>
             {
                 options.DbMaintenanceQueueName = Queues.DB_MAINTENANCE;
-            }).AddDbContext<ICreditDbContext, CreditDbContext>(sp =>
-            {
-                var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
-                return new CreditDbContext(eventDispatcher);
-            },
-            options =>
-            {
-                options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
-                options.ConnectionString = Configuration["ConnectionStrings:CreditDb"] ?? throw new ServiceConfigurationException();
-            });
+            })
+                .AddDbContext<ICreditDbContext, CreditDbContext>(sp =>
+                {
+                    var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
+                    return new CreditDbContext(eventDispatcher);
+                },
+                options =>
+                {
+                    options.ConnectionString = Configuration["ConnectionStrings:CreditDb"] ?? throw new ServiceConfigurationException();
+                    options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
+                })
+
+                .AddDbContext<ISharedDbContext, SharedDbContext>(options =>
+                {
+                    options.ConnectionString = Configuration["ConnectionStrings:ServiceSharedDb"] ?? throw new ServiceConfigurationException();
+                    options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
+                });
 
             services.AddMongODMAdminDashboard(new MongODM.AspNetCore.UI.DashboardOptions
             {

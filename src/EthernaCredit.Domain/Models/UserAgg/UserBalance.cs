@@ -1,11 +1,11 @@
 ﻿using Etherna.MongoDB.Bson;
+using System;
 
 namespace Etherna.CreditSystem.Domain.Models.UserAgg
 {
     /// <summary>
     /// This class is unmanaged from domain space.
-    /// It needs atomic direct operations on db, and Id is an external key for User.Id.
-    /// Interact only with IUserService.
+    /// It needs atomic direct operations on db, interact only with IUserService.
     /// </summary>
     public class UserBalance : EntityModelBase<string>
     {

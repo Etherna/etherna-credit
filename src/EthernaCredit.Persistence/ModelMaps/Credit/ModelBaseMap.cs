@@ -5,7 +5,7 @@ using Etherna.MongoDB.Bson.Serialization.Serializers;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.CreditSystem.Persistence.ModelMaps
+namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
 {
     class ModelBaseMap : IModelMapsCollector
     {

@@ -1,3 +1,4 @@
+using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
@@ -45,7 +46,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             WithdrawAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
             WithdrawAmount = decimal.Truncate(WithdrawAmount * 100) / 100; //accept 2 digit precision
 
-            var user = await userService.FindAndUpdateUserAsync(User); //create or update address, if required
+            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
 
             // Preliminary check.
             if (user.HasUnlimitedCredit || //***** disable withdraw if unlimited credit (SECURITY!) *****
@@ -61,7 +62,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
                 return;
 
             // Report log.
-            var withdrawLog = new WithdrawOperationLog(-WithdrawAmount, user.EtherAddress, user);
+            var withdrawLog = new WithdrawOperationLog(-WithdrawAmount, userSharedInfo.EtherAddress, user);
             await dbContext.OperationLogs.CreateAsync(withdrawLog);
 
             // Dispatch event.

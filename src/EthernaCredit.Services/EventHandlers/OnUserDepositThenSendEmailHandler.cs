@@ -1,4 +1,6 @@
-﻿using Etherna.CreditSystem.Domain.Events;
+﻿using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Events;
+using Etherna.CreditSystem.Services.Domain;
 using Etherna.CreditSystem.Services.Views.Emails;
 using Etherna.DomainEvents;
 using Etherna.ServicesClient.Clients.Sso;
@@ -13,23 +15,29 @@ namespace Etherna.CreditSystem.Services.EventHandlers
         private readonly IEmailSender emailSender;
         private readonly IRazorViewRenderer razorViewRenderer;
         private readonly IServiceSsoClient serviceSsoClient;
+        private readonly ISharedDbContext sharedDbContext;
 
         // Constructor.
         public OnUserDepositThenSendEmailHandler(
             IEmailSender emailSender,
             IRazorViewRenderer razorViewRenderer,
-            IServiceSsoClient serviceSsoClient)
+            IServiceSsoClient serviceSsoClient,
+            ISharedDbContext sharedDbContext)
         {
             this.emailSender = emailSender;
             this.razorViewRenderer = razorViewRenderer;
             this.serviceSsoClient = serviceSsoClient;
+            this.sharedDbContext = sharedDbContext;
         }
 
         // Methods.
         public override async Task HandleAsync(UserDepositEvent @event)
         {
+            // Get user shared info.
+            var userSharedInfo = await sharedDbContext.UsersInfo.FindOneAsync(@event.User.SharedInfoId);
+
             // Get user email.
-            var contacts = await serviceSsoClient.ServiceInteract.ContactsAsync(@event.User.EtherAddress);
+            var contacts = await serviceSsoClient.ServiceInteract.ContactsAsync(userSharedInfo.EtherAddress);
             if (contacts.Email is null)
                 return;
 

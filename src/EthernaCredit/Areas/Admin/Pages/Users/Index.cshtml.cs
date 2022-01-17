@@ -1,5 +1,6 @@
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.UserAgg;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,14 +24,16 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
 
         public class UserDto
         {
-            public UserDto(User user, decimal balance)
+            public UserDto(User user, UserSharedInfo userSharedInfo, decimal balance)
             {
                 if (user is null)
                     throw new ArgumentNullException(nameof(user));
+                if (userSharedInfo is null)
+                    throw new ArgumentNullException(nameof(userSharedInfo));
 
                 Id = user.Id;
                 Balance = balance;
-                EtherAddress = user.EtherAddress;
+                EtherAddress = userSharedInfo.EtherAddress;
                 HasUnlimitedCredit = user.HasUnlimitedCredit;
             }
 
@@ -44,15 +47,15 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         private const int PageSize = 20;
 
         // Fields.
-        private readonly ICreditDbContext dbContext;
+        private readonly ISharedDbContext sharedDbContext;
         private readonly IUserService userService;
 
         // Constructor.
         public IndexModel(
-            ICreditDbContext dbContext,
+            ISharedDbContext sharedDbContext,
             IUserService userService)
         {
-            this.dbContext = dbContext;
+            this.sharedDbContext = sharedDbContext;
             this.userService = userService;
         }
 
@@ -85,7 +88,7 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
             }
 
             // Find user.
-            var user = await userService.TryFindUserByAddressAsync(Input.FindAddress);
+            var (user, _) = await userService.TryFindUserAsync(Input.FindAddress);
 
             if (user is null)
             {
@@ -102,16 +105,17 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         {
             CurrentPage = p ?? 0;
 
-            var paginatedUsers = await dbContext.Users.QueryPaginatedElementsAsync(
+            var paginatedUsersSharedInfo = await sharedDbContext.UsersInfo.QueryPaginatedElementsAsync(
                 elements => elements, u => u.EtherAddress, CurrentPage, PageSize);
 
-            foreach (var user in paginatedUsers.Elements)
+            foreach (var sharedInfo in paginatedUsersSharedInfo.Elements)
             {
+                var (user, _) = await userService.FindUserAsync(sharedInfo);
                 var balance = await userService.GetUserBalanceAsync(user);
-                Users.Add(new UserDto(user, balance));
+                Users.Add(new UserDto(user, sharedInfo, balance));
             }
 
-            MaxPage = paginatedUsers.MaxPage;
+            MaxPage = paginatedUsersSharedInfo.MaxPage;
         }
     }
 }

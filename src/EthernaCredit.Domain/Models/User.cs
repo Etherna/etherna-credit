@@ -1,69 +1,30 @@
-﻿using Nethereum.Util;
+﻿using Etherna.CreditSystem.Domain.Models.UserAgg;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Etherna.CreditSystem.Domain.Models
 {
     public class User : EntityModelBase<string>
     {
-        // Fields.
-        private HashSet<string> _etherPreviousAddresses = new();
-
         // Constructors.
-        public User(string address, IEnumerable<string> prevAddresses)
+        public User(UserSharedInfo sharedInfo)
         {
-            if (address is null)
-                throw new ArgumentNullException(nameof(address));
-            if (!address.IsValidEthereumAddressHexFormat())
-                throw new ArgumentException("The value is not a valid ethereum address", nameof(address));
+            if (sharedInfo is null)
+                throw new ArgumentNullException(nameof(sharedInfo));
 
-            if (prevAddresses is null)
-                throw new ArgumentNullException(nameof(prevAddresses));
-            foreach (var prevAddress in prevAddresses)
-                if (!prevAddress.IsValidEthereumAddressHexFormat())
-                    throw new ArgumentException("Some values are not valid ethereum addresses", nameof(prevAddresses));
-
-            EtherAddress = address.ConvertToEthereumChecksumAddress();
-            _etherPreviousAddresses = prevAddresses.Select(a => a.ConvertToEthereumChecksumAddress())
-                                                   .ToHashSet();
+            SharedInfoId = sharedInfo.Id;
         }
         protected User() { }
 
         // Properties.
-        public virtual string EtherAddress { get; protected set; } = default!;
-        public virtual IEnumerable<string> EtherPreviousAddresses
-        {
-            get => _etherPreviousAddresses;
-            protected set => _etherPreviousAddresses = new HashSet<string>(value ?? Array.Empty<string>());
-        }
+        //public virtual string EtherAddress => SharedInfo.EtherAddress;
+        //public virtual IEnumerable<string> EtherPreviousAddresses => SharedInfo.EtherPreviousAddresses;
         public virtual bool HasUnlimitedCredit { get; set; }
 
-        // Methods.
-        public virtual void UpdateAddresses(string newAddress, IEnumerable<string> newEtherPreviousAddresses)
-        {
-            if (newAddress is null)
-                throw new ArgumentNullException(nameof(newAddress));
-            if (!newAddress.IsValidEthereumAddressHexFormat())
-                throw new ArgumentException("The value is not a valid ethereum address", nameof(newAddress));
-
-            if (newEtherPreviousAddresses is null)
-                throw new ArgumentNullException(nameof(newEtherPreviousAddresses));
-            foreach (var address in newEtherPreviousAddresses)
-                if (!address.IsValidEthereumAddressHexFormat())
-                    throw new ArgumentException("Some values are not valid ethereum addresses", nameof(newEtherPreviousAddresses));
-
-            var mergedPrevEtherAddresses = _etherPreviousAddresses.Union(newEtherPreviousAddresses)
-                                                                  .Select(a => a.ConvertToEthereumChecksumAddress())
-                                                                  .ToHashSet();
-
-            if (mergedPrevEtherAddresses.Contains(newAddress))
-                throw new ArgumentException("Old addresses can't contain also the new one", nameof(newEtherPreviousAddresses));
-            if (!mergedPrevEtherAddresses.Contains(EtherAddress))
-                throw new ArgumentException("Old addresses must contain also the last old one", nameof(newEtherPreviousAddresses));
-
-            _etherPreviousAddresses = mergedPrevEtherAddresses;
-            EtherAddress = newAddress.ConvertToEthereumChecksumAddress();
-        }
+        /* SharedInfo is encapsulable with resolution of https://etherna.atlassian.net/browse/MODM-101.
+         * With encapsulation we can expose also EtherAddress and EtherPreviousAddresses properties
+         * pointing to SharedInfo internal property, and avoid data duplication.
+         */
+        //protected virtual SharedUserInfo SharedInfo { get; set; }
+        public virtual string SharedInfoId { get; protected set; } = default!;
     }
 }

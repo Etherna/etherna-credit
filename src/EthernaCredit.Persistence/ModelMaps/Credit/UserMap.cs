@@ -7,7 +7,7 @@ using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
 using Etherna.MongODM.Core.Serialization.Serializers;
 
-namespace Etherna.CreditSystem.Persistence.ModelMaps
+namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
 {
     class UserMap : IModelMapsCollector
     {
@@ -21,7 +21,6 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
 
                     // Set members with custom serializers.
                     mm.SetMemberSerializer(b => b.Credit, new Decimal128Serializer(BsonType.Decimal128));
-                    mm.SetMemberSerializer(b => b.User, ReferenceSerializer(dbContext));
                 });
         }
 
