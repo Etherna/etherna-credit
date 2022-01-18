@@ -1,4 +1,5 @@
 using Etherna.CreditSystem.Configs;
+using Etherna.CreditSystem.Configs.Authorization;
 using Etherna.CreditSystem.Configs.Hangfire;
 using Etherna.CreditSystem.Configs.Swagger;
 using Etherna.CreditSystem.Domain;
@@ -20,6 +21,8 @@ using Hangfire.Mongo.Migration.Strategies.Backup;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -91,6 +94,8 @@ namespace Etherna.CreditSystem
                 // can also be used to control the format of the API version in route templates
                 options.SubstituteApiVersionInUrl = true;
             });
+
+            // Configure authentication.
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -135,8 +140,21 @@ namespace Etherna.CreditSystem
                     options.Audience = "ethernaCreditServiceInteract";
                     options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
                 });
+
+            // Configure authorization.
+            //policy and requirements
             services.AddAuthorization(options =>
             {
+                //default policy
+                options.DefaultPolicy = new AuthorizationPolicy(
+                    new IAuthorizationRequirement[]
+                    {
+                        new DenyAnonymousAuthorizationRequirement(),
+                        new DenyBannedAuthorizationRequirement()
+                    },
+                    Array.Empty<string>());
+
+                //other policies
                 options.AddPolicy(CommonConsts.RequireAdministratorClaimPolicy,
                     policy =>
                     {
@@ -151,6 +169,9 @@ namespace Etherna.CreditSystem
                     policy.RequireClaim("scope", "ethernaCredit_serviceInteract_api");
                 });
             });
+
+            //requirement handlers
+            services.AddScoped<IAuthorizationHandler, DenyBannedAuthorizationHandler>();
 
             // Configure Hangfire server.
             if (!Environment.IsStaging()) //don't start server in staging

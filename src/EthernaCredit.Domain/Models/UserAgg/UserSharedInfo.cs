@@ -25,6 +25,7 @@ namespace Etherna.CreditSystem.Domain.Models.UserAgg
             get => _etherPreviousAddresses;
             protected set => _etherPreviousAddresses = new List<string>(value ?? Array.Empty<string>());
         }
+        public bool IsLockedOutNow => LockoutEnabled && LockoutEnd >= DateTimeOffset.UtcNow;
         public virtual bool LockoutEnabled { get; protected set; }
         public virtual DateTimeOffset? LockoutEnd { get; protected set; }
     }
