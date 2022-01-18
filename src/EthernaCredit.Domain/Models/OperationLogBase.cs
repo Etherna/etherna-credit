@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Etherna.MongoDB.Bson;
+using System;
 
 namespace Etherna.CreditSystem.Domain.Models
 {
@@ -17,7 +18,7 @@ namespace Etherna.CreditSystem.Domain.Models
         protected OperationLogBase() { }
 
         // Properties.
-        public virtual decimal Amount { get; protected set; }
+        public virtual Decimal128 Amount { get; protected set; }
         public virtual string Author { get; protected set; } = default!;
         public abstract string OperationName { get; }
         public virtual User User { get; protected set; } = default!;

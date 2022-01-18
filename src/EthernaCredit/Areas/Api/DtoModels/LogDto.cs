@@ -1,4 +1,5 @@
 ﻿using Etherna.CreditSystem.Domain.Models;
+using Etherna.MongoDB.Bson;
 using System;
 
 namespace Etherna.CreditSystem.Areas.Api.DtoModels
@@ -10,7 +11,7 @@ namespace Etherna.CreditSystem.Areas.Api.DtoModels
             if (log is null)
                 throw new ArgumentNullException(nameof(log));
 
-            Amount = log.Amount;
+            Amount = Decimal128.ToDecimal(log.Amount);
             Author = log.Author;
             CreationDateTime = log.CreationDateTime;
             OperationName = log.OperationName;
