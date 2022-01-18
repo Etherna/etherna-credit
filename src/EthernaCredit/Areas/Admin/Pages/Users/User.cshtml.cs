@@ -18,15 +18,18 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         }
 
         // Fields.
-        private readonly ICreditDbContext dbContext;
+        private readonly ICreditDbContext creditDbContext;
+        private readonly ISharedDbContext sharedDbContext;
         private readonly IUserService userService;
 
         // Constructor.
         public UserModel(
-            ICreditDbContext dbContext,
+            ICreditDbContext creditDbContext,
+            ISharedDbContext sharedDbContext,
             IUserService userService)
         {
-            this.dbContext = dbContext;
+            this.creditDbContext = creditDbContext;
+            this.sharedDbContext = sharedDbContext;
             this.userService = userService;
         }
 
@@ -47,21 +50,22 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         // Methods.
         public async Task OnGetAsync(string id)
         {
-            var user = await dbContext.Users.FindOneAsync(id);
+            var user = await creditDbContext.Users.FindOneAsync(id);
+            var userSharedInfo = await sharedDbContext.UsersInfo.FindOneAsync(user.SharedInfoId);
 
             Id = id;
             Balance = await userService.GetUserBalanceAsync(user);
-            EtherAddress = user.EtherAddress;
-            EtherPreviousAddresses = user.EtherPreviousAddresses;
+            EtherAddress = userSharedInfo.EtherAddress;
+            EtherPreviousAddresses = userSharedInfo.EtherPreviousAddresses;
             Input = new InputModel { HasUnlimitedCredit = user.HasUnlimitedCredit };
         }
 
         public async Task<IActionResult> OnPostAsync(string id)
         {
-            var user = await dbContext.Users.FindOneAsync(id);
+            var user = await creditDbContext.Users.FindOneAsync(id);
 
             user.HasUnlimitedCredit = Input.HasUnlimitedCredit;
-            await dbContext.SaveChangesAsync();
+            await creditDbContext.SaveChangesAsync();
 
             return RedirectToPage(new { id });
         }

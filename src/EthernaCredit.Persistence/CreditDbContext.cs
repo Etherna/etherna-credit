@@ -19,7 +19,7 @@ namespace Etherna.CreditSystem.Persistence
     public class CreditDbContext : DbContext, ICreditDbContextInternal, IEventDispatcherDbContext
     {
         // Consts.
-        private const string SerializersNamespace = "Etherna.CreditSystem.Persistence.ModelMaps";
+        private const string SerializersNamespace = "Etherna.CreditSystem.Persistence.ModelMaps.Credit";
 
         // Constructor.
         public CreditDbContext(
@@ -37,8 +37,7 @@ namespace Etherna.CreditSystem.Persistence
             {
                 IndexBuilders = new[]
                 {
-                    (Builders<User>.IndexKeys.Ascending(u => u.EtherAddress), new CreateIndexOptions<User> { Unique = true }),
-                    (Builders<User>.IndexKeys.Ascending(u => u.EtherPreviousAddresses), new CreateIndexOptions<User>())
+                    (Builders<User>.IndexKeys.Ascending(u => u.SharedInfoId), new CreateIndexOptions<User> { Unique = true })
                 }
             });
 

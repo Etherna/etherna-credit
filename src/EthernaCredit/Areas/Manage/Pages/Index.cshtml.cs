@@ -1,3 +1,4 @@
+using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -29,9 +30,9 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             // Get user.
-            var user = await userService.FindAndUpdateUserAsync(User);
+            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
 
-            EthereumAddress = user.EtherAddress;
+            EthereumAddress = userSharedInfo.EtherAddress;
             CreditBalance = await userService.GetUserBalanceAsync(user);
             HasUnlimitedCredit = user.HasUnlimitedCredit;
 

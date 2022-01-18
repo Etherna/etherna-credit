@@ -1,3 +1,4 @@
+using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
@@ -44,7 +45,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
             // Get data.
             DepositAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
-            var user = await userService.FindAndUpdateUserAsync(User);
+            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
 
             // Preliminary check.
             if (user.HasUnlimitedCredit) //disable deposit if unlimited credit
@@ -57,7 +58,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             await userService.IncrementUserBalanceAsync(user, DepositAmount, false);
 
             // Report log.
-            var depositLog = new DepositOperationLog(DepositAmount, user.EtherAddress, user);
+            var depositLog = new DepositOperationLog(DepositAmount, userSharedInfo.EtherAddress, user);
             await dbContext.OperationLogs.CreateAsync(depositLog);
 
             // Dispatch event.

@@ -31,7 +31,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
 
         public async Task<CreditDto> GetCreditAsync(ClaimsPrincipal user)
         {
-            var userModel = await userService.FindAndUpdateUserAsync(user);
+            var (userModel, _) = await userService.FindUserAsync(user.GetEtherAddress());
             var balance = await userService.GetUserBalanceAsync(userModel);
 
             return new CreditDto(balance, userModel.HasUnlimitedCredit);
@@ -39,7 +39,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
 
         public async Task<IEnumerable<LogDto>> GetLogsAsync(ClaimsPrincipal user, int page, int take)
         {
-            var userModel = await userService.FindAndUpdateUserAsync(user);
+            var (userModel, _) = await userService.FindUserAsync(user.GetEtherAddress());
             var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
                 elements => elements.Where(l => l.User.Id == userModel.Id),
                 l => l.CreationDateTime,

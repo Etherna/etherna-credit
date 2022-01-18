@@ -7,7 +7,7 @@ using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
 using Etherna.MongODM.Core.Serialization.Serializers;
 
-namespace Etherna.CreditSystem.Persistence.ModelMaps
+namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
 {
     class UserMap : IModelMapsCollector
     {

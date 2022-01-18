@@ -1,3 +1,4 @@
+using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Services.Domain;
@@ -36,7 +37,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public async Task OnGetAsync(int p)
         {
             // Get user.
-            var user = await userService.FindAndUpdateUserAsync(User);
+            var (user, _) = await userService.FindUserAsync(User.GetEtherAddress());
 
             // Get paginated logs.
             var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(

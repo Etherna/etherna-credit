@@ -1,5 +1,4 @@
-﻿using Etherna.Authentication.Extensions;
-using Etherna.CreditSystem.Domain;
+﻿using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
 using Etherna.MongoDB.Bson;
@@ -7,9 +6,7 @@ using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Nethereum.Util;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.Domain
@@ -17,85 +14,72 @@ namespace Etherna.CreditSystem.Services.Domain
     class UserService : IUserService
     {
         // Fields.
-        private readonly ICreditDbContextInternal dbContext;
+        private readonly ICreditDbContextInternal creditDbContext;
+        private readonly ISharedDbContext sharedDbContext;
 
         // Constructor.
-        public UserService(ICreditDbContext dbContext)
+        public UserService(
+            ICreditDbContext creditDbContext,
+            ISharedDbContext sharedDbContext)
         {
-            this.dbContext = (ICreditDbContextInternal)dbContext;
+            this.creditDbContext = (ICreditDbContextInternal)creditDbContext;
+            this.sharedDbContext = sharedDbContext;
         }
 
         // Methods.
-        public Task<User> FindAndUpdateUserAsync(ClaimsPrincipal user) =>
-            FindAndUpdateUserAsync(user.GetEtherAddress(), user.GetEtherPrevAddresses());
+        public async Task<(User, UserSharedInfo)> FindUserAsync(string address) =>
+            await FindUserAsync(await FindUserSharedInfoByAddressAsync(address));
 
-        public async Task<User> FindAndUpdateUserAsync(string etherAddress, IEnumerable<string> prevEtherAddresses)
+        public async Task<(User, UserSharedInfo)> FindUserAsync(UserSharedInfo userSharedInfo)
         {
-            // Search user.
-            var user = await dbContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.EtherAddress == etherAddress ||                   //case: service and invoker are synced
-                                    prevEtherAddresses.Contains(u.EtherAddress) ||      //case: invoker is ahead than service (update db)
-                                    u.EtherPreviousAddresses.Contains(etherAddress))    //case: service is ahead than invoker (do nothing)
-                        .FirstOrDefaultAsync());
+            // Try find user.
+            var user = await creditDbContext.Users.TryFindOneAsync(u => u.SharedInfoId == userSharedInfo.Id);
 
             // If user doesn't exist.
             if (user is null)
             {
                 // Create a new user.
-                user = new User(etherAddress, prevEtherAddresses);
-                await dbContext.Users.CreateAsync(user);
+                user = new User(userSharedInfo);
+                await creditDbContext.Users.CreateAsync(user);
 
                 // Create balance record.
                 var balance = new UserBalance(user);
-                await dbContext.UserBalances.CreateAsync(balance);
+                await creditDbContext.UserBalances.CreateAsync(balance);
 
                 // Get again, because of https://etherna.atlassian.net/browse/MODM-83
-                user = await dbContext.Users.FindOneAsync(user.Id);
-            }
-            else //if already exist
-            {
-                // Verify if invoker is ahead of service. In case, update on db.
-                if (prevEtherAddresses.Contains(user.EtherAddress))
-                {
-                    user.UpdateAddresses(etherAddress, prevEtherAddresses);
-                    await dbContext.SaveChangesAsync();
-                }
+                user = await creditDbContext.Users.FindOneAsync(user.Id);
             }
 
-            return user;
+            return (user, userSharedInfo);
         }
 
-        public async Task<User> FindUserByAddressAsync(string address)
+        public async Task<UserSharedInfo> FindUserSharedInfoByAddressAsync(string address)
         {
             if (!address.IsValidEthereumAddressHexFormat())
                 throw new ArgumentException("The value is not a valid ethereum address", nameof(address));
 
+            // Normalize address.
             address = address.ConvertToEthereumChecksumAddress();
 
-            return await dbContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.EtherAddress == address ||
-                                    u.EtherPreviousAddresses.Contains(address))
+            // Find user shared info.
+            return await sharedDbContext.UsersInfo.QueryElementsAsync(elements =>
+                elements.Where(u => u.EtherAddress == address ||                   //case: db and invoker are synced
+                                    u.EtherPreviousAddresses.Contains(address))    //case: db is ahead than invoker
                         .FirstAsync());
         }
 
         public async Task<decimal> GetUserBalanceAsync(string address)
         {
-            var user = await TryFindUserByAddressAsync(address);
+            var (user, _) = await TryFindUserAsync(address);
             if (user is null)
                 return 0;
 
             return await GetUserBalanceAsync(user);
         }
 
-        public async Task<decimal> GetUserBalanceAsync(ClaimsPrincipal user)
-        {
-            var userModel = await FindAndUpdateUserAsync(user);
-            return await GetUserBalanceAsync(userModel);
-        }
-
         public async Task<decimal> GetUserBalanceAsync(User user)
         {
-            var userBalance = await dbContext.UserBalances.FindOneAsync(balance => balance.User.Id == user.Id);
+            var userBalance = await creditDbContext.UserBalances.FindOneAsync(balance => balance.User.Id == user.Id);
             return Decimal128.ToDecimal(userBalance.Credit);
         }
 
@@ -106,7 +90,7 @@ namespace Etherna.CreditSystem.Services.Domain
 
             if (allowBalanceDecreaseNegative || amount >= 0)
             {
-                var balanceResult = await dbContext.UserBalances.AccessToCollectionAsync(collection =>
+                var balanceResult = await creditDbContext.UserBalances.AccessToCollectionAsync(collection =>
                     collection.FindOneAndUpdateAsync(
                         balance => balance.User.Id == user.Id,
                         Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount))));
@@ -115,7 +99,7 @@ namespace Etherna.CreditSystem.Services.Domain
             }
             else
             {
-                var balanceResult = await dbContext.UserBalances.AccessToCollectionAsync(collection =>
+                var balanceResult = await creditDbContext.UserBalances.AccessToCollectionAsync(collection =>
                     collection.FindOneAndUpdateAsync(
                         balance => balance.User.Id == user.Id &&
                                    balance.Credit >= new Decimal128(-amount), //verify disponibility
@@ -125,17 +109,19 @@ namespace Etherna.CreditSystem.Services.Domain
             }
         }
 
-        public async Task<User?> TryFindUserByAddressAsync(string address)
+        public async Task<(User?, UserSharedInfo?)> TryFindUserAsync(string address)
         {
-            if (!address.IsValidEthereumAddressHexFormat())
-                return null;
+            var sharedInfo = await TryFindUserSharedInfoByAddressAsync(address);
+            if (sharedInfo is null)
+                return (null, null);
 
-            address = address.ConvertToEthereumChecksumAddress();
+            return await FindUserAsync(sharedInfo);
+        }
 
-            return await dbContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.EtherAddress == address ||
-                                    u.EtherPreviousAddresses.Contains(address))
-                        .FirstOrDefaultAsync());
+        public async Task<UserSharedInfo?> TryFindUserSharedInfoByAddressAsync(string address)
+        {
+            try { return await FindUserSharedInfoByAddressAsync(address); }
+            catch (InvalidOperationException) { return null; }
         }
     }
 }

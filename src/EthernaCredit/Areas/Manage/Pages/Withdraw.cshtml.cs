@@ -1,3 +1,4 @@
+using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Areas.Withdraw.Pages;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +40,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         // Methods.
         public async Task<IActionResult> OnGetAsync()
         {
-            CreditBalance = await userService.GetUserBalanceAsync(User);
+            CreditBalance = await userService.GetUserBalanceAsync(User.GetEtherAddress());
             return Page();
         }
 
