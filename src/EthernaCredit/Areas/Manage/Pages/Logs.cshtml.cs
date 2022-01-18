@@ -43,7 +43,8 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
             var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
                 elements => elements.Where(l => l.User.Id == user.Id),
                 l => l.CreationDateTime,
-                p, DefaultTakeElements);
+                p, DefaultTakeElements,
+                true);
 
             CurrentPage = paginatedLogs.CurrentPage;
             MaxPage = paginatedLogs.MaxPage;
