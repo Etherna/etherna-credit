@@ -1,4 +1,5 @@
 ﻿using Etherna.CreditSystem.Areas.Api.DtoModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,8 +12,8 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         Task<IEnumerable<OperationLogDto>> GetServiceOpLogsWithUserAsync(
             string clientId,
             string address,
-            int page,
-            int take);
+            DateTime? fromDate,
+            DateTime? toDate);
 
         Task RegisterBalanceUpdateAsync(
             string clientId,

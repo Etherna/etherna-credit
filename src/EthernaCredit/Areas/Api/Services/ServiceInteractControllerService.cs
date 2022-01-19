@@ -43,20 +43,22 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         public async Task<IEnumerable<OperationLogDto>> GetServiceOpLogsWithUserAsync(
             string clientId,
             string address,
-            int page,
-            int take)
+            DateTime? fromDate,
+            DateTime? toDate)
         {
             var (user, userSharedInfo) = await userService.TryFindUserAsync(address);
             if (user is null)
                 return Array.Empty<OperationLogDto>();
 
-            var result = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
+            var result = await dbContext.OperationLogs.QueryElementsAsync(
                 elements => elements.Where(l => l.Author == clientId)
-                                    .Where(l => l.User.Id == user.Id),
-                l => l.CreationDateTime,
-                page, take);
+                                    .Where(l => l.User.Id == user.Id)
+                                    .Where(l => l.CreationDateTime >= (fromDate ?? DateTime.MinValue))
+                                    .Where(l => l.CreationDateTime <= (toDate ?? DateTime.MaxValue))
+                                    .OrderBy(l => l.CreationDateTime)
+                                    .ToListAsync());
 
-            return result.Elements.Select(l => new OperationLogDto(l, userSharedInfo!));
+            return result.Select(l => new OperationLogDto(l, userSharedInfo!));
         }
 
         public async Task RegisterBalanceUpdateAsync(
