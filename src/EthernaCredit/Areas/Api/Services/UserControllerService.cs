@@ -37,16 +37,16 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             return new CreditDto(balance, userModel.HasUnlimitedCredit);
         }
 
-        public async Task<IEnumerable<LogDto>> GetLogsAsync(ClaimsPrincipal user, int page, int take)
+        public async Task<IEnumerable<OperationLogDto>> GetLogsAsync(ClaimsPrincipal user, int page, int take)
         {
-            var (userModel, _) = await userService.FindUserAsync(user.GetEtherAddress());
+            var (userModel, userSharedInfo) = await userService.FindUserAsync(user.GetEtherAddress());
             var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
                 elements => elements.Where(l => l.User.Id == userModel.Id),
                 l => l.CreationDateTime,
                 page,
                 take);
 
-            return paginatedLogs.Elements.Select(l => new LogDto(l));
+            return paginatedLogs.Elements.Select(l => new OperationLogDto(l, userSharedInfo));
         }
     }
 }

@@ -5,7 +5,10 @@ using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
 using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Driver;
+using Etherna.MongoDB.Driver.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Api.Services
@@ -37,7 +40,30 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             return new CreditDto(balance, user.HasUnlimitedCredit);
         }
 
-        public async Task RegisterBalanceUpdateAsync(string clientId, string address, decimal amount, string reason)
+        public async Task<IEnumerable<OperationLogDto>> GetServiceOpLogsWithUserAsync(
+            string clientId,
+            string address,
+            int page,
+            int take)
+        {
+            var (user, userSharedInfo) = await userService.TryFindUserAsync(address);
+            if (user is null)
+                return Array.Empty<OperationLogDto>();
+
+            var result = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
+                elements => elements.Where(l => l.Author == clientId)
+                                    .Where(l => l.User.Id == user.Id),
+                l => l.CreationDateTime,
+                page, take);
+
+            return result.Elements.Select(l => new OperationLogDto(l, userSharedInfo!));
+        }
+
+        public async Task RegisterBalanceUpdateAsync(
+            string clientId,
+            string address,
+            decimal amount,
+            string reason)
         {
             // Get user.
             var (user, _) = await userService.FindUserAsync(address);
