@@ -43,7 +43,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
                 throw new ArgumentNullException(nameof(amount));
 
             // Get data.
-            WithdrawAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
+            WithdrawAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
             WithdrawAmount = decimal.Truncate(WithdrawAmount * 100) / 100; //accept 2 digit precision
 
             var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
