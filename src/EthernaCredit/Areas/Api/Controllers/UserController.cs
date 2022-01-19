@@ -57,7 +57,7 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         [HttpGet("logs")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public Task<IEnumerable<LogDto>> GetLogsAsync(
+        public Task<IEnumerable<OperationLogDto>> GetLogsAsync(
             [Range(0, int.MaxValue)] int page,
             [Range(1, 100)] int take = 25) =>
             service.GetLogsAsync(User, page, take);
