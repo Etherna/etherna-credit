@@ -31,6 +31,8 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         // Properties.
         [BindProperty]
         public InputModel Input { get; set; } = default!;
+        [TempData]
+        public string? StatusMessage { get; set; }
 
         public bool CanWithdraw => CreditBalance >= MinLimit && CreditBalance != 0;
         public decimal CreditBalance { get; private set; }
@@ -47,8 +49,15 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public IActionResult OnPostAsync()
         {
             if (!ModelState.IsValid ||
-                !double.TryParse(Input.Amount, NumberStyles.Any, CultureInfo.InvariantCulture, out var amountValue))
-                return Page();
+                !double.TryParse(
+                    Input.Amount.Trim('$'),
+                    NumberStyles.Any,
+                    CultureInfo.InvariantCulture,
+                    out var amountValue))
+            {
+                StatusMessage = "Error, inserted value is not a valid number";
+                return RedirectToPage();
+            }
 
             return RedirectToPage("WithdrawProcess", new
             {
