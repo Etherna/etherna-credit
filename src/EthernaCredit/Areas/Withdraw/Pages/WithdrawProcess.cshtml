@@ -9,11 +9,11 @@
     <div class="col-md-6">
         @if (Model.SucceededResult)
         {
-            <p>An amount of $@Model.WithdrawAmount has been withdrawn from your account</p>
+            <p>An amount of @Model.WithdrawAmount.ToFinancialString(prefixSymbol: "$") has been withdrawn from your account</p>
         }
         else
         {
-            <p>Sorry, we was not able to withdraw an amount of $@Model.WithdrawAmount from your account</p>
+            <p>Sorry, we was not able to withdraw an amount of @Model.WithdrawAmount.ToFinancialString(prefixSymbol: "$") from your account</p>
         }
         <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
     </div>
