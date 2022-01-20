@@ -6,7 +6,7 @@
 
     <Authors>Etherna Sagl</Authors>
     <Description>Service implementing logic for manage user credits</Description>
-    
+
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -38,5 +38,24 @@
     <ProjectReference Include="..\EthernaCredit.Persistence\EthernaCredit.Persistence.csproj" />
     <ProjectReference Include="..\EthernaCredit.Services\EthernaCredit.Services.csproj" />
   </ItemGroup>
+
+  <Target Name="DeleteDist" AfterTargets="Clean">
+    <RemoveDir Directories="wwwroot\dist" />
+  </Target>
+
+  <Target Name="DebugRunInstall" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' And (!Exists('wwwroot\dist') Or !Exists('node_modules'))">
+    <Exec Command="npm install" />
+    <Exec Command="npm run build-production" />
+  </Target>
+
+  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' And Exists('node_modules')">
+    <Message Importance="High" Text="Compiling bundle..." />
+    <Exec Command="npm run build-production" />
+  </Target>
+
+  <Target Name="ReleaseRunInstall" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Exec Command="npm install" />
+    <Exec Command="npm run build-production" />
+  </Target>
 
 </Project>

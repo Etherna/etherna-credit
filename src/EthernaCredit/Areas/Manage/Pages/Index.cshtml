@@ -9,17 +9,17 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="EthereumAddress"></label>
             <p>@Model.EthereumAddress</p>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="CreditBalance"></label>
             <p>@Model.CreditBalance.ToFinancialString(prefixSymbol: "$")</p>
         </div>
         @if (Model.HasUnlimitedCredit)
         {
-            <div class="form-group">
+            <div class="mb-3">
                 <p>Your account has unlimited credit, deposits and withdrawals are disabled.</p>
             </div>
         }
