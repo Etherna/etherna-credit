@@ -17,7 +17,7 @@ namespace Etherna.CreditSystem.Domain.Models.OperationLogs
         protected UpdateOperationLog() { }
 
         // Properties.
-        public override string OperationName => "Update";
+        public override string OperationName => "Service update";
         public virtual string Reason { get; protected set; } = default!;
     }
 }

@@ -11,7 +11,9 @@
     <div class="col-md-6">
         @if (Model.CanWithdraw)
         {
-            <p>How much do you want to withdraw from your account? (min: $@Model.MinLimit, max: $@Model.MaxLimit)</p>
+            <p>How much do you want to withdraw from your account? (
+                min: @Model.MinLimit.ToFinancialString(roundMode: MidpointRounding.ToZero, prefixSymbol: "$"),
+                max: @Model.MaxLimit.ToFinancialString(roundMode: MidpointRounding.ToZero, prefixSymbol: "$"))</p>
 
             <form id="withdraw" method="post">
                 <div class="form-group">

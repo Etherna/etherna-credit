@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
             <label asp-for="CreditBalance"></label>
-            <p>$@Model.CreditBalance</p>
+            <p>@Model.CreditBalance.ToFinancialString(prefixSymbol: "$")</p>
         </div>
         @if (Model.HasUnlimitedCredit)
         {

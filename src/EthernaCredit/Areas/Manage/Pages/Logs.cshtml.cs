@@ -13,7 +13,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
     public class LogsModel : PageModel
     {
         // Consts.
-        public const int DefaultTakeElements = 20;
+        public const int DefaultTakeElements = 10;
 
         // Fields.
         private readonly ICreditDbContext dbContext;

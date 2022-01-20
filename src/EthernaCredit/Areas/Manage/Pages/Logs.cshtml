@@ -15,16 +15,20 @@
         {
             <div class="border-top">
                 <p>
-                    <b>@log.OperationName</b> - @log.CreationDateTime<br />
                     @switch (log)
                     {
                         case UpdateOperationLog update:
-                            <span>$@update.Amount - @update.Author - @update.Reason</span>
+                            <span><b>@log.OperationName</b> - @log.CreationDateTime.Date.ToShortDateString()</span><br />
+                            <span>@update.Reason</span><br />
                             break;
                         default:
-                            <span>$@log.Amount</span>
+                            <span><b>@log.OperationName</b> - @log.CreationDateTime</span><br />
                             break;
                     }
+                    <span>@log.Amount.ToFinancialString(
+                         allowedDecimals: null,
+                         prefixSymbol: "$",
+                         usePlusSign: true)</span>
                 </p>
             </div>
         }
