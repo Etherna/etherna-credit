@@ -1,13 +1,33 @@
-using Etherna.EthernaCredit.Configs;
-using Etherna.EthernaCredit.Configs.Hangfire;
-using Etherna.EthernaCredit.Configs.Swagger;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Extensions;
-using Etherna.EthernaCredit.Persistence;
-using Etherna.EthernaCredit.Services;
+//   Copyright 2021-present Etherna Sagl
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+using Etherna.CreditSystem.Configs;
+using Etherna.CreditSystem.Configs.Authorization;
+using Etherna.CreditSystem.Configs.Hangfire;
+using Etherna.CreditSystem.Configs.Swagger;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Extensions;
+using Etherna.CreditSystem.Persistence;
+using Etherna.CreditSystem.Services;
+using Etherna.CreditSystem.Services.Settings;
+using Etherna.CreditSystem.Services.Tasks;
+using Etherna.DomainEvents;
 using Etherna.MongODM;
-using Etherna.MongODM.HF.Tasks;
+using Etherna.MongODM.AspNetCore.UI;
+using Etherna.MongODM.Core.Options;
+using Etherna.SSL.Exceptions;
+using Etherna.SSL.Settings;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -15,44 +35,59 @@ using Hangfire.Mongo.Migration.Strategies.Backup;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit
+namespace Etherna.CreditSystem
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        // Constructor.
+        public Startup(
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
+        // Properties.
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // Methods.
         public void ConfigureServices(IServiceCollection services)
         {
             // Configure Asp.Net Core framework services.
             services.AddDataProtection()
-                .PersistKeysToDbContext(new DbContextOptions { ConnectionString = Configuration["ConnectionStrings:SystemDb"] });
+                .PersistKeysToDbContext(new DbContextOptions
+                {
+                    ConnectionString = Configuration["ConnectionStrings:DataProtectionDb"] ?? throw new ServiceConfigurationException()
+                })
+                .SetApplicationName(CommonConsts.SharedCookieApplicationName);
 
             services.AddCors();
             services.AddRazorPages(options =>
             {
+                options.Conventions.AuthorizeAreaFolder(CommonConsts.AdminArea, "/", CommonConsts.RequireAdministratorClaimPolicy);
+
                 options.Conventions.AuthorizeAreaFolder("Deposit", "/");
                 options.Conventions.AuthorizeAreaFolder("Manage", "/");
             });
@@ -73,6 +108,8 @@ namespace Etherna.EthernaCredit
                 // can also be used to control the format of the API version in route templates
                 options.SubstituteApiVersionInUrl = true;
             });
+
+            // Configure authentication.
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -80,11 +117,17 @@ namespace Etherna.EthernaCredit
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
-                    options.Cookie.Name = Configuration["Application:CompactName"];
+                    options.Cookie.Name = CommonConsts.SharedCookieApplicationName;
+                    options.AccessDeniedPath = "/AccessDenied";
+
+                    if (Environment.IsProduction())
+                    {
+                        options.Cookie.Domain = ".etherna.io";
+                    }
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //client config
                 {
-                    options.Authority = Configuration["SsoServer:BaseUrl"];
+                    options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
 
                     // Response 401 for unauthorized call on api.
                     options.Events.OnRedirectToIdentityProvider = context =>
@@ -97,28 +140,43 @@ namespace Etherna.EthernaCredit
                         return Task.CompletedTask;
                     };
 
-                    options.ClientId = "ethernaCreditClientId";
-                    options.ClientSecret = Configuration["SsoServer:ClientSecret"];
+                    options.ClientId = Configuration["SsoServer:Clients:Webapp:ClientId"] ?? throw new ServiceConfigurationException();
+                    options.ClientSecret = Configuration["SsoServer:Clients:Webapp:Secret"] ?? throw new ServiceConfigurationException();
                     options.ResponseType = "code";
 
                     options.SaveTokens = true;
 
-                    options.Scope.Clear();
-                    options.Scope.Add("openid");
                     options.Scope.Add("ether_accounts");
+                    options.Scope.Add("role");
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    options.Authority = Configuration["SsoServer:BaseUrl"];
-
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
+                    options.Audience = "ethernaCreditServiceInteract";
+                    options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
                 });
+
+            // Configure authorization.
+            //policy and requirements
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ServiceInteractApiScope", policy =>
+                //default policy
+                options.DefaultPolicy = new AuthorizationPolicy(
+                    new IAuthorizationRequirement[]
+                    {
+                        new DenyAnonymousAuthorizationRequirement(),
+                        new DenyBannedAuthorizationRequirement()
+                    },
+                    Array.Empty<string>());
+
+                //other policies
+                options.AddPolicy(CommonConsts.RequireAdministratorClaimPolicy,
+                    policy =>
+                    {
+                        policy.RequireAuthenticatedUser();
+                        policy.RequireClaim(ClaimTypes.Role, CommonConsts.AdministratorRoleName);
+                    });
+
+                options.AddPolicy(CommonConsts.ServiceInteractApiScopePolicy, policy =>
                 {
                     policy.AuthenticationSchemes = new List<string> { JwtBearerDefaults.AuthenticationScheme };
                     policy.RequireAuthenticatedUser();
@@ -126,20 +184,23 @@ namespace Etherna.EthernaCredit
                 });
             });
 
-            // Configure Hangfire services.
-            services.AddHangfire(options =>
+            //requirement handlers
+            services.AddScoped<IAuthorizationHandler, DenyBannedAuthorizationHandler>();
+
+            // Configure Hangfire server.
+            if (!Environment.IsStaging()) //don't start server in staging
             {
-                options.UseMongoStorage(
-                    Configuration["ConnectionStrings:HangfireDb"],
-                    new MongoStorageOptions
+                //register hangfire server
+                services.AddHangfireServer(options =>
+                {
+                    options.Queues = new[]
                     {
-                        MigrationOptions = new MongoMigrationOptions //don't remove, could throw exception
-                        {
-                            MigrationStrategy = new MigrateMongoMigrationStrategy(),
-                            BackupStrategy = new CollectionMongoBackupStrategy()
-                        }
-                    });
-            });
+                        Queues.DB_MAINTENANCE,
+                        "default"
+                    };
+                    options.WorkerCount = System.Environment.ProcessorCount * 2;
+                });
+            }
 
             // Configure Swagger services.
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
@@ -154,30 +215,68 @@ namespace Etherna.EthernaCredit
                 options.IncludeXmlComments(xmlPath);
             });
 
+            // Configure Etherna SSO Client services.
+            services.AddEthernaSsoClientForServices(
+                new Uri(Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException()),
+                Configuration["SsoServer:Clients:SsoServer:ClientId"] ?? throw new ServiceConfigurationException(),
+                Configuration["SsoServer:Clients:SsoServer:Secret"] ?? throw new ServiceConfigurationException());
+
             // Configure setting.
             var assemblyVersion = new AssemblyVersion(GetType().GetTypeInfo().Assembly);
             services.Configure<ApplicationSettings>(options =>
             {
                 options.AssemblyVersion = assemblyVersion.Version;
             });
-            services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer"));
+            services.Configure<EmailSettings>(Configuration.GetSection("Email") ?? throw new ServiceConfigurationException());
+            services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
 
             // Configure persistence.
-            services.UseMongODM<HangfireTaskRunner, ModelBase>()
-                .AddDbContext<ICreditContext, CreditContext>(options =>
+            services.AddMongODMWithHangfire(configureHangfireOptions: options =>
+            {
+                options.ConnectionString = Configuration["ConnectionStrings:HangfireDb"] ?? throw new ServiceConfigurationException();
+                options.StorageOptions = new MongoStorageOptions
                 {
-                    options.ApplicationVersion = assemblyVersion.SimpleVersion;
-                    options.ConnectionString = Configuration["ConnectionStrings:CreditDb"];
+                    MigrationOptions = new MongoMigrationOptions //don't remove, could throw exception
+                    {
+                        MigrationStrategy = new MigrateMongoMigrationStrategy(),
+                        BackupStrategy = new CollectionMongoBackupStrategy()
+                    }
+                };
+            }, configureMongODMOptions: options =>
+            {
+                options.DbMaintenanceQueueName = Queues.DB_MAINTENANCE;
+            })
+                .AddDbContext<ICreditDbContext, CreditDbContext>(sp =>
+                {
+                    var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
+                    return new CreditDbContext(eventDispatcher);
+                },
+                options =>
+                {
+                    options.ConnectionString = Configuration["ConnectionStrings:CreditDb"] ?? throw new ServiceConfigurationException();
+                    options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
+                })
+
+                .AddDbContext<ISharedDbContext, SharedDbContext>(options =>
+                {
+                    options.ConnectionString = Configuration["ConnectionStrings:ServiceSharedDb"] ?? throw new ServiceConfigurationException();
+                    options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
                 });
+
+            services.AddMongODMAdminDashboard(new MongODM.AspNetCore.UI.DashboardOptions
+            {
+                AuthFilters = new[] { new Configs.MongODM.AdminAuthFilter() },
+                BasePath = CommonConsts.DatabaseAdminPath
+            });
 
             // Configure domain services.
             services.AddDomainServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider apiProvider)
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider apiProvider)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -190,7 +289,7 @@ namespace Etherna.EthernaCredit
 
             app.UseCors(builder =>
             {
-                if (env.IsDevelopment())
+                if (Environment.IsDevelopment())
                 {
                     builder.SetIsOriginAllowed(_ => true)
                            .AllowAnyHeader()
@@ -217,27 +316,17 @@ namespace Etherna.EthernaCredit
 
             // Add Hangfire.
             app.UseHangfireDashboard(
-                "/admin/hangfire",
-                new DashboardOptions
+                CommonConsts.HangfireAdminPath,
+                new Hangfire.DashboardOptions
                 {
                     Authorization = new[] { new AdminAuthFilter() }
-                });
-            if (!env.IsStaging()) //don't init server in staging
-                app.UseHangfireServer(new BackgroundJobServerOptions
-                {
-                    Queues = new[]
-                    {
-                        MongODM.Tasks.Queues.DB_MAINTENANCE,
-                        "default"
-                    },
-                    WorkerCount = Environment.ProcessorCount * 2
                 });
 
             // Add Swagger and SwaggerUI.
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                // build a swagger endpoint for each discovered API version
+                //build a swagger endpoint for each discovered API version
                 foreach (var description in apiProvider.ApiVersionDescriptions)
                 {
                     options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());

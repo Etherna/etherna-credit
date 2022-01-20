@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:51597",
+      "applicationUrl": "http://localhost:31597",
       "sslPort": 44369
     }
   },
@@ -19,7 +19,7 @@
     "EthernaCredit": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44369;http://localhost:51597",
+      "applicationUrl": "https://localhost:44369;http://localhost:31597",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"

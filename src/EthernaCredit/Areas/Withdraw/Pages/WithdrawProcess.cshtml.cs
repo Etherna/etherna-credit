@@ -1,67 +1,87 @@
+//   Copyright 2021-present Etherna Sagl
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Events;
+using Etherna.CreditSystem.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Services.Domain;
+using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Withdraw.Pages
+namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 {
     public class WithdrawProcessModel : PageModel
     {
         // Consts.
-        public const double MinimumWithdraw = 1.0;
+        public const decimal MinimumWithdraw = 1.0M;
 
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext dbContext;
+        private readonly IEventDispatcher eventDispatcher;
+        private readonly IUserService userService;
 
         // Constructor.
-        public WithdrawProcessModel(ICreditContext creditContext)
+        public WithdrawProcessModel(
+            ICreditDbContext dbContext,
+            IEventDispatcher eventDispatcher,
+            IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.dbContext = dbContext;
+            this.eventDispatcher = eventDispatcher;
+            this.userService = userService;
         }
 
         // Properties.
         public bool SucceededResult { get; set; }
-        public double WithdrawAmmount { get; set; }
+        public decimal WithdrawAmount { get; set; }
 
         // Methods
-        public async Task OnGetAsync(string ammount)
+        public async Task OnGetAsync(string amount)
         {
-            if (ammount is null)
-                throw new ArgumentNullException(nameof(ammount));
+            if (amount is null)
+                throw new ArgumentNullException(nameof(amount));
 
             // Get data.
-            WithdrawAmmount = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
-            var address = User.GetEtherAddress();
+            WithdrawAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
+            WithdrawAmount = decimal.Truncate(WithdrawAmount * 100) / 100; //accept 2 digit precision
+
+            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
 
             // Preliminary check.
-            if (WithdrawAmmount < MinimumWithdraw)
+            if (user.HasUnlimitedCredit || //***** disable withdraw if unlimited credit (SECURITY!) *****
+                WithdrawAmount < MinimumWithdraw)
             {
                 SucceededResult = false;
                 return;
             }
 
-            // Withdraw.
-            var user = await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Address == address &&
-                     u.CreditBalance >= WithdrawAmmount, //verify disponibility
-                Builders<User>.Update.Inc(u => u.CreditBalance, -WithdrawAmmount));
-
-            // Result check.
-            if (user is null)
-            {
-                SucceededResult = false;
+            // Update user balance.
+            SucceededResult = await userService.IncrementUserBalanceAsync(user, -WithdrawAmount, false);
+            if (!SucceededResult)
                 return;
-            }
-            SucceededResult = true;
 
             // Report log.
-            var withdrawLog = new WithdrawOperationLog(-WithdrawAmmount, address, user);
-            await creditContext.OperationLogs.CreateAsync(withdrawLog);
+            var withdrawLog = new WithdrawOperationLog(-WithdrawAmount, userSharedInfo.EtherAddress, user);
+            await dbContext.OperationLogs.CreateAsync(withdrawLog);
+
+            // Dispatch event.
+            await eventDispatcher.DispatchAsync(new UserWithdrawEvent(
+                -WithdrawAmount, user));
         }
     }
 }

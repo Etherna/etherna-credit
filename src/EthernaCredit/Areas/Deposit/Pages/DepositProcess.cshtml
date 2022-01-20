@@ -1,5 +1,20 @@
-﻿@page
-@model Etherna.EthernaCredit.Areas.Deposit.Pages.DepositProcessModel
+﻿@*  *   Copyright 2021-present Etherna Sagl
+    *
+    *   Licensed under the Apache License, Version 2.0 (the "License");
+    *   you may not use this file except in compliance with the License.
+    *   You may obtain a copy of the License at
+    *
+    *       http://www.apache.org/licenses/LICENSE-2.0
+    *
+    *   Unless required by applicable law or agreed to in writing, software
+    *   distributed under the License is distributed on an "AS IS" BASIS,
+    *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    *   See the License for the specific language governing permissions and
+    *   limitations under the License.
+*@
+
+@page
+@model Etherna.CreditSystem.Areas.Deposit.Pages.DepositProcessModel
 @{
     ViewData["Title"] = "Deposit confirm";
 }
@@ -7,7 +22,14 @@
 <h4>@ViewData["Title"]</h4>
 <div class="row">
     <div class="col-md-6">
-        <p>An ammount of $@Model.DepositAmmount has been deposited to your account</p>
+        @if (Model.SucceededResult)
+        {
+            <p>An amount of @Model.DepositAmount.ToFinancialString(prefixSymbol: "$") has been deposited to your account</p>
+        }
+        else
+        {
+            <p>Sorry, we was not able to deposit an amount of @Model.DepositAmount.ToFinancialString(prefixSymbol: "$") to your account</p>
+        }
         <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
     </div>
 </div>

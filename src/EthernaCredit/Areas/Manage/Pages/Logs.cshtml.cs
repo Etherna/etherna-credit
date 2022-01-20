@@ -1,28 +1,45 @@
+//   Copyright 2021-present Etherna Sagl
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.MongODM.Extensions;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Services.Domain;
+using Etherna.MongoDB.Driver.Linq;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Credit.Pages
+namespace Etherna.CreditSystem.Areas.Manage.Pages
 {
     public class LogsModel : PageModel
     {
         // Consts.
-        public const int DefaultTakeElements = 20;
+        public const int DefaultTakeElements = 10;
 
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext dbContext;
+        private readonly IUserService userService;
 
         // Constructor.
-        public LogsModel(ICreditContext creditContext)
+        public LogsModel(
+            ICreditDbContext dbContext,
+            IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.dbContext = dbContext;
+            this.userService = userService;
         }
 
         // Properties.
@@ -33,18 +50,19 @@ namespace Etherna.EthernaCredit.Areas.Credit.Pages
         // Methods.
         public async Task OnGetAsync(int p)
         {
-            var address = User.GetEtherAddress();
-            var totLogs = await creditContext.OperationLogs.QueryElementsAsync(elements =>
-                elements.Where(l => l.User.Address == address)
-                        .CountAsync());
+            // Get user.
+            var (user, _) = await userService.FindUserAsync(User.GetEtherAddress());
 
-            MaxPage = (totLogs - 1) / DefaultTakeElements;
-            CurrentPage = Math.Min(p, MaxPage);
+            // Get paginated logs.
+            var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
+                elements => elements.Where(l => l.User.Id == user.Id),
+                l => l.CreationDateTime,
+                p, DefaultTakeElements,
+                true);
 
-            Logs = await creditContext.OperationLogs.QueryElementsAsync(elements =>
-                elements.Where(l => l.User.Address == address)
-                        .PaginateDescending(l => l.CreationDateTime, CurrentPage, DefaultTakeElements)
-                        .ToListAsync());
+            CurrentPage = paginatedLogs.CurrentPage;
+            MaxPage = paginatedLogs.MaxPage;
+            Logs = paginatedLogs.Elements;
         }
     }
 }

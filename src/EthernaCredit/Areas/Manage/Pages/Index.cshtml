@@ -1,21 +1,42 @@
-﻿@page
-@model Etherna.EthernaCredit.Areas.Credit.Pages.IndexModel
+﻿@*  *   Copyright 2021-present Etherna Sagl
+    *
+    *   Licensed under the Apache License, Version 2.0 (the "License");
+    *   you may not use this file except in compliance with the License.
+    *   You may obtain a copy of the License at
+    *
+    *       http://www.apache.org/licenses/LICENSE-2.0
+    *
+    *   Unless required by applicable law or agreed to in writing, software
+    *   distributed under the License is distributed on an "AS IS" BASIS,
+    *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    *   See the License for the specific language governing permissions and
+    *   limitations under the License.
+*@
+
+@page
+@model Etherna.CreditSystem.Areas.Manage.Pages.IndexModel
 @{
     ViewData["Title"] = "Credit status";
     ViewData["ActivePage"] = ManageNavPages.Status;
 }
 
 <h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+
 <div class="row">
     <div class="col-md-6">
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="EthereumAddress"></label>
             <p>@Model.EthereumAddress</p>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="CreditBalance"></label>
-            <p>$@Model.CreditBalance</p>
+            <p>@Model.CreditBalance.ToFinancialString(prefixSymbol: "$")</p>
         </div>
+        @if (Model.HasUnlimitedCredit)
+        {
+            <div class="mb-3">
+                <p>Your account has unlimited credit, deposits and withdrawals are disabled.</p>
+            </div>
+        }
     </div>
 </div>

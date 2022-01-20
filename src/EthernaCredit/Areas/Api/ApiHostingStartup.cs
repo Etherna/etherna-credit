@@ -1,11 +1,25 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿//   Copyright 2021-present Etherna Sagl
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Reflection;
 
-[assembly: HostingStartup(typeof(Etherna.EthernaCredit.Areas.Api.ApiHostingStartup))]
-namespace Etherna.EthernaCredit.Areas.Api
+[assembly: HostingStartup(typeof(Etherna.CreditSystem.Areas.Api.ApiHostingStartup))]
+namespace Etherna.CreditSystem.Areas.Api
 {
     public class ApiHostingStartup : IHostingStartup
     {
@@ -27,6 +41,8 @@ namespace Etherna.EthernaCredit.Areas.Api
                                             select t)
                 {
                     var serviceInterfaceType = serviceType.GetInterface($"I{serviceType.Name}");
+                    if (serviceInterfaceType is null)
+                        throw new InvalidOperationException();
                     services.AddScoped(serviceInterfaceType, serviceType);
                 }
             });

@@ -1,10 +1,25 @@
-﻿@page
-@model Etherna.EthernaCredit.Areas.Credit.Pages.LogsModel
+﻿@*  *   Copyright 2021-present Etherna Sagl
+    *
+    *   Licensed under the Apache License, Version 2.0 (the "License");
+    *   you may not use this file except in compliance with the License.
+    *   You may obtain a copy of the License at
+    *
+    *       http://www.apache.org/licenses/LICENSE-2.0
+    *
+    *   Unless required by applicable law or agreed to in writing, software
+    *   distributed under the License is distributed on an "AS IS" BASIS,
+    *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    *   See the License for the specific language governing permissions and
+    *   limitations under the License.
+*@
+
+@page
+@model Etherna.CreditSystem.Areas.Manage.Pages.LogsModel
 @{
     ViewData["Title"] = "Operation logs";
     ViewData["ActivePage"] = ManageNavPages.Logs;
 
-    var pageSelectorModel = new PageSelectorModel(HttpContext.Request.Path.Value, Model.CurrentPage, Model.MaxPage);
+    var pageSelectorModel = new PageSelectorModel(Model.CurrentPage, Model.MaxPage);
 }
 
 <h4>@ViewData["Title"]</h4>
@@ -15,16 +30,20 @@
         {
             <div class="border-top">
                 <p>
-                    <b>@log.OperationName</b> - @log.CreationDateTime<br />
                     @switch (log)
                     {
                         case UpdateOperationLog update:
-                            <span>$@update.Ammount - @update.Author - @update.Reason</span>
+                            <span><b>@log.OperationName</b> - @log.CreationDateTime.Date.ToShortDateString()</span><br />
+                            <span>@update.Reason</span><br />
                             break;
                         default:
-                            <span>$@log.Ammount</span>
+                            <span><b>@log.OperationName</b> - @log.CreationDateTime</span><br />
                             break;
                     }
+                    <span>@log.Amount.ToFinancialString(
+                         allowedDecimals: null,
+                         prefixSymbol: "$",
+                         usePlusSign: true)</span>
                 </p>
             </div>
         }

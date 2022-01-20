@@ -1,47 +1,54 @@
+//   Copyright 2021-present Etherna Sagl
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
+using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver.Linq;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Credit.Pages
+namespace Etherna.CreditSystem.Areas.Manage.Pages
 {
     public class IndexModel : PageModel
     {
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly IUserService userService;
 
         // Constructor.
-        public IndexModel(ICreditContext creditContext)
+        public IndexModel(
+            IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.userService = userService;
         }
 
         // Properties.
         [Display(Name = "Credit balance")]
-        public double CreditBalance { get; set; }
+        public decimal CreditBalance { get; private set; }
         [Display(Name = "Ethereum address")]
-        public string EthereumAddress { get; set; } = default!;
-        [TempData]
-        public string? StatusMessage { get; set; }
+        public string EthereumAddress { get; private set; } = default!;
+        public bool HasUnlimitedCredit { get; private set; }
 
         // Methods.
         public async Task<IActionResult> OnGetAsync()
         {
-            var address = User.GetEtherAddress();
-            var prevAddresses = User.GetEtherPrevAddresses();
+            // Get user.
+            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
 
-            // Verify if user exists.
-            var user = await creditContext.Users.QueryElementsAsync(elements =>
-                elements.Where(u => u.Address == address ||
-                                    prevAddresses.Contains(u.Address))
-                        .FirstAsync());
-
-            EthereumAddress = user.Address;
-            CreditBalance = user.CreditBalance;
+            EthereumAddress = userSharedInfo.EtherAddress;
+            CreditBalance = await userService.GetUserBalanceAsync(user);
+            HasUnlimitedCredit = user.HasUnlimitedCredit;
 
             return Page();
         }

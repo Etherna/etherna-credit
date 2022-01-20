@@ -1,54 +1,85 @@
+//   Copyright 2021-present Etherna Sagl
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
 using Etherna.Authentication.Extensions;
-using Etherna.EthernaCredit.Domain;
-using Etherna.EthernaCredit.Domain.Models;
-using Etherna.EthernaCredit.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Domain;
+using Etherna.CreditSystem.Domain.Events;
+using Etherna.CreditSystem.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Services.Domain;
+using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Driver;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Etherna.EthernaCredit.Areas.Deposit.Pages
+namespace Etherna.CreditSystem.Areas.Deposit.Pages
 {
     public class DepositProcessModel : PageModel
     {
         // Fields.
-        private readonly ICreditContext creditContext;
+        private readonly ICreditDbContext dbContext;
+        private readonly IEventDispatcher eventDispatcher;
+        private readonly IUserService userService;
 
         // Constructor.
-        public DepositProcessModel(ICreditContext creditContext)
+        public DepositProcessModel(
+            ICreditDbContext dbContext,
+            IEventDispatcher eventDispatcher,
+            IUserService userService)
         {
-            this.creditContext = creditContext;
+            this.dbContext = dbContext;
+            this.eventDispatcher = eventDispatcher;
+            this.userService = userService;
         }
 
         // Properties.
-        public double DepositAmmount { get; set; }
+        public decimal DepositAmount { get; set; }
+        public bool SucceededResult { get; set; }
 
         // Methods
         public IActionResult OnGet() =>
             LocalRedirect("~/");
 
-        public async Task OnPostAsync(string ammount)
+        public async Task OnPostAsync(string amount)
         {
-            if (ammount is null)
-                throw new ArgumentNullException(nameof(ammount));
+            if (amount is null)
+                throw new ArgumentNullException(nameof(amount));
 
             // Get data.
-            var ammountValue = double.Parse(ammount.Trim('$'), CultureInfo.InvariantCulture);
-            var address = User.GetEtherAddress();
-            var user = await creditContext.Users.FindOneAsync(u => u.Address == address);
+            DepositAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
+            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
+
+            // Preliminary check.
+            if (user.HasUnlimitedCredit) //disable deposit if unlimited credit
+            {
+                SucceededResult = false;
+                return;
+            }
 
             // Deposit.
-            await creditContext.Users.Collection.FindOneAndUpdateAsync(
-                u => u.Address == address,
-                Builders<User>.Update.Inc(u => u.CreditBalance, ammountValue));
+            await userService.IncrementUserBalanceAsync(user, DepositAmount, false);
 
             // Report log.
-            var depositLog = new DepositOperationLog(ammountValue, address, user);
-            await creditContext.OperationLogs.CreateAsync(depositLog);
+            var depositLog = new DepositOperationLog(DepositAmount, userSharedInfo.EtherAddress, user);
+            await dbContext.OperationLogs.CreateAsync(depositLog);
 
-            DepositAmmount = ammountValue;
+            // Dispatch event.
+            await eventDispatcher.DispatchAsync(new UserDepositEvent(
+                DepositAmount, user));
+
+            SucceededResult = true;
         }
     }
 }
