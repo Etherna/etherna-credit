@@ -49,7 +49,9 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
@@ -87,6 +89,24 @@ namespace Etherna.CreditSystem
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.All;
+
+                var knownNetworksConfig = Configuration.GetSection("ForwardedHeaders:KnownNetworks");
+                if (knownNetworksConfig.Exists())
+                {
+                    var networks = knownNetworksConfig.Get<string[]>().Select(address =>
+                    {
+                        var parts = address.Split('/');
+                        if (parts.Length != 2)
+                            throw new ServiceConfigurationException();
+
+                        return new IPNetwork(
+                            IPAddress.Parse(parts[0]),
+                            int.Parse(parts[1], CultureInfo.InvariantCulture));
+                    });
+
+                    foreach (var network in networks)
+                        options.KnownNetworks.Add(network);
+                }
             });
 
             services.AddCors();
