@@ -24,11 +24,11 @@
     <div class="col-md-6">
         @if (Model.SucceededResult)
         {
-            <p>An amount of @Model.DepositAmount.ToFinancialString(prefixSymbol: "$") has been deposited to your account</p>
+            <p>An amount of @Model.DepositAmount.ToFinancialString(suffixSymbol: " CHF") has been deposited to your account</p>
         }
         else
         {
-            <p>Sorry, we was not able to deposit an amount of @Model.DepositAmount.ToFinancialString(prefixSymbol: "$") to your account</p>
+            <p>Sorry, we was not able to deposit an amount of @Model.DepositAmount.ToFinancialString(suffixSymbol: " CHF") to your account</p>
         }
         <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
     </div>
