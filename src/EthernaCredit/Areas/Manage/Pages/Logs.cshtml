@@ -19,7 +19,7 @@
     ViewData["Title"] = "Operation logs";
     ViewData["ActivePage"] = ManageNavPages.Logs;
 
-    var pageSelectorModel = new PageSelectorModel(Model.CurrentPage, Model.MaxPage);
+    var pageSelectorModel = new PageSelectorModel(Model.CurrentPage, Model.MaxPage, 1);
 }
 
 <h4>@ViewData["Title"]</h4>
@@ -42,7 +42,7 @@
                     }
                     <span>@log.Amount.ToFinancialString(
                          allowedDecimals: null,
-                         prefixSymbol: "$",
+                         suffixSymbol: " CHF",
                          usePlusSign: true)</span>
                 </p>
             </div>

@@ -12,13 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+using Etherna.ACR.Services;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
-using Etherna.CreditSystem.Services.Domain;
 using Etherna.CreditSystem.Services.Views.Emails;
 using Etherna.DomainEvents;
 using Etherna.ServicesClient.Clients.Sso;
-using Etherna.SSL.Services;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.EventHandlers

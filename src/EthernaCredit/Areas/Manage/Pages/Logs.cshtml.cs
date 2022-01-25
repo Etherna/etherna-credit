@@ -48,7 +48,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public IEnumerable<OperationLogBase> Logs { get; private set; } = Array.Empty<OperationLogBase>();
 
         // Methods.
-        public async Task OnGetAsync(int p)
+        public async Task OnGetAsync(int p = 1)
         {
             // Get user.
             var (user, _) = await userService.FindUserAsync(User.GetEtherAddress());
@@ -57,11 +57,11 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
             var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
                 elements => elements.Where(l => l.User.Id == user.Id),
                 l => l.CreationDateTime,
-                p, DefaultTakeElements,
+                p - 1, DefaultTakeElements,
                 true);
 
-            CurrentPage = paginatedLogs.CurrentPage;
-            MaxPage = paginatedLogs.MaxPage;
+            CurrentPage = paginatedLogs.CurrentPage + 1;
+            MaxPage = paginatedLogs.MaxPage + 1;
             Logs = paginatedLogs.Elements;
         }
     }

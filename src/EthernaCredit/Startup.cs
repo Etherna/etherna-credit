@@ -12,6 +12,8 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+using Etherna.ACR.Exceptions;
+using Etherna.ACR.Settings;
 using Etherna.CreditSystem.Configs;
 using Etherna.CreditSystem.Configs.Authorization;
 using Etherna.CreditSystem.Configs.Hangfire;
@@ -26,8 +28,6 @@ using Etherna.DomainEvents;
 using Etherna.MongODM;
 using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
-using Etherna.SSL.Exceptions;
-using Etherna.SSL.Settings;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;

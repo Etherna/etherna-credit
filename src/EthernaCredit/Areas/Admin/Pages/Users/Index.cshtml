@@ -68,7 +68,11 @@
                             </td>
                             <td class="align-middle">@user.Id</td>
                             <td class="align-middle">@user.EtherAddress</td>
-                            <td class="align-middle">@user.Balance</td>
+                            <td class="align-middle">
+                                @user.Balance.ToFinancialString(
+                                    allowedDecimals: 4,
+                                    suffixSymbol: " CHF",
+                                    usePlusSign: true)</td>
                             <td class="align-middle">@user.HasUnlimitedCredit</td>
                         </tr>
                     }
