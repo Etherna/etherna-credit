@@ -17,12 +17,11 @@ using System.Collections.Generic;
 
 namespace Etherna.CreditSystem.Domain.Models.UserAgg
 {
-    /* This model will not be encapsulated with UserBase until https://etherna.atlassian.net/browse/MODM-101 is solved.
+    /* This model will not be encapsulated with User until https://etherna.atlassian.net/browse/MODM-101 is solved.
      * After it, a full referenced inclusion can be implemented. */
 
     /// <summary>
-    /// A class that expose <see cref="UserBase"/> information, but that needs to be saved on a different DbContext,
-    /// shared with other Etherna services. Use in read-only mode.
+    /// Shared with other Etherna services. Use in read-only mode.
     /// </summary>
     public class UserSharedInfo : EntityModelBase<string>
     {
