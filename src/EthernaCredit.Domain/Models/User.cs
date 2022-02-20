@@ -36,7 +36,7 @@ namespace Etherna.CreditSystem.Domain.Models
 
         /* SharedInfo is encapsulable with resolution of https://etherna.atlassian.net/browse/MODM-101.
          * With encapsulation we can expose also EtherAddress and EtherPreviousAddresses properties
-         * pointing to SharedInfo internal property, and avoid data duplication.
+         * pointing to SharedInfo internal property.
          */
         //protected virtual SharedUserInfo SharedInfo { get; set; }
         public virtual string SharedInfoId { get; protected set; } = default!;
