@@ -145,6 +145,7 @@ namespace Etherna.CreditSystem
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     // Set properties.
+                    options.Cookie.MaxAge = TimeSpan.FromDays(30);
                     options.Cookie.Name = CommonConsts.SharedCookieApplicationName;
                     options.AccessDeniedPath = "/AccessDenied";
 
