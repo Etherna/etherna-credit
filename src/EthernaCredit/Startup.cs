@@ -255,10 +255,20 @@ namespace Etherna.CreditSystem
             });
 
             // Configure Etherna SSO Client services.
-            services.AddEthernaSsoClientForServices(
+            var ethernaServiceClientBuilder = services.AddEthernaSsoClientForServices(
                 new Uri(Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException()),
                 Configuration["SsoServer:Clients:SsoServer:ClientId"] ?? throw new ServiceConfigurationException(),
                 Configuration["SsoServer:Clients:SsoServer:Secret"] ?? throw new ServiceConfigurationException());
+
+            var clientCredentialTask = ethernaServiceClientBuilder.GetClientCredentialsTokenRequestAsync();
+            clientCredentialTask.Wait();
+            var clientCredential = clientCredentialTask.Result;
+
+            // Register token manager.
+            services.AddAccessTokenManagement(options =>
+            {
+                options.Client.Clients.Add(ethernaServiceClientBuilder.ClientName, clientCredential);
+            });
 
             // Configure setting.
             var assemblyVersion = new AssemblyVersion(GetType().GetTypeInfo().Assembly);
