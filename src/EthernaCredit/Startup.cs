@@ -144,19 +144,38 @@ namespace Etherna.CreditSystem
                 })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
+                    // Set properties.
+                    options.Cookie.MaxAge = TimeSpan.FromDays(30);
                     options.Cookie.Name = CommonConsts.SharedCookieApplicationName;
                     options.AccessDeniedPath = "/AccessDenied";
 
                     if (Environment.IsProduction())
-                    {
                         options.Cookie.Domain = ".etherna.io";
-                    }
+
+                    // Handle unauthorized call on api with 401 response. For already logged in users.
+                    options.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        if (context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCulture))
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        else
+                            context.Response.Redirect(context.RedirectUri);
+                        return Task.CompletedTask;
+                    };
                 })
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //client config
                 {
+                    // Set properties.
                     options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
+                    options.ClientId = Configuration["SsoServer:Clients:Webapp:ClientId"] ?? throw new ServiceConfigurationException();
+                    options.ClientSecret = Configuration["SsoServer:Clients:Webapp:Secret"] ?? throw new ServiceConfigurationException();
+                    options.ResponseType = "code";
 
-                    // Response 401 for unauthorized call on api.
+                    options.SaveTokens = true;
+
+                    options.Scope.Add("ether_accounts");
+                    options.Scope.Add("role");
+
+                    // Handle unauthorized call on api with 401 response. For users not logged in.
                     options.Events.OnRedirectToIdentityProvider = context =>
                     {
                         if (context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCulture))
@@ -166,15 +185,6 @@ namespace Etherna.CreditSystem
                         }
                         return Task.CompletedTask;
                     };
-
-                    options.ClientId = Configuration["SsoServer:Clients:Webapp:ClientId"] ?? throw new ServiceConfigurationException();
-                    options.ClientSecret = Configuration["SsoServer:Clients:Webapp:Secret"] ?? throw new ServiceConfigurationException();
-                    options.ResponseType = "code";
-
-                    options.SaveTokens = true;
-
-                    options.Scope.Add("ether_accounts");
-                    options.Scope.Add("role");
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -233,6 +243,8 @@ namespace Etherna.CreditSystem
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen(options =>
             {
+                options.SupportNonNullableReferenceTypes();
+
                 //add a custom operation filter which sets default values
                 options.OperationFilter<SwaggerDefaultValues>();
 
@@ -243,10 +255,20 @@ namespace Etherna.CreditSystem
             });
 
             // Configure Etherna SSO Client services.
-            services.AddEthernaSsoClientForServices(
+            var ethernaServiceClientBuilder = services.AddEthernaSsoClientForServices(
                 new Uri(Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException()),
                 Configuration["SsoServer:Clients:SsoServer:ClientId"] ?? throw new ServiceConfigurationException(),
                 Configuration["SsoServer:Clients:SsoServer:Secret"] ?? throw new ServiceConfigurationException());
+
+            var clientCredentialTask = ethernaServiceClientBuilder.GetClientCredentialsTokenRequestAsync();
+            clientCredentialTask.Wait();
+            var clientCredential = clientCredentialTask.Result;
+
+            // Register token manager.
+            services.AddAccessTokenManagement(options =>
+            {
+                options.Client.Clients.Add(ethernaServiceClientBuilder.ClientName, clientCredential);
+            });
 
             // Configure setting.
             var assemblyVersion = new AssemblyVersion(GetType().GetTypeInfo().Assembly);
