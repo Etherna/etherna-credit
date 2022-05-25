@@ -137,6 +137,10 @@ namespace Etherna.CreditSystem
             });
 
             // Configure authentication.
+            var allowUnsafeAuthorityConnection = false;
+            if (Configuration["SsoServer:AllowUnsafeConnection"] is not null)
+                allowUnsafeAuthorityConnection = bool.Parse(Configuration["SsoServer:AllowUnsafeConnection"]);
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -175,6 +179,8 @@ namespace Etherna.CreditSystem
                     options.Scope.Add("ether_accounts");
                     options.Scope.Add("role");
 
+                    options.RequireHttpsMetadata = !allowUnsafeAuthorityConnection;
+
                     // Handle unauthorized call on api with 401 response. For users not logged in.
                     options.Events.OnRedirectToIdentityProvider = context =>
                     {
@@ -190,6 +196,8 @@ namespace Etherna.CreditSystem
                 {
                     options.Audience = "ethernaCreditServiceInteract";
                     options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
+
+                    options.RequireHttpsMetadata = !allowUnsafeAuthorityConnection;
                 });
 
             // Configure authorization.
@@ -260,7 +268,7 @@ namespace Etherna.CreditSystem
                 Configuration["SsoServer:Clients:SsoServer:ClientId"] ?? throw new ServiceConfigurationException(),
                 Configuration["SsoServer:Clients:SsoServer:Secret"] ?? throw new ServiceConfigurationException());
 
-            var clientCredentialTask = ethernaServiceClientBuilder.GetClientCredentialsTokenRequestAsync();
+            var clientCredentialTask = ethernaServiceClientBuilder.GetClientCredentialsTokenRequestAsync(!allowUnsafeAuthorityConnection);
             clientCredentialTask.Wait();
             var clientCredential = clientCredentialTask.Result;
 
