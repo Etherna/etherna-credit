@@ -69,7 +69,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             }
 
             // Deposit.
-            await userService.IncrementUserBalanceAsync(user, DepositAmount, false);
+            await userService.TryIncrementUserBalanceAsync(user, DepositAmount, false);
 
             // Report log.
             var depositLog = new DepositOperationLog(DepositAmount, userSharedInfo.EtherAddress, user);

@@ -25,8 +25,8 @@ namespace Etherna.CreditSystem.Services.Domain
         Task<UserSharedInfo> FindUserSharedInfoByAddressAsync(string address);
         Task<decimal> GetUserBalanceAsync(string address);
         Task<decimal> GetUserBalanceAsync(User user);
-        Task<bool> IncrementUserBalanceAsync(User user, decimal amount, bool allowBalanceDecreaseNegative);
         Task<(User?, UserSharedInfo?)> TryFindUserAsync(string address);
         Task<UserSharedInfo?> TryFindUserSharedInfoByAddressAsync(string address);
+        Task<bool> TryIncrementUserBalanceAsync(User user, decimal amount, bool allowBalanceDecreaseNegative);
     }
 }

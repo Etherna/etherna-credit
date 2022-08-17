@@ -14,6 +14,7 @@
 
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
 using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Driver;
@@ -27,6 +28,9 @@ namespace Etherna.CreditSystem.Services.Domain
 {
     class UserService : IUserService
     {
+        // Consts.
+        private const decimal DefaultWelcomeCredit = 0.1M;
+
         // Fields.
         private readonly ICreditDbContextInternal creditDbContext;
         private readonly ISharedDbContext sharedDbContext;
@@ -57,8 +61,17 @@ namespace Etherna.CreditSystem.Services.Domain
                 await creditDbContext.Users.CreateAsync(user);
 
                 // Create balance record.
-                var balance = new UserBalance(user);
+                var welcomeCredit = DefaultWelcomeCredit;
+                var balance = new UserBalance(user, welcomeCredit);
                 await creditDbContext.UserBalances.CreateAsync(balance);
+
+                // Create log for welcome credit deposit.
+                if (welcomeCredit > 0)
+                {
+                    var depositLog = new WelcomeCreditDepositOperationLog(
+                        welcomeCredit, userSharedInfo.EtherAddress, user);
+                    await creditDbContext.OperationLogs.CreateAsync(depositLog);
+                }
 
                 // Get again, because of https://etherna.atlassian.net/browse/MODM-83
                 user = await creditDbContext.Users.FindOneAsync(user.Id);
@@ -97,7 +110,22 @@ namespace Etherna.CreditSystem.Services.Domain
             return Decimal128.ToDecimal(userBalance.Credit);
         }
 
-        public async Task<bool> IncrementUserBalanceAsync(User user, decimal amount, bool allowBalanceDecreaseNegative)
+        public async Task<(User?, UserSharedInfo?)> TryFindUserAsync(string address)
+        {
+            var sharedInfo = await TryFindUserSharedInfoByAddressAsync(address);
+            if (sharedInfo is null)
+                return (null, null);
+
+            return await FindUserAsync(sharedInfo);
+        }
+
+        public async Task<UserSharedInfo?> TryFindUserSharedInfoByAddressAsync(string address)
+        {
+            try { return await FindUserSharedInfoByAddressAsync(address); }
+            catch (InvalidOperationException) { return null; }
+        }
+
+        public async Task<bool> TryIncrementUserBalanceAsync(User user, decimal amount, bool allowBalanceDecreaseNegative)
         {
             if (user.HasUnlimitedCredit)
                 return true;
@@ -121,21 +149,6 @@ namespace Etherna.CreditSystem.Services.Domain
 
                 return balanceResult is not null;
             }
-        }
-
-        public async Task<(User?, UserSharedInfo?)> TryFindUserAsync(string address)
-        {
-            var sharedInfo = await TryFindUserSharedInfoByAddressAsync(address);
-            if (sharedInfo is null)
-                return (null, null);
-
-            return await FindUserAsync(sharedInfo);
-        }
-
-        public async Task<UserSharedInfo?> TryFindUserSharedInfoByAddressAsync(string address)
-        {
-            try { return await FindUserSharedInfoByAddressAsync(address); }
-            catch (InvalidOperationException) { return null; }
         }
     }
 }
