@@ -24,8 +24,9 @@ namespace Etherna.CreditSystem.Domain.Models.UserAgg
     public class UserBalance : EntityModelBase<string>
     {
         // Constructors.
-        public UserBalance(User user)
+        public UserBalance(User user, Decimal128 welcomeCredit)
         {
+            Credit = welcomeCredit;
             User = user;
         }
         protected UserBalance() { }

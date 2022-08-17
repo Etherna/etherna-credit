@@ -71,7 +71,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             }
 
             // Update user balance.
-            SucceededResult = await userService.IncrementUserBalanceAsync(user, -WithdrawAmount, false);
+            SucceededResult = await userService.TryIncrementUserBalanceAsync(user, -WithdrawAmount, false);
             if (!SucceededResult)
                 return;
 
