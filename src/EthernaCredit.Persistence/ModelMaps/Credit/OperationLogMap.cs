@@ -37,6 +37,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
                 });
             dbContext.SchemaRegistry.AddModelMapsSchema<DepositOperationLog>("7fc7abe8-9a55-40a2-90ce-f3cba34bc005");
             dbContext.SchemaRegistry.AddModelMapsSchema<UpdateOperationLog>("74e021d4-6d86-4deb-b952-0c328839cfe2");
+            dbContext.SchemaRegistry.AddModelMapsSchema<WelcomeCreditDepositOperationLog>("ba82b71f-1d41-45e2-a56b-d3293ea74c3a");
             dbContext.SchemaRegistry.AddModelMapsSchema<WithdrawOperationLog>("b0ffe059-c985-4f3d-8677-238ab9551ec3");
         }
     }
