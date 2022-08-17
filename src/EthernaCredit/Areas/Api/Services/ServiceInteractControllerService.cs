@@ -85,7 +85,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             var (user, _) = await userService.FindUserAsync(address);
 
             // Apply update (balance can go negative).
-            var result = await userService.IncrementUserBalanceAsync(user, amount, true);
+            var result = await userService.TryIncrementUserBalanceAsync(user, amount, true);
             if (!result)
                 throw new InvalidOperationException();
 
