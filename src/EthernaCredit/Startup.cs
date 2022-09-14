@@ -33,8 +33,6 @@ using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
 using Hangfire.Mongo.Migration.Strategies.Backup;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -47,6 +45,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -143,10 +142,12 @@ namespace Etherna.CreditSystem
 
             services.AddAuthentication(options =>
                 {
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultScheme = CommonConsts.UserAuthenticationPolicyScheme;
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+
+                //users access
+                .AddCookie(CommonConsts.UserAuthenticationCookieScheme, options =>
                 {
                     // Set properties.
                     options.Cookie.MaxAge = TimeSpan.FromDays(30);
@@ -166,7 +167,31 @@ namespace Etherna.CreditSystem
                         return Task.CompletedTask;
                     };
                 })
-                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => //client config
+                .AddJwtBearer(CommonConsts.UserAuthenticationJwtScheme, options =>
+                {
+                    options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
+
+                    options.RequireHttpsMetadata = !allowUnsafeAuthorityConnection;
+
+#pragma warning disable CA5404 // Do not disable token validation checks
+                    options.TokenValidationParameters.ValidateAudience = false;
+#pragma warning restore CA5404 // Do not disable token validation checks
+                })
+                .AddPolicyScheme(CommonConsts.UserAuthenticationPolicyScheme, CommonConsts.UserAuthenticationPolicyScheme, options =>
+                {
+                    //runs on each request
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        //filter by auth type
+                        string authorization = context.Request.Headers[HeaderNames.Authorization];
+                        if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            return CommonConsts.UserAuthenticationJwtScheme;
+
+                        //otherwise always check for cookie auth
+                        return CommonConsts.UserAuthenticationCookieScheme;
+                    };
+                })
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
                     // Set properties.
                     options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
@@ -192,7 +217,9 @@ namespace Etherna.CreditSystem
                         return Task.CompletedTask;
                     };
                 })
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+
+                //services access
+                .AddJwtBearer(CommonConsts.ServiceAuthenticationScheme, options =>
                 {
                     options.Audience = "ethernaCreditServiceInteract";
                     options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
@@ -223,7 +250,7 @@ namespace Etherna.CreditSystem
 
                 options.AddPolicy(CommonConsts.ServiceInteractApiScopePolicy, policy =>
                 {
-                    policy.AuthenticationSchemes = new List<string> { JwtBearerDefaults.AuthenticationScheme };
+                    policy.AuthenticationSchemes = new List<string> { CommonConsts.ServiceAuthenticationScheme };
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("scope", "ethernaCredit_serviceInteract_api");
                 });
