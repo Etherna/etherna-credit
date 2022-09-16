@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
+using Etherna.Authentication;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
@@ -30,16 +30,19 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
     {
         // Fields.
         private readonly ICreditDbContext dbContext;
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IEventDispatcher eventDispatcher;
         private readonly IUserService userService;
 
         // Constructor.
         public DepositProcessModel(
             ICreditDbContext dbContext,
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IEventDispatcher eventDispatcher,
             IUserService userService)
         {
             this.dbContext = dbContext;
+            this.ethernaOidcClient = ethernaOidcClient;
             this.eventDispatcher = eventDispatcher;
             this.userService = userService;
         }
@@ -59,7 +62,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
             // Get data.
             DepositAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
-            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
+            var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 
             // Preliminary check.
             if (user.HasUnlimitedCredit) //disable deposit if unlimited credit

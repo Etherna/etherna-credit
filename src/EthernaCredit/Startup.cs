@@ -191,20 +191,19 @@ namespace Etherna.CreditSystem
                         return CommonConsts.UserAuthenticationCookieScheme;
                     };
                 })
-                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                .AddEthernaOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
                     // Set properties.
                     options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
                     options.ClientId = Configuration["SsoServer:Clients:Webapp:ClientId"] ?? throw new ServiceConfigurationException();
                     options.ClientSecret = Configuration["SsoServer:Clients:Webapp:Secret"] ?? throw new ServiceConfigurationException();
-                    options.ResponseType = "code";
 
+                    options.RequireHttpsMetadata = !allowUnsafeAuthorityConnection;
+                    options.ResponseType = "code";
                     options.SaveTokens = true;
 
                     options.Scope.Add("ether_accounts");
                     options.Scope.Add("role");
-
-                    options.RequireHttpsMetadata = !allowUnsafeAuthorityConnection;
 
                     // Handle unauthorized call on api with 401 response. For users not logged in.
                     options.Events.OnRedirectToIdentityProvider = context =>
