@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Etherna.CreditSystem.Configs;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,7 +22,7 @@ namespace Etherna.CreditSystem.Areas.Account.Pages
     public class LogoutModel : PageModel
     {
         public IActionResult OnGet() =>
-            SignOut(CookieAuthenticationDefaults.AuthenticationScheme,
+            SignOut(CommonConsts.UserAuthenticationPolicyScheme,
                 OpenIdConnectDefaults.AuthenticationScheme);
     }
 }

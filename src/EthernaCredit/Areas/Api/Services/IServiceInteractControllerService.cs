@@ -24,13 +24,11 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         Task<CreditDto> GetUserCreditAsync(string address);
 
         Task<IEnumerable<OperationLogDto>> GetServiceOpLogsWithUserAsync(
-            string clientId,
             string address,
             DateTime? fromDate,
             DateTime? toDate);
 
         Task RegisterBalanceUpdateAsync(
-            string clientId,
             string address,
             decimal amount,
             string reason);

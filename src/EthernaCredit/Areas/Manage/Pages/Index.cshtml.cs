@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
+using Etherna.Authentication;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -24,12 +24,15 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
     public class IndexModel : PageModel
     {
         // Fields.
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IUserService userService;
 
         // Constructor.
         public IndexModel(
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IUserService userService)
         {
+            this.ethernaOidcClient = ethernaOidcClient;
             this.userService = userService;
         }
 
@@ -44,7 +47,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             // Get user.
-            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
+            var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 
             EthereumAddress = userSharedInfo.EtherAddress;
             CreditBalance = await userService.GetUserBalanceAsync(user);

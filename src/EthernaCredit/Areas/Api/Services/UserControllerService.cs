@@ -12,14 +12,13 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
+using Etherna.Authentication;
 using Etherna.CreditSystem.Areas.Api.DtoModels;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Services.Domain;
 using Etherna.MongoDB.Driver.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Api.Services
@@ -28,32 +27,35 @@ namespace Etherna.CreditSystem.Areas.Api.Services
     {
         // Fields.
         private readonly ICreditDbContext dbContext;
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IUserService userService;
 
         // Constructor.
         public UserControllerService(
             ICreditDbContext dbContext,
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IUserService userService)
         {
             this.dbContext = dbContext;
+            this.ethernaOidcClient = ethernaOidcClient;
             this.userService = userService;
         }
 
         // Methods.
-        public string GetAddress(ClaimsPrincipal user) =>
-            user.GetEtherAddress();
+        public Task<string> GetAddressAsync() =>
+            ethernaOidcClient.GetEtherAddressAsync();
 
-        public async Task<CreditDto> GetCreditAsync(ClaimsPrincipal user)
+        public async Task<CreditDto> GetCreditAsync()
         {
-            var (userModel, _) = await userService.FindUserAsync(user.GetEtherAddress());
+            var (userModel, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
             var balance = await userService.GetUserBalanceAsync(userModel);
 
             return new CreditDto(balance, userModel.HasUnlimitedCredit);
         }
 
-        public async Task<IEnumerable<OperationLogDto>> GetLogsAsync(ClaimsPrincipal user, int page, int take)
+        public async Task<IEnumerable<OperationLogDto>> GetLogsAsync(int page, int take)
         {
-            var (userModel, userSharedInfo) = await userService.FindUserAsync(user.GetEtherAddress());
+            var (userModel, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
             var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
                 elements => elements.Where(l => l.User.Id == userModel.Id),
                 l => l.CreationDateTime,
