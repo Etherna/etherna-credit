@@ -169,13 +169,10 @@ namespace Etherna.CreditSystem
                 })
                 .AddJwtBearer(CommonConsts.UserAuthenticationJwtScheme, options =>
                 {
+                    options.Audience = "userApi";
                     options.Authority = Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
 
                     options.RequireHttpsMetadata = !allowUnsafeAuthorityConnection;
-
-#pragma warning disable CA5404 // Do not disable token validation checks
-                    options.TokenValidationParameters.ValidateAudience = false;
-#pragma warning restore CA5404 // Do not disable token validation checks
                 })
                 .AddPolicyScheme(CommonConsts.UserAuthenticationPolicyScheme, CommonConsts.UserAuthenticationPolicyScheme, options =>
                 {
