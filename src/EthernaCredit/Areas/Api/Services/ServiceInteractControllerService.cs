@@ -12,6 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+using Etherna.Authentication;
 using Etherna.CreditSystem.Areas.Api.DtoModels;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
@@ -31,35 +32,28 @@ namespace Etherna.CreditSystem.Areas.Api.Services
     {
         // Fields.
         private readonly ICreditDbContext dbContext;
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IUserService userService;
 
         // Constructor.
         public ServiceInteractControllerService(
             ICreditDbContext dbContext,
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IUserService userService)
         {
             this.dbContext = dbContext;
+            this.ethernaOidcClient = ethernaOidcClient;
             this.userService = userService;
         }
 
         // Methods.
-        public async Task<CreditDto> GetUserCreditAsync(string address)
-        {
-            var (user, _) = await userService.TryFindUserAsync(address);
-            if (user is null)
-                return new CreditDto(0, false);
-
-            var balance = await userService.GetUserBalanceAsync(user);
-
-            return new CreditDto(balance, user.HasUnlimitedCredit);
-        }
-
         public async Task<IEnumerable<OperationLogDto>> GetServiceOpLogsWithUserAsync(
-            string clientId,
             string address,
             DateTime? fromDate,
             DateTime? toDate)
         {
+            var clientId = await ethernaOidcClient.GetClientIdAsync();
+
             var (user, userSharedInfo) = await userService.TryFindUserAsync(address);
             if (user is null)
                 return Array.Empty<OperationLogDto>();
@@ -75,12 +69,24 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             return result.Select(l => new OperationLogDto(l, userSharedInfo!));
         }
 
+        public async Task<CreditDto> GetUserCreditAsync(string address)
+        {
+            var (user, _) = await userService.TryFindUserAsync(address);
+            if (user is null)
+                return new CreditDto(0, false);
+
+            var balance = await userService.GetUserBalanceAsync(user);
+
+            return new CreditDto(balance, user.HasUnlimitedCredit);
+        }
+
         public async Task RegisterBalanceUpdateAsync(
-            string clientId,
             string address,
             decimal amount,
             string reason)
         {
+            var clientId = await ethernaOidcClient.GetClientIdAsync();
+
             // Get user.
             var (user, _) = await userService.FindUserAsync(address);
 

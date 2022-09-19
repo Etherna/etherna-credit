@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
+using Etherna.Authentication;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -23,12 +23,15 @@ namespace Etherna.CreditSystem.Configs.Authorization
     public class DenyBannedAuthorizationHandler : AuthorizationHandler<DenyBannedAuthorizationRequirement>
     {
         // Fields.
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IUserService userService;
 
         // Constructor
         public DenyBannedAuthorizationHandler(
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IUserService userService)
         {
+            this.ethernaOidcClient = ethernaOidcClient;
             this.userService = userService;
         }
 
@@ -42,7 +45,7 @@ namespace Etherna.CreditSystem.Configs.Authorization
 
             if (context.User.Identity?.IsAuthenticated == true)
             {
-                var sharedInfo = await userService.TryFindUserSharedInfoByAddressAsync(context.User.GetEtherAddress());
+                var sharedInfo = await userService.TryFindUserSharedInfoByAddressAsync(await ethernaOidcClient.GetEtherAddressAsync());
                 if (sharedInfo is null)
                 {
                     context.Fail();

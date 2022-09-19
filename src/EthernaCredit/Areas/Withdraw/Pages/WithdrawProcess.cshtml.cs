@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
+using Etherna.Authentication;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
@@ -32,16 +32,19 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
         // Fields.
         private readonly ICreditDbContext dbContext;
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IEventDispatcher eventDispatcher;
         private readonly IUserService userService;
 
         // Constructor.
         public WithdrawProcessModel(
             ICreditDbContext dbContext,
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IEventDispatcher eventDispatcher,
             IUserService userService)
         {
             this.dbContext = dbContext;
+            this.ethernaOidcClient = ethernaOidcClient;
             this.eventDispatcher = eventDispatcher;
             this.userService = userService;
         }
@@ -60,7 +63,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             WithdrawAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
             WithdrawAmount = decimal.Truncate(WithdrawAmount * 100) / 100; //accept 2 digit precision
 
-            var (user, userSharedInfo) = await userService.FindUserAsync(User.GetEtherAddress());
+            var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 
             // Preliminary check.
             if (user.HasUnlimitedCredit || //***** disable withdraw if unlimited credit (SECURITY!) *****
