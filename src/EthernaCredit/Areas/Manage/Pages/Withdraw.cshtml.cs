@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
+using Etherna.Authentication;
 using Etherna.CreditSystem.Areas.Withdraw.Pages;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +33,15 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         }
 
         // Fields.
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IUserService userService;
 
         // Constructor.
         public WithdrawModel(
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IUserService userService)
         {
+            this.ethernaOidcClient = ethernaOidcClient;
             this.userService = userService;
         }
 
@@ -56,7 +59,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         // Methods.
         public async Task<IActionResult> OnGetAsync()
         {
-            CreditBalance = await userService.GetUserBalanceAsync(User.GetEtherAddress());
+            CreditBalance = await userService.GetUserBalanceAsync(await ethernaOidcClient.GetEtherAddressAsync());
             return Page();
         }
 

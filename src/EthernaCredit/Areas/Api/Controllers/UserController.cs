@@ -49,8 +49,8 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         [HttpGet("address")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public string GetAddress() =>
-            service.GetAddress(User);
+        public Task<string> GetAddressAsync() =>
+            service.GetAddressAsync();
 
         /// <summary>
         /// Get credit status for current user
@@ -60,7 +60,7 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public Task<CreditDto> GetCreditAsync() =>
-            service.GetCreditAsync(User);
+            service.GetCreditAsync();
 
         /// <summary>
         /// Get transaction logs for current user
@@ -74,6 +74,6 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         public Task<IEnumerable<OperationLogDto>> GetLogsAsync(
             [Range(0, int.MaxValue)] int page,
             [Range(1, 100)] int take = 25) =>
-            service.GetLogsAsync(User, page, take);
+            service.GetLogsAsync(page, take);
     }
 }

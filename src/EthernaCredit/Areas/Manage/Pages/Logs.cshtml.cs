@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
+using Etherna.Authentication;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Services.Domain;
@@ -31,14 +31,17 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
         // Fields.
         private readonly ICreditDbContext dbContext;
+        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
         private readonly IUserService userService;
 
         // Constructor.
         public LogsModel(
             ICreditDbContext dbContext,
+            IEthernaOpenIdConnectClient ethernaOidcClient,
             IUserService userService)
         {
             this.dbContext = dbContext;
+            this.ethernaOidcClient = ethernaOidcClient;
             this.userService = userService;
         }
 
@@ -51,7 +54,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public async Task OnGetAsync(int p = 1)
         {
             // Get user.
-            var (user, _) = await userService.FindUserAsync(User.GetEtherAddress());
+            var (user, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 
             // Get paginated logs.
             var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(

@@ -12,7 +12,6 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.Authentication.Extensions;
 using Etherna.CreditSystem.Areas.Api.DtoModels;
 using Etherna.CreditSystem.Areas.Api.Services;
 using Etherna.CreditSystem.Attributes;
@@ -72,7 +71,7 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
             [Required] string address,
             DateTime? fromDate = null,
             DateTime? toDate = null) =>
-            service.GetServiceOpLogsWithUserAsync(User.GetClientId(), address, fromDate, toDate);
+            service.GetServiceOpLogsWithUserAsync(address, fromDate, toDate);
 
         // Put.
 
@@ -87,6 +86,6 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task RegisterBalanceUpdateAsync([Required] string address, [Required] decimal amount, [Required] string reason) =>
-            service.RegisterBalanceUpdateAsync(User.GetClientId(), address, amount, reason);
+            service.RegisterBalanceUpdateAsync(address, amount, reason);
     }
 }
