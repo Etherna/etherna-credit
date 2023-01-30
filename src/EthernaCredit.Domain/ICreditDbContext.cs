@@ -21,8 +21,8 @@ namespace Etherna.CreditSystem.Domain
 {
     public interface ICreditDbContext : IDbContext
     {
-        ICollectionRepository<OperationLogBase, string> OperationLogs { get; }
-        ICollectionRepository<User, string> Users { get; }
+        IRepository<OperationLogBase, string> OperationLogs { get; }
+        IRepository<User, string> Users { get; }
 
         IEventDispatcher EventDispatcher { get; }
     }

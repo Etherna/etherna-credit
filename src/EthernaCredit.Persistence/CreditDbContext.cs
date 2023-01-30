@@ -44,10 +44,10 @@ namespace Etherna.CreditSystem.Persistence
 
         // Properties.
         //repositories
-        public ICollectionRepository<OperationLogBase, string> OperationLogs { get; } =
-            new DomainCollectionRepository<OperationLogBase, string>("logs");
-        public ICollectionRepository<User, string> Users { get; } = new DomainCollectionRepository<User, string>(
-            new CollectionRepositoryOptions<User>("users")
+        public IRepository<OperationLogBase, string> OperationLogs { get; } =
+            new DomainRepository<OperationLogBase, string>("logs");
+        public IRepository<User, string> Users { get; } = new DomainRepository<User, string>(
+            new RepositoryOptions<User>("users")
             {
                 IndexBuilders = new[]
                 {
@@ -56,8 +56,8 @@ namespace Etherna.CreditSystem.Persistence
             });
 
         //internal repositories
-        public ICollectionRepository<UserBalance, string> UserBalances { get; } = new DomainCollectionRepository<UserBalance, string>(
-            new CollectionRepositoryOptions<UserBalance>("userBalances")
+        public IRepository<UserBalance, string> UserBalances { get; } = new DomainRepository<UserBalance, string>(
+            new RepositoryOptions<UserBalance>("userBalances")
             {
                 IndexBuilders = new[]
                 {

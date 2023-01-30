@@ -78,7 +78,7 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         public InputModel Input { get; set; } = default!;
 
         public int CurrentPage { get; private set; }
-        public int MaxPage { get; private set; }
+        public long MaxPage { get; private set; }
         public List<UserDto> Users { get; } = new();
 
         // Methods.
