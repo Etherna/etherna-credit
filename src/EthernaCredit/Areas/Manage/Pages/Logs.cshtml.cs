@@ -47,7 +47,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
         // Properties.
         public int CurrentPage { get; private set; }
-        public int MaxPage { get; private set; }
+        public long MaxPage { get; private set; }
         public IEnumerable<OperationLogBase> Logs { get; private set; } = Array.Empty<OperationLogBase>();
 
         // Methods.

@@ -302,11 +302,6 @@ namespace Etherna.CreditSystem
             });
 
             // Configure setting.
-            var assemblyVersion = new AssemblyVersion(GetType().GetTypeInfo().Assembly);
-            services.Configure<ApplicationSettings>(options =>
-            {
-                options.AssemblyVersion = assemblyVersion.Version;
-            });
             services.Configure<EmailSettings>(Configuration.GetSection("Email") ?? throw new ServiceConfigurationException());
             services.Configure<SsoServerSettings>(Configuration.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
 
@@ -334,13 +329,11 @@ namespace Etherna.CreditSystem
                 options =>
                 {
                     options.ConnectionString = Configuration["ConnectionStrings:CreditDb"] ?? throw new ServiceConfigurationException();
-                    options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
                 })
 
                 .AddDbContext<ISharedDbContext, SharedDbContext>(options =>
                 {
                     options.ConnectionString = Configuration["ConnectionStrings:ServiceSharedDb"] ?? throw new ServiceConfigurationException();
-                    options.DocumentSemVer.CurrentVersion = assemblyVersion.SimpleVersion;
                 });
 
             services.AddMongODMAdminDashboard(new MongODM.AspNetCore.UI.DashboardOptions

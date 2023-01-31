@@ -24,6 +24,6 @@ namespace Etherna.CreditSystem.Domain
     /// </summary>
     public interface ICreditDbContextInternal : ICreditDbContext
     {
-        ICollectionRepository<UserBalance, string> UserBalances { get; }
+        IRepository<UserBalance, string> UserBalances { get; }
     }
 }
