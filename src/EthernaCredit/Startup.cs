@@ -93,7 +93,7 @@ namespace Etherna.CreditSystem
                 var knownNetworksConfig = Configuration.GetSection("ForwardedHeaders:KnownNetworks");
                 if (knownNetworksConfig.Exists())
                 {
-                    var networks = knownNetworksConfig.Get<string[]>().Select(address =>
+                    var networks = knownNetworksConfig.Get<string[]>()?.Select(address =>
                     {
                         var parts = address.Split('/');
                         if (parts.Length != 2)
@@ -102,7 +102,7 @@ namespace Etherna.CreditSystem
                         return new IPNetwork(
                             IPAddress.Parse(parts[0]),
                             int.Parse(parts[1], CultureInfo.InvariantCulture));
-                    });
+                    }) ?? Array.Empty<IPNetwork>();
 
                     foreach (var network in networks)
                         options.KnownNetworks.Add(network);
@@ -138,7 +138,7 @@ namespace Etherna.CreditSystem
             // Configure authentication.
             var allowUnsafeAuthorityConnection = false;
             if (Configuration["SsoServer:AllowUnsafeConnection"] is not null)
-                allowUnsafeAuthorityConnection = bool.Parse(Configuration["SsoServer:AllowUnsafeConnection"]);
+                allowUnsafeAuthorityConnection = bool.Parse(Configuration["SsoServer:AllowUnsafeConnection"]!);
 
             services.AddAuthentication(options =>
                 {
@@ -180,7 +180,7 @@ namespace Etherna.CreditSystem
                     options.ForwardDefaultSelector = context =>
                     {
                         //filter by auth type
-                        string authorization = context.Request.Headers[HeaderNames.Authorization];
+                        string? authorization = context.Request.Headers[HeaderNames.Authorization];
                         if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
                             return CommonConsts.UserAuthenticationJwtScheme;
 

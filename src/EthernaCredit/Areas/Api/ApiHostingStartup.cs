@@ -40,9 +40,7 @@ namespace Etherna.CreditSystem.Areas.Api
                                             where t.IsClass && t.Namespace == servicesNamespace && t.DeclaringType == null
                                             select t)
                 {
-                    var serviceInterfaceType = serviceType.GetInterface($"I{serviceType.Name}");
-                    if (serviceInterfaceType is null)
-                        throw new InvalidOperationException();
+                    var serviceInterfaceType = serviceType.GetInterface($"I{serviceType.Name}") ?? throw new InvalidOperationException();
                     services.AddScoped(serviceInterfaceType, serviceType);
                 }
             });
