@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Etherna.CreditSystem</RootNamespace>
 
-    <Authors>Etherna Sagl</Authors>
+    <Authors>Etherna Sa</Authors>
     <Description>Service implementing logic for manage user credits</Description>
 
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
