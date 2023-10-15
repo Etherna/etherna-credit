@@ -30,7 +30,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="CreditBalance"></label>
-            <p>@Model.CreditBalance.ToFinancialString(suffixSymbol: " CHF")</p>
+            <p>@Model.CreditBalance.ToFinancialString(suffixSymbol: " xDAI")</p>
         </div>
         @if (Model.HasUnlimitedCredit)
         {
