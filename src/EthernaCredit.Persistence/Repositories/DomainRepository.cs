@@ -16,6 +16,7 @@ using Etherna.CreditSystem.Domain.Models;
 using Etherna.DomainEvents;
 using Etherna.DomainEvents.Events;
 using Etherna.MongODM.Core.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -42,27 +43,61 @@ namespace Etherna.CreditSystem.Persistence.Repositories
         // Methods.
         public override async Task CreateAsync(IEnumerable<TModel> models, CancellationToken cancellationToken = default)
         {
+            if (models is null)
+                throw new ArgumentNullException(nameof(models));
+
+            // Create entity.
             await base.CreateAsync(models, cancellationToken);
 
-            // Dispatch created events.
+            // Dispatch events.
             if (EventDispatcher != null)
-                await EventDispatcher.DispatchAsync(
-                    models.Select(m => new EntityCreatedEvent<TModel>(m)));
+            {
+                //created event
+                await EventDispatcher.DispatchAsync(models.Select(m => new EntityCreatedEvent<TModel>(m)));
+
+                //custom events
+                foreach (var model in models)
+                {
+                    await EventDispatcher.DispatchAsync(model.Events);
+                    model.ClearEvents();
+                }
+            }
         }
 
         public override async Task CreateAsync(TModel model, CancellationToken cancellationToken = default)
         {
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+
+            // Create entity.
             await base.CreateAsync(model, cancellationToken);
 
-            // Dispatch created event.
+            // Dispatch events.
             if (EventDispatcher != null)
-                await EventDispatcher.DispatchAsync(
-                    new EntityCreatedEvent<TModel>(model));
+            {
+                //created event
+                await EventDispatcher.DispatchAsync(new EntityCreatedEvent<TModel>(model));
+
+                //custom events
+                await EventDispatcher.DispatchAsync(model.Events);
+                model.ClearEvents();
+            }
         }
 
         public override async Task DeleteAsync(TModel model, CancellationToken cancellationToken = default)
         {
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+
+            // Delete entity.
             await base.DeleteAsync(model, cancellationToken);
+
+            // Dispatch custom events.
+            if (EventDispatcher != null)
+            {
+                await EventDispatcher.DispatchAsync(model.Events);
+                model.ClearEvents();
+            }
 
             // Dispatch deleted event.
             if (EventDispatcher != null)
