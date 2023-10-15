@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Etherna.CreditSystem.Domain</RootNamespace>
 
-    <Authors>Etherna Sagl</Authors>
+    <Authors>Etherna Sa</Authors>
     
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
