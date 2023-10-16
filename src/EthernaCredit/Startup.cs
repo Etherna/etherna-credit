@@ -13,6 +13,7 @@
 //   limitations under the License.
 
 using Etherna.ACR.Exceptions;
+using Etherna.ACR.Middlewares.DebugPages;
 using Etherna.ACR.Settings;
 using Etherna.CreditSystem.Configs;
 using Etherna.CreditSystem.Configs.Authorization;
@@ -354,6 +355,7 @@ namespace Etherna.CreditSystem
             {
                 app.UseDeveloperExceptionPage();
                 app.UseForwardedHeaders();
+                app.UseEthernaAcrDebugPages();
             }
             else
             {
