@@ -275,6 +275,7 @@ namespace Etherna.CreditSystem
             services.AddSwaggerGen(options =>
             {
                 options.SupportNonNullableReferenceTypes();
+                options.UseInlineDefinitionsForEnums();
 
                 //add a custom operation filter which sets default values
                 options.OperationFilter<SwaggerDefaultValues>();
