@@ -49,6 +49,7 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         [HttpGet("address")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Produces("application/json")] //force because of https://github.com/RicoSuter/NSwag/issues/4132
         public Task<string> GetAddressAsync() =>
             service.GetAddressAsync();
 
