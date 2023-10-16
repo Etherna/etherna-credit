@@ -403,6 +403,8 @@ namespace Etherna.CreditSystem
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
+                options.DocumentTitle = "Etherna Credit API";
+                
                 //build a swagger endpoint for each discovered API version
                 foreach (var description in apiProvider.ApiVersionDescriptions)
                 {
