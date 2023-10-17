@@ -18,7 +18,7 @@ using Etherna.MongODM.Core.Serialization;
 
 namespace Etherna.CreditSystem.Persistence.ModelMaps.Shared
 {
-    class UserSharedInfoMap : IModelMapsCollector
+    internal sealed class UserSharedInfoMap : IModelMapsCollector
     {
         public void Register(IDbContext dbContext)
         {

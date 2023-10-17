@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.EventHandlers
 {
-    class OnUserWithdrawThenSendEmailHandler : EventHandlerBase<UserWithdrawEvent>
+    internal sealed class OnUserWithdrawThenSendEmailHandler : EventHandlerBase<UserWithdrawEvent>
     {
         // Fields.
         private readonly IEmailSender emailSender;

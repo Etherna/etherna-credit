@@ -22,7 +22,7 @@ using Etherna.MongODM.Core.Serialization;
 
 namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
 {
-    class OperationLogMap : IModelMapsCollector
+    internal sealed class OperationLogMap : IModelMapsCollector
     {
         public void Register(IDbContext dbContext)
         {

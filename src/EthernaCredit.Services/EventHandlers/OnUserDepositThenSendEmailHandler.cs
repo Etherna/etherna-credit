@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.EventHandlers
 {
-    class OnUserDepositThenSendEmailHandler : EventHandlerBase<UserDepositEvent>
+    internal sealed class OnUserDepositThenSendEmailHandler : EventHandlerBase<UserDepositEvent>
     {
         // Fields.
         private readonly IEmailSender emailSender;

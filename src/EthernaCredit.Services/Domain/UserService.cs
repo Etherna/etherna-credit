@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.Domain
 {
-    class UserService : IUserService
+    internal sealed class UserService : IUserService
     {
         // Consts.
         private const decimal DefaultWelcomeCredit = 0.1M;
