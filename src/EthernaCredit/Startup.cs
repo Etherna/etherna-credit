@@ -15,6 +15,7 @@
 using Etherna.ACR.Exceptions;
 using Etherna.ACR.Middlewares.DebugPages;
 using Etherna.ACR.Settings;
+using Etherna.Authentication.AspNetCore;
 using Etherna.CreditSystem.Configs;
 using Etherna.CreditSystem.Configs.Authorization;
 using Etherna.CreditSystem.Configs.Hangfire;
@@ -29,7 +30,7 @@ using Etherna.DomainEvents;
 using Etherna.MongODM;
 using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
-using Etherna.ServicesClient.AspNetCore;
+using Etherna.ServicesClient.Internal.AspNetCore;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -288,20 +289,12 @@ namespace Etherna.CreditSystem
             });
 
             // Configure Etherna SSO Client services.
-            var ethernaServiceClientBuilder = services.AddEthernaSsoClientForServices(
+            services.AddEthernaInternalClients(
                 new Uri(Configuration["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException()),
-                Configuration["SsoServer:Clients:SsoServer:ClientId"] ?? throw new ServiceConfigurationException(),
-                Configuration["SsoServer:Clients:SsoServer:Secret"] ?? throw new ServiceConfigurationException());
-
-            var clientCredentialTask = ethernaServiceClientBuilder.GetClientCredentialsTokenRequestAsync(!allowUnsafeAuthorityConnection);
-            clientCredentialTask.Wait();
-            var clientCredential = clientCredentialTask.Result;
-
-            // Register token manager.
-            services.AddAccessTokenManagement(options =>
-            {
-                options.Client.Clients.Add(ethernaServiceClientBuilder.ClientName, clientCredential);
-            });
+                !allowUnsafeAuthorityConnection)
+                .AddEthernaSsoClient(
+                    Configuration["SsoServer:Clients:SsoServer:ClientId"] ?? throw new ServiceConfigurationException(),
+                    Configuration["SsoServer:Clients:SsoServer:Secret"] ?? throw new ServiceConfigurationException());
 
             // Configure setting.
             services.Configure<EmailSettings>(Configuration.GetSection("Email") ?? throw new ServiceConfigurationException());
