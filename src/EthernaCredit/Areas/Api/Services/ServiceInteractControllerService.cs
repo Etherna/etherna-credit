@@ -82,7 +82,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
 
         public async Task RegisterBalanceUpdateAsync(
             string address,
-            decimal amount,
+            XDaiBalance amount,
             string reason)
         {
             var clientId = await ethernaOidcClient.GetClientIdAsync();
@@ -103,7 +103,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
                                log.CreationDateTime >= DateTime.Now.Date &&
                                log.Reason == reason &&
                                log.User.Id == user.Id),
-                    Builders<OperationLogBase>.Update.Inc(log => log.Amount, new Decimal128(amount))));
+                    Builders<OperationLogBase>.Update.Inc(log => log.Amount, amount)));
 
             if (updatedLog is null) //if a previous log didn't exist
             {

@@ -13,6 +13,7 @@
 //   limitations under the License.
 
 using Etherna.CreditSystem.Areas.Api.DtoModels;
+using Etherna.CreditSystem.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
 
         Task RegisterBalanceUpdateAsync(
             string address,
-            decimal amount,
+            XDaiBalance amount,
             string reason);
     }
 }
