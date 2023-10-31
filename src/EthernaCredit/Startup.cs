@@ -46,6 +46,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -319,7 +320,8 @@ namespace Etherna.CreditSystem
                 .AddDbContext<ICreditDbContext, CreditDbContext>(sp =>
                 {
                     var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
-                    return new CreditDbContext(eventDispatcher);
+                    var logger = sp.GetRequiredService<ILogger<CreditDbContext>>();
+                    return new CreditDbContext(eventDispatcher, logger);
                 },
                 options =>
                 {
