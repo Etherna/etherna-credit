@@ -27,8 +27,8 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
     {
         public void Register(IDbContext dbContext)
         {
-            dbContext.MapRegistry.AddModelMap<User>("0ff83163-b49f-4182-895d-bed59e73a976");
-            dbContext.MapRegistry.AddModelMap<UserBalance>("873c5ee4-122b-4021-8dc9-524b9f50b73b",
+            dbContext.MapRegistry.AddModelMap<User>("0ff83163-b49f-4182-895d-bed59e73a976"); //dev (pre v0.3.0), published for WAM event
+            dbContext.MapRegistry.AddModelMap<UserBalance>("873c5ee4-122b-4021-8dc9-524b9f50b73b", //dev (pre v0.3.0), published for WAM event
                 mm =>
                 {
                     mm.AutoMap();

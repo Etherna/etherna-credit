@@ -21,6 +21,7 @@ using Etherna.MongoDB.Driver;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
 using Etherna.MongODM.Core.Serialization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,9 @@ namespace Etherna.CreditSystem.Persistence
 
         // Constructor.
         public CreditDbContext(
-            IEventDispatcher eventDispatcher)
+            IEventDispatcher eventDispatcher,
+            ILogger<CreditDbContext> logger)
+            : base(logger)
         {
             EventDispatcher = eventDispatcher;
         }
