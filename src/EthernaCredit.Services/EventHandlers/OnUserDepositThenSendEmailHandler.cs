@@ -17,7 +17,7 @@ using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
 using Etherna.CreditSystem.Services.Views.Emails;
 using Etherna.DomainEvents;
-using Etherna.ServicesClient.Clients.Sso;
+using Etherna.ServicesClient.Internal;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.EventHandlers
@@ -27,14 +27,14 @@ namespace Etherna.CreditSystem.Services.EventHandlers
         // Fields.
         private readonly IEmailSender emailSender;
         private readonly IRazorViewRenderer razorViewRenderer;
-        private readonly IServiceSsoClient serviceSsoClient;
+        private readonly IEthernaInternalSsoClient serviceSsoClient;
         private readonly ISharedDbContext sharedDbContext;
 
         // Constructor.
         public OnUserDepositThenSendEmailHandler(
             IEmailSender emailSender,
             IRazorViewRenderer razorViewRenderer,
-            IServiceSsoClient serviceSsoClient,
+            IEthernaInternalSsoClient serviceSsoClient,
             ISharedDbContext sharedDbContext)
         {
             this.emailSender = emailSender;
