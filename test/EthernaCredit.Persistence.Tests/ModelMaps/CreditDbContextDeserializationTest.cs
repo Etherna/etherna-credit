@@ -189,32 +189,45 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
             }
         }
         
-//         public static IEnumerable<object[]> UserBalanceDeserializationTests
-//         {
-//             get
-//             {
-//                 var tests = new List<DeserializationTestElement<UserBalance>>();
-//                 
-//                 // "8e509e8e-5c2b-4874-a734-ada4e2b91f92" - dev (pre v0.3.0), published for WAM event
-//                 {
-//                     var sourceDocument =
-//                         $$"""
-//                           {
-//                             ...
-//                           }
-//                           """;
-//
-//                     var expectedBalanceMock = new Mock<UserBalance>();
-//                     expectedBalanceMock.Setup(c => c.Id).Returns("621d377079200245673f1071");
-//                     expectedBalanceMock.Setup(c => c.CreationDateTime).Returns(new DateTime(2023, 09, 07, 22, 15, 48, 183));
-//
-//                     tests.Add(new DeserializationTestElement<UserBalance>(sourceDocument, expectedBalanceMock.Object));
-//                 }
-//
-//                 return tests.Select(t => new object[] { t });
-//             }
-//         }
-//         
+         public static IEnumerable<object[]> UserBalanceDeserializationTests
+         {
+             get
+             {
+                 var tests = new List<DeserializationTestElement<UserBalance>>();
+                 
+                 // "873c5ee4-122b-4021-8dc9-524b9f50b73b" - dev (pre v0.3.0), published for WAM event
+                 {
+                     var sourceDocument =
+                         $$"""
+                           {
+                               "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                               "_m" : "873c5ee4-122b-4021-8dc9-524b9f50b73b",
+                               "CreationDateTime" : ISODate("2023-10-16T20:27:17.837+0000"),
+                               "Credit" : NumberDecimal("123.456"),
+                               "User" : {
+                                   "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                   "_id" : ObjectId("652d9b0bf665611b84305e57")
+                               }
+                           }
+                           """;
+
+                     var expectedBalanceMock = new Mock<UserBalance>();
+                     expectedBalanceMock.Setup(l => l.Id).Returns("652d9b14f66ea29b84305a23");
+                     expectedBalanceMock.Setup(l => l.CreationDateTime).Returns(new DateTime(2023, 10, 16, 20, 27, 17, 837));
+                     expectedBalanceMock.Setup(l => l.Credit).Returns(123.456m);
+                     {
+                         var userMock = new Mock<User>();
+                         userMock.Setup(a => a.Id).Returns("652d9b0bf665611b84305e57");
+                         expectedBalanceMock.Setup(c => c.User).Returns(userMock.Object);
+                     }
+
+                     tests.Add(new DeserializationTestElement<UserBalance>(sourceDocument, expectedBalanceMock.Object));
+                 }
+
+                 return tests.Select(t => new object[] { t });
+             }
+         }
+         
 //         public static IEnumerable<object[]> UserDeserializationTests
 //         {
 //             get
@@ -288,34 +301,31 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
             }
         }
         
-        // [Theory, MemberData(nameof(UserBalanceDeserializationTests))]
-        // public void UserBalanceDeserialization(DeserializationTestElement<UserBalance> testElement)
-        // {
-        //     if (testElement is null)
-        //         throw new ArgumentNullException(nameof(testElement));
-        //
-        //     // Setup.
-        //     using var documentReader = new JsonReader(testElement.SourceDocument);
-        //     var modelMapSerializer = new ModelMapSerializer<UserBalance>(dbContext);
-        //     var deserializationContext = BsonDeserializationContext.CreateRoot(documentReader);
-        //     testElement.SetupAction(mongoDatabaseMock, dbContext);
-        //
-        //     // Action.
-        //     using var dbExecutionContext = new DbExecutionContextHandler(dbContext); //run into a db execution context
-        //     var result = modelMapSerializer.Deserialize(deserializationContext);
-        //
-        //     // Assert.
-        //     Assert.Equal(testElement.ExpectedModel.Id, result.Id);
-        //     Assert.Equal(testElement.ExpectedModel.Author, result.Author, EntityModelEqualityComparer.Instance);
-        //     Assert.Equal(testElement.ExpectedModel.CreationDateTime, result.CreationDateTime);
-        //     Assert.Equal(testElement.ExpectedModel.TextHistory, result.TextHistory);
-        //     Assert.Equal(testElement.ExpectedModel.Video, result.Video, EntityModelEqualityComparer.Instance);
-        //     Assert.NotNull(result.Id);
-        //     Assert.NotNull(result.Author);
-        //     Assert.NotNull(result.LastText);
-        //     Assert.NotNull(result.Video);
-        // }
-        //
+        [Theory, MemberData(nameof(UserBalanceDeserializationTests))]
+        public void UserBalanceDeserialization(DeserializationTestElement<UserBalance> testElement)
+        {
+            if (testElement is null)
+                throw new ArgumentNullException(nameof(testElement));
+        
+            // Setup.
+            using var documentReader = new JsonReader(testElement.SourceDocument);
+            var modelMapSerializer = new ModelMapSerializer<UserBalance>(dbContext);
+            var deserializationContext = BsonDeserializationContext.CreateRoot(documentReader);
+            testElement.SetupAction(mongoDatabaseMock, dbContext);
+        
+            // Action.
+            using var dbExecutionContext = new DbExecutionContextHandler(dbContext); //run into a db execution context
+            var result = modelMapSerializer.Deserialize(deserializationContext);
+        
+            // Assert.
+            Assert.Equal(testElement.ExpectedModel.Id, result.Id);
+            Assert.Equal(testElement.ExpectedModel.CreationDateTime, result.CreationDateTime);
+            Assert.Equal(testElement.ExpectedModel.Credit, result.Credit);
+            Assert.Equal(testElement.ExpectedModel.User, result.User, EntityModelEqualityComparer.Instance);
+            Assert.NotNull(result.Id);
+            Assert.NotNull(result.User);
+        }
+        
         // [Theory, MemberData(nameof(UserDeserializationTests))]
         // public void UserBalanceDeserialization(DeserializationTestElement<User> testElement)
         // {
