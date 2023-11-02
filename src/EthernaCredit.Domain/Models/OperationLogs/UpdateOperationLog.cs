@@ -20,7 +20,7 @@ namespace Etherna.CreditSystem.Domain.Models.OperationLogs
     {
         // Constructors.
         public UpdateOperationLog(
-            decimal amount,
+            XDaiBalance amount,
             string author,
             string reason,
             User user)

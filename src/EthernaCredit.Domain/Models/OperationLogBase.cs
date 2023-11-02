@@ -21,7 +21,7 @@ namespace Etherna.CreditSystem.Domain.Models
     {
         // Constructors.
         protected OperationLogBase(
-            decimal amount,
+            XDaiBalance amount,
             string author,
             User user)
         {
@@ -32,7 +32,7 @@ namespace Etherna.CreditSystem.Domain.Models
         protected OperationLogBase() { }
 
         // Properties.
-        public virtual Decimal128 Amount { get; protected set; }
+        public virtual XDaiBalance Amount { get; protected set; }
         public virtual string Author { get; protected set; } = default!;
         public abstract string OperationName { get; }
         public virtual User User { get; protected set; } = default!;

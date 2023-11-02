@@ -14,6 +14,7 @@
 
 using Etherna.Authentication;
 using Etherna.CreditSystem.Areas.Withdraw.Pages;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -52,9 +53,9 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public string? StatusMessage { get; set; }
 
         public bool CanWithdraw => CreditBalance >= MinLimit && CreditBalance != 0;
-        public decimal CreditBalance { get; private set; }
-        public decimal MaxLimit => CreditBalance;
-        public decimal MinLimit => WithdrawProcessModel.MinimumWithdraw;
+        public XDaiBalance CreditBalance { get; private set; }
+        public XDaiBalance MaxLimit => CreditBalance;
+        public XDaiBalance MinLimit => WithdrawProcessModel.MinimumWithdraw;
 
         // Methods.
         public async Task<IActionResult> OnGetAsync()

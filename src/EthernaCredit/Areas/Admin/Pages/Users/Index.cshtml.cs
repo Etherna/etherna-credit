@@ -38,7 +38,7 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
 
         public class UserDto
         {
-            public UserDto(User user, UserSharedInfo userSharedInfo, decimal balance)
+            public UserDto(User user, UserSharedInfo userSharedInfo, XDaiBalance balance)
             {
                 if (user is null)
                     throw new ArgumentNullException(nameof(user));
@@ -52,7 +52,7 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
             }
 
             public string Id { get; }
-            public decimal Balance { get; }
+            public XDaiBalance Balance { get; }
             public string EtherAddress { get; }
             public bool HasUnlimitedCredit { get; }
         }

@@ -13,6 +13,7 @@
 //   limitations under the License.
 
 using Etherna.Authentication;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -38,7 +39,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
         // Properties.
         [Display(Name = "Credit balance")]
-        public decimal CreditBalance { get; private set; }
+        public XDaiBalance CreditBalance { get; private set; }
         [Display(Name = "Ethereum address")]
         public string EthereumAddress { get; private set; } = default!;
         public bool HasUnlimitedCredit { get; private set; }

@@ -29,7 +29,7 @@ namespace Etherna.CreditSystem.Areas.Api.DtoModels
             if (userSharedInfo is null)
                 throw new ArgumentNullException(nameof(userSharedInfo));
 
-            Amount = Decimal128.ToDecimal(operationLog.Amount);
+            Amount = operationLog.Amount.ToDecimal();
             Author = operationLog.Author;
             CreationDateTime = operationLog.CreationDateTime;
             OperationName = operationLog.OperationName;

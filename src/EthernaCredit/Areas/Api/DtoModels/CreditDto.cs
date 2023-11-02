@@ -12,13 +12,15 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+using Etherna.CreditSystem.Domain.Models;
+
 namespace Etherna.CreditSystem.Areas.Api.DtoModels
 {
     public class CreditDto
     {
-        public CreditDto(decimal balance, bool isUnlimited)
+        public CreditDto(XDaiBalance balance, bool isUnlimited)
         {
-            Balance = balance;
+            Balance = balance.ToDecimal();
             IsUnlimited = isUnlimited;
         }
 

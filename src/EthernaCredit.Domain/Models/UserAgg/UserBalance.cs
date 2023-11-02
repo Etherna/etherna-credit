@@ -12,9 +12,6 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.MongoDB.Bson;
-using System;
-
 namespace Etherna.CreditSystem.Domain.Models.UserAgg
 {
     /// <summary>
@@ -24,7 +21,7 @@ namespace Etherna.CreditSystem.Domain.Models.UserAgg
     public class UserBalance : EntityModelBase<string>
     {
         // Constructors.
-        public UserBalance(User user, Decimal128 welcomeCredit)
+        public UserBalance(User user, XDaiBalance welcomeCredit)
         {
             Credit = welcomeCredit;
             User = user;
@@ -32,7 +29,7 @@ namespace Etherna.CreditSystem.Domain.Models.UserAgg
         protected UserBalance() { }
 
         // Properties.
-        public virtual Decimal128 Credit { get; protected set; }
+        public virtual XDaiBalance Credit { get; protected set; }
         public virtual User User { get; protected set; } = default!;
     }
 }

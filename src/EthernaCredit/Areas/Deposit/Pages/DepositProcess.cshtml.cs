@@ -15,6 +15,7 @@
 using Etherna.Authentication;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
 using Etherna.DomainEvents;
@@ -48,7 +49,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
         }
 
         // Properties.
-        public decimal DepositAmount { get; set; }
+        public XDaiBalance DepositAmount { get; set; }
         public bool SucceededResult { get; set; }
 
         // Methods
