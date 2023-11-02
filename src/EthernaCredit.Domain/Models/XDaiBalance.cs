@@ -29,7 +29,8 @@ public struct XDaiBalance : IEquatable<XDaiBalance>
     // Constructors.
     public XDaiBalance(decimal balance)
     {
-        _balance = decimal.Round(balance, DecimalPrecision);
+        _balance = decimal.Round(balance, DecimalPrecision)
+                   / 1.000000000000000000000000000000000m; //remove final zeros
     }
     
     // Methods.
@@ -39,10 +40,11 @@ public struct XDaiBalance : IEquatable<XDaiBalance>
         Equals(xDaiObj);
     public bool Equals(XDaiBalance other) => _balance == other._balance;
     public XDaiBalance FromDecimal(decimal value) => new(value);
+    public XDaiBalance FromDouble(double value) => new((decimal)value);
     public XDaiBalance FromInt32(int value) => new(value);
     public override int GetHashCode() => _balance.GetHashCode();
     public decimal ToDecimal() => _balance;
-    public Decimal128 ToDecimal128() => new(_balance);
+    public override string ToString() => _balance.ToString(CultureInfo.InvariantCulture);
     
     // Static methods.
     public static XDaiBalance Add(XDaiBalance left, XDaiBalance right) => left + right;
@@ -51,7 +53,6 @@ public struct XDaiBalance : IEquatable<XDaiBalance>
     public static XDaiBalance Increment(XDaiBalance balance) => ++balance;
     public static XDaiBalance Multiply(XDaiBalance left, XDaiBalance right) => left * right;
     public static XDaiBalance Negate(XDaiBalance balance) => -balance;
-    public override string ToString() => _balance.ToString(CultureInfo.InvariantCulture);
     public static XDaiBalance Subtract(XDaiBalance left, XDaiBalance right) => left - right;
 
     // Operator methods.
@@ -71,8 +72,8 @@ public struct XDaiBalance : IEquatable<XDaiBalance>
     
     // Implicit conversion operator methods.
     public static implicit operator XDaiBalance(decimal value) => new(value);
+    public static implicit operator XDaiBalance(double value) => new((decimal)value);
     public static implicit operator XDaiBalance(int value) => new(value);
     
     public static explicit operator decimal(XDaiBalance value) => value.ToDecimal();
-    public static explicit operator Decimal128(XDaiBalance value) => value.ToDecimal128();
 }

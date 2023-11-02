@@ -14,6 +14,7 @@
 
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
+using Etherna.CreditSystem.Persistence.Serializers;
 using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Bson.Serialization.Serializers;
 using Etherna.MongODM.Core;
@@ -34,7 +35,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
                     mm.AutoMap();
 
                     // Set members with custom serializers.
-                    mm.SetMemberSerializer(b => b.Credit, new Decimal128Serializer(BsonType.Decimal128));
+                    mm.SetMemberSerializer(b => b.Credit, new XDaiBalanceSerializer(BsonType.Decimal128));
                     mm.SetMemberSerializer(b => b.User, ReferenceSerializer(dbContext));
                 });
         }

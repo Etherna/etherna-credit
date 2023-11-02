@@ -14,8 +14,8 @@
 
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
+using Etherna.CreditSystem.Persistence.Serializers;
 using Etherna.MongoDB.Bson;
-using Etherna.MongoDB.Bson.Serialization.Serializers;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
@@ -32,7 +32,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
                     mm.AutoMap();
 
                     // Set members with custom serializers.
-                    mm.SetMemberSerializer(l => l.Amount, new Decimal128Serializer(BsonType.Decimal128));
+                    mm.SetMemberSerializer(l => l.Amount, new XDaiBalanceSerializer(BsonType.Decimal128));
                     mm.SetMemberSerializer(l => l.User, UserMap.ReferenceSerializer(dbContext));
                 });
             dbContext.MapRegistry.AddModelMap<DepositOperationLog>("7fc7abe8-9a55-40a2-90ce-f3cba34bc005"); //dev (pre v0.3.0), published for WAM event

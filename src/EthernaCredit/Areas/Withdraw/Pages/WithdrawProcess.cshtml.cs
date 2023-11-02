@@ -15,6 +15,7 @@
 using Etherna.Authentication;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
 using Etherna.DomainEvents;
@@ -28,7 +29,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
     public class WithdrawProcessModel : PageModel
     {
         // Consts.
-        public const decimal MinimumWithdraw = 1.0M;
+        public static readonly XDaiBalance MinimumWithdraw = 1.0M;
 
         // Fields.
         private readonly ICreditDbContext dbContext;
@@ -51,7 +52,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
         // Properties.
         public bool SucceededResult { get; set; }
-        public decimal WithdrawAmount { get; set; }
+        public XDaiBalance WithdrawAmount { get; set; }
 
         // Methods
         public async Task OnGetAsync(string amount)
@@ -61,7 +62,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
             // Get data.
             WithdrawAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
-            WithdrawAmount = decimal.Truncate(WithdrawAmount * 100) / 100; //accept 2 digit precision
+            WithdrawAmount = decimal.Truncate(WithdrawAmount.ToDecimal() * 100) / 100; //accept 2 digit precision
 
             var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 

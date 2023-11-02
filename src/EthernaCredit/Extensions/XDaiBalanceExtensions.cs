@@ -12,17 +12,17 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.MongoDB.Bson;
+using Etherna.CreditSystem.Domain.Models;
 using System;
 using System.Globalization;
 using System.Text;
 
 namespace Etherna.CreditSystem.Extensions
 {
-    public static class DecimalExtensions
+    public static class XDaiBalanceExtensions
     {
         /// <summary>
-        /// Format a decimal to a financial string
+        /// Format a XDaiBalance to a financial string
         /// </summary>
         /// <param name="value">The value to convert</param>
         /// <param name="allowedDecimals">Max number of allowed decimals. Skip if null</param>
@@ -33,33 +33,12 @@ namespace Etherna.CreditSystem.Extensions
         /// <param name="usePlusSign">Use '+' as prefix if positive</param>
         /// <returns>The converted string</returns>
         public static string ToFinancialString(
-            this Decimal128 value,
+            this XDaiBalance value,
             int? allowedDecimals = 2,
             int printedDecimals = 2,
             MidpointRounding roundMode = MidpointRounding.AwayFromZero,
             string? prefixSymbol = null,
-            string? suffixSymbol = null,
-            bool usePlusSign = false) =>
-            ToFinancialString(Decimal128.ToDecimal(value), allowedDecimals, printedDecimals, roundMode, prefixSymbol, suffixSymbol, usePlusSign);
-
-        /// <summary>
-        /// Format a decimal to a financial string
-        /// </summary>
-        /// <param name="value">The value to convert</param>
-        /// <param name="allowedDecimals">Max number of allowed decimals. Skip if null</param>
-        /// <param name="printedDecimals">Min number of decimals to show</param>
-        /// <param name="roundMode">Mode of rounding to use</param>
-        /// <param name="prefixSymbol">Optional prefix string</param>
-        /// <param name="suffixSymbol">Optional suffic string</param>
-        /// <param name="usePlusSign">Use '+' as prefix if positive</param>
-        /// <returns>The converted string</returns>
-        public static string ToFinancialString(
-            this decimal value,
-            int? allowedDecimals = 2,
-            int printedDecimals = 2,
-            MidpointRounding roundMode = MidpointRounding.AwayFromZero,
-            string? prefixSymbol = null,
-            string? suffixSymbol = null,
+            string? suffixSymbol = " xDAI",
             bool usePlusSign = false)
         {
             if (allowedDecimals < 0)
@@ -72,11 +51,12 @@ namespace Etherna.CreditSystem.Extensions
                     "Allowed decimals must be equal or greater than printed decimals");
 
             // Round decimals.
+            var decimalValue = value.ToDecimal();
             if (allowedDecimals.HasValue)
-                value = Math.Round(value, allowedDecimals.Value, roundMode);
+                decimalValue = Math.Round(decimalValue, allowedDecimals.Value, roundMode);
 
             // Print missing decimals.
-            var valueStr = value.ToString(CultureInfo.InvariantCulture);
+            var valueStr = decimalValue.ToString(CultureInfo.InvariantCulture);
             if (printedDecimals > 0)
             {
                 var valueStrBuilder = new StringBuilder(valueStr);
@@ -96,7 +76,7 @@ namespace Etherna.CreditSystem.Extensions
             //format as: [sign][previx]{value}[suffix]
             var strBuilder = new StringBuilder();
 
-            if (usePlusSign && value >= 0)
+            if (usePlusSign && decimalValue >= 0)
                 strBuilder.Append('+');
             
             strBuilder.Append(valueStr);
