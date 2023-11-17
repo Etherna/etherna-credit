@@ -62,10 +62,15 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
                 throw new ArgumentNullException(nameof(amount));
 
             // Get data.
-            DepositAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
+            DepositAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
             var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 
             // Preliminary check.
+            if (DepositAmount <= 0)
+            {
+                SucceededResult = false;
+                return;
+            }
             if (user.HasUnlimitedCredit) //disable deposit if unlimited credit
             {
                 SucceededResult = false;
