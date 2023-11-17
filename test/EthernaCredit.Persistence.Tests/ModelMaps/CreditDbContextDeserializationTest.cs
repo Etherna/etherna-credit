@@ -88,6 +88,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                 }
                 
                  // "74e021d4-6d86-4deb-b952-0c328839cfe2" - dev (pre v0.3.0), published for WAM event
+                 //with default values not assigned
                  {
                      var sourceDocument =
                          $$"""
@@ -116,6 +117,44 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                          userMock.Setup(a => a.Id).Returns("652d9b0bf665611b84305e57");
                          expectedOpLogMock.Setup(c => c.User).Returns(userMock.Object);
                      }
+                     expectedOpLogMock.Setup(l => l.IsApplied).Returns(true);
+                     expectedOpLogMock.Setup(l => l.Reason).Returns("DownloadFee");
+
+                     tests.Add(new DeserializationTestElement<OperationLogBase>(sourceDocument, expectedOpLogMock.Object));
+                 }
+                
+                 // "74e021d4-6d86-4deb-b952-0c328839cfe2" - dev (pre v0.3.0), published for WAM event
+                 //with default values changed
+                 {
+                     var sourceDocument =
+                         $$"""
+                           {
+                               "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                               "_m" : "74e021d4-6d86-4deb-b952-0c328839cfe2",
+                               "_t" : "UpdateOperationLog",
+                               "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
+                               "Amount" : NumberDecimal("-1.88E-8"),
+                               "Author" : "ethernaGatewayCreditClientId",
+                               "User" : {
+                                   "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                   "_id" : ObjectId("652d9b0bf665611b84305e57")
+                               },
+                               "IsApplied": false,
+                               "Reason" : "DownloadFee"
+                           }
+                           """;
+
+                     var expectedOpLogMock = new Mock<UpdateOperationLog>();
+                     expectedOpLogMock.Setup(l => l.Id).Returns("652d9b14f66ea29b84305a23");
+                     expectedOpLogMock.Setup(l => l.CreationDateTime).Returns(new DateTime(2023, 10, 26, 20, 20, 15, 830));
+                     expectedOpLogMock.Setup(l => l.Amount).Returns(-0.0000000188m);
+                     expectedOpLogMock.Setup(l => l.Author).Returns("ethernaGatewayCreditClientId");
+                     {
+                         var userMock = new Mock<User>();
+                         userMock.Setup(a => a.Id).Returns("652d9b0bf665611b84305e57");
+                         expectedOpLogMock.Setup(c => c.User).Returns(userMock.Object);
+                     }
+                     expectedOpLogMock.Setup(l => l.IsApplied).Returns(false);
                      expectedOpLogMock.Setup(l => l.Reason).Returns("DownloadFee");
 
                      tests.Add(new DeserializationTestElement<OperationLogBase>(sourceDocument, expectedOpLogMock.Object));
@@ -295,6 +334,8 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                 case UpdateOperationLog expectedUpdateLog:
                     Assert.IsType<UpdateOperationLog>(result);
                     var resultUpdateLog = (UpdateOperationLog)result;
+                    
+                    Assert.Equal(expectedUpdateLog.IsApplied, resultUpdateLog.IsApplied);
                     Assert.Equal(expectedUpdateLog.Reason, resultUpdateLog.Reason);
                     break;
                 case WelcomeCreditDepositOperationLog _:

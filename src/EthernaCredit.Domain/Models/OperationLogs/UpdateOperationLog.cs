@@ -22,15 +22,18 @@ namespace Etherna.CreditSystem.Domain.Models.OperationLogs
         public UpdateOperationLog(
             XDaiBalance amount,
             string author,
+            bool isApplied,
             string reason,
             User user)
             : base(amount, author, user)
         {
+            IsApplied = isApplied;
             Reason = reason ?? throw new ArgumentNullException(nameof(reason));
         }
         protected UpdateOperationLog() { }
 
         // Properties.
+        public virtual bool IsApplied { get;  protected set; }
         public override string OperationName => "Service update";
         public virtual string Reason { get; protected set; } = default!;
     }
