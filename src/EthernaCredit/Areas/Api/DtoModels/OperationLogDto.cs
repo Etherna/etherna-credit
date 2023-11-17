@@ -15,7 +15,6 @@
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
-using Etherna.MongoDB.Bson;
 using System;
 
 namespace Etherna.CreditSystem.Areas.Api.DtoModels
@@ -38,6 +37,7 @@ namespace Etherna.CreditSystem.Areas.Api.DtoModels
             switch (operationLog)
             {
                 case UpdateOperationLog updateLog:
+                    IsApplied = updateLog.IsApplied;
                     Reason = updateLog.Reason;
                     break;
             }
@@ -46,6 +46,7 @@ namespace Etherna.CreditSystem.Areas.Api.DtoModels
         public decimal Amount { get; }
         public string Author { get; }
         public DateTime CreationDateTime { get; }
+        public bool? IsApplied { get; }
         public string OperationName { get; }
         public string? Reason { get; }
         public string UserAddress { get; }

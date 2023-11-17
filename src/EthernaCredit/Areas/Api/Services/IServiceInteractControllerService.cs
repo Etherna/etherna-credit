@@ -32,6 +32,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         Task RegisterBalanceUpdateAsync(
             string address,
             XDaiBalance amount,
+            bool isApplied,
             string reason);
     }
 }

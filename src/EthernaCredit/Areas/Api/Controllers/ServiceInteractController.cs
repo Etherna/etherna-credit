@@ -80,12 +80,17 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         /// </summary>
         /// <param name="address">The user address</param>
         /// <param name="amount">The amount to be updated. Positive for credit, negative for debit</param>
+        /// <param name="isApplied">True if credit update needs to be applied to user balance</param>
         /// <param name="reason">The update reason description</param>
         [HttpPut("users/{address}/credit/balance")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task RegisterBalanceUpdateAsync([Required] string address, [Required] decimal amount, [Required] string reason) =>
-            service.RegisterBalanceUpdateAsync(address, amount, reason);
+        public Task RegisterBalanceUpdateAsync(
+            [Required] string address,
+            [Required] decimal amount,
+            [Required] string reason,
+            bool isApplied = true) =>
+            service.RegisterBalanceUpdateAsync(address, amount, isApplied, reason);
     }
 }

@@ -18,7 +18,6 @@ using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
-using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using System;
@@ -83,6 +82,7 @@ namespace Etherna.CreditSystem.Areas.Api.Services
         public async Task RegisterBalanceUpdateAsync(
             string address,
             XDaiBalance amount,
+            bool isApplied,
             string reason)
         {
             var clientId = await ethernaOidcClient.GetClientIdAsync();
@@ -91,9 +91,12 @@ namespace Etherna.CreditSystem.Areas.Api.Services
             var (user, _) = await userService.FindUserAsync(address);
 
             // Apply update (balance can go negative).
-            var result = await userService.TryIncrementUserBalanceAsync(user, amount, true);
-            if (!result)
-                throw new InvalidOperationException();
+            if (isApplied)
+            {
+                var result = await userService.TryIncrementUserBalanceAsync(user, amount, true);
+                if (!result)
+                    throw new InvalidOperationException();
+            }
 
             // Create or update log.
             var updatedLog = await dbContext.OperationLogs.AccessToCollectionAsync(collection =>
@@ -101,13 +104,14 @@ namespace Etherna.CreditSystem.Areas.Api.Services
                     Builders<OperationLogBase>.Filter.OfType<UpdateOperationLog>(
                         log => log.Author == clientId &&
                                log.CreationDateTime >= DateTime.Now.Date &&
+                               log.IsApplied == isApplied &&
                                log.Reason == reason &&
                                log.User.Id == user.Id),
                     Builders<OperationLogBase>.Update.Inc(log => log.Amount, amount)));
 
             if (updatedLog is null) //if a previous log didn't exist
             {
-                var withdrawLog = new UpdateOperationLog(amount, clientId, reason, user);
+                var withdrawLog = new UpdateOperationLog(amount, clientId, isApplied, reason, user);
                 await dbContext.OperationLogs.CreateAsync(withdrawLog);
             }
         }
