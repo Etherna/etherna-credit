@@ -303,8 +303,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
         [Theory, MemberData(nameof(OperationLogDeserializationTests))]
         public void OperationLogDeserialization(DeserializationTestElement<OperationLogBase> testElement)
         {
-            if (testElement is null)
-                throw new ArgumentNullException(nameof(testElement));
+            ArgumentNullException.ThrowIfNull(testElement, nameof(testElement));
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
@@ -351,9 +350,8 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
         [Theory, MemberData(nameof(UserBalanceDeserializationTests))]
         public void UserBalanceDeserialization(DeserializationTestElement<UserBalance> testElement)
         {
-            if (testElement is null)
-                throw new ArgumentNullException(nameof(testElement));
-        
+            ArgumentNullException.ThrowIfNull(testElement, nameof(testElement));
+
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
             var modelMapSerializer = new ModelMapSerializer<UserBalance>(dbContext);
@@ -376,9 +374,8 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
         [Theory, MemberData(nameof(UserDeserializationTests))]
         public void UserDeserialization(DeserializationTestElement<User> testElement)
         {
-            if (testElement is null)
-                throw new ArgumentNullException(nameof(testElement));
-        
+            ArgumentNullException.ThrowIfNull(testElement, nameof(testElement));
+
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
             var modelMapSerializer = new ModelMapSerializer<User>(dbContext);

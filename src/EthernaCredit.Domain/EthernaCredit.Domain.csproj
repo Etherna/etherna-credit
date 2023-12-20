@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Etherna.CreditSystem.Domain</RootNamespace>
 
     <Authors>Etherna Sa</Authors>
@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Etherna.DomainEvents" Version="1.4.0" />
     <PackageReference Include="MongODM.Core" Version="0.24.0-alpha.101" />
-    <PackageReference Include="Nethereum.Util" Version="4.17.1" />
+    <PackageReference Include="Nethereum.Util" Version="4.18.0" />
   </ItemGroup>
 
 </Project>

@@ -22,6 +22,7 @@ using Etherna.MongODM.Core.Utility;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 
@@ -43,6 +44,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
         }
 
         // Data.
+        [SuppressMessage("Usage", "CA1861: Prefer 'static readonly' fields over constant array arguments", Justification = "Don't need it")]
         public static IEnumerable<object[]> UserSharedInfoDeserializationTests
         {
             get
@@ -83,13 +85,12 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps
                 return tests.Select(t => new object[] { t });
             }
         }
-
+        
         // Tests.
         [Theory, MemberData(nameof(UserSharedInfoDeserializationTests))]
         public void UserSharedInfoDeserialization(DeserializationTestElement<UserSharedInfo> testElement)
         {
-            if (testElement is null)
-                throw new ArgumentNullException(nameof(testElement));
+            ArgumentNullException.ThrowIfNull(testElement, nameof(testElement));
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);

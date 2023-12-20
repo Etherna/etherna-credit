@@ -40,8 +40,7 @@ namespace Etherna.CreditSystem.Configs.Authorization
             AuthorizationHandlerContext context,
             DenyBannedAuthorizationRequirement requirement)
         {
-            if (context is null)
-                throw new ArgumentNullException(nameof(context));
+            ArgumentNullException.ThrowIfNull(context, nameof(context));
 
             if (context.User.Identity?.IsAuthenticated == true)
             {

@@ -58,8 +58,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
         public async Task OnPostAsync(string amount)
         {
-            if (amount is null)
-                throw new ArgumentNullException(nameof(amount));
+            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
 
             // Get data.
             DepositAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
