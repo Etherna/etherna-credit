@@ -40,10 +40,8 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         {
             public UserDto(User user, UserSharedInfo userSharedInfo, XDaiBalance balance)
             {
-                if (user is null)
-                    throw new ArgumentNullException(nameof(user));
-                if (userSharedInfo is null)
-                    throw new ArgumentNullException(nameof(userSharedInfo));
+                ArgumentNullException.ThrowIfNull(user, nameof(user));
+                ArgumentNullException.ThrowIfNull(userSharedInfo, nameof(userSharedInfo));
 
                 Id = user.Id;
                 Balance = balance;

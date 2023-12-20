@@ -57,8 +57,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
         // Methods
         public async Task OnGetAsync(string amount)
         {
-            if (amount is null)
-                throw new ArgumentNullException(nameof(amount));
+            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
 
             // Get data.
             WithdrawAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);

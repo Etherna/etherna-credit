@@ -23,10 +23,8 @@ namespace Etherna.CreditSystem.Areas.Api.DtoModels
     {
         public OperationLogDto(OperationLogBase operationLog, UserSharedInfo userSharedInfo)
         {
-            if (operationLog is null)
-                throw new ArgumentNullException(nameof(operationLog));
-            if (userSharedInfo is null)
-                throw new ArgumentNullException(nameof(userSharedInfo));
+            ArgumentNullException.ThrowIfNull(operationLog, nameof(operationLog));
+            ArgumentNullException.ThrowIfNull(userSharedInfo, nameof(userSharedInfo));
 
             Amount = operationLog.Amount.ToDecimal();
             Author = operationLog.Author;
