@@ -83,8 +83,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             await dbContext.OperationLogs.CreateAsync(withdrawLog);
 
             // Dispatch event.
-            await eventDispatcher.DispatchAsync(new UserWithdrawEvent(
-                -WithdrawAmount, user));
+            await eventDispatcher.DispatchAsync(new UserWithdrawEvent(withdrawLog));
         }
     }
 }

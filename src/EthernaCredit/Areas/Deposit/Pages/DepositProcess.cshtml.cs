@@ -84,8 +84,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             await dbContext.OperationLogs.CreateAsync(depositLog);
 
             // Dispatch event.
-            await eventDispatcher.DispatchAsync(new UserDepositEvent(
-                DepositAmount, user));
+            await eventDispatcher.DispatchAsync(new UserDepositEvent(depositLog));
 
             SucceededResult = true;
         }

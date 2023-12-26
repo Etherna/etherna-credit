@@ -12,22 +12,13 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.CreditSystem.Domain.Models;
+using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.DomainEvents;
 
 namespace Etherna.CreditSystem.Domain.Events
 {
-    public class UserDepositEvent : IDomainEvent
+    public class UserDepositEvent(DepositOperationLog operationLog) : IDomainEvent
     {
-        // Constructor.
-        public UserDepositEvent(XDaiBalance amount, User user)
-        {
-            Amount = amount;
-            User = user;
-        }
-
-        // Properties.
-        public XDaiBalance Amount { get; }
-        public User User { get; }
+        public DepositOperationLog OperationLog { get; } = operationLog;
     }
 }
