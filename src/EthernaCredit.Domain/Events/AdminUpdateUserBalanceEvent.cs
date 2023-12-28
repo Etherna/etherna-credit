@@ -1,4 +1,4 @@
-﻿//   Copyright 2021-present Etherna Sa
+// Copyright 2021-present Etherna Sa
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@ using Etherna.DomainEvents;
 
 namespace Etherna.CreditSystem.Domain.Events
 {
-    public class UserWithdrawEvent(WithdrawOperationLog operationLog) : IDomainEvent
+    public class AdminUpdateUserBalanceEvent(AdminUpdateOperationLog operationLog) : IDomainEvent
     {
-        public WithdrawOperationLog OperationLog { get; } = operationLog;
+        // Properties.
+        public AdminUpdateOperationLog OperationLog { get; } = operationLog;
     }
 }

@@ -22,6 +22,7 @@ using Etherna.CreditSystem.Configs.Hangfire;
 using Etherna.CreditSystem.Configs.Swagger;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Extensions;
+using Etherna.CreditSystem.ModelBinders;
 using Etherna.CreditSystem.Persistence;
 using Etherna.CreditSystem.Services;
 using Etherna.CreditSystem.Services.Settings;
@@ -183,9 +184,14 @@ namespace Etherna.CreditSystem
                 options.Conventions.AuthorizeAreaFolder("Deposit", "/");
                 options.Conventions.AuthorizeAreaFolder("Manage", "/");
             });
-            services.AddControllers()
+            services.AddControllers(options =>
+                {
+                    options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
+                })
                 .AddJsonOptions(options =>
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             services.AddApiVersioning(options =>
             {
                 options.ReportApiVersions = true;

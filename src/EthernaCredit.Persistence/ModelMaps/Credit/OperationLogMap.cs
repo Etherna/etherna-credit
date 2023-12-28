@@ -35,6 +35,7 @@ namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
                     mm.SetMemberSerializer(l => l.Amount, new XDaiBalanceSerializer(BsonType.Decimal128));
                     mm.SetMemberSerializer(l => l.User, UserMap.ReferenceSerializer(dbContext));
                 });
+            dbContext.MapRegistry.AddModelMap<AdminUpdateOperationLog>("3610fd2e-5f43-490b-bcfc-435a970a59cf"); //v0.3.12
             dbContext.MapRegistry.AddModelMap<DepositOperationLog>("7fc7abe8-9a55-40a2-90ce-f3cba34bc005"); //dev (pre v0.3.0), published for WAM event
             dbContext.MapRegistry.AddModelMap<UpdateOperationLog>("74e021d4-6d86-4deb-b952-0c328839cfe2",  //dev (pre v0.3.0), published for WAM event
                 mm =>

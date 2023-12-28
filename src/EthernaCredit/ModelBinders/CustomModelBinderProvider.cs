@@ -1,4 +1,4 @@
-﻿//   Copyright 2021-present Etherna Sa
+// Copyright 2021-present Etherna Sa
 // 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -12,13 +12,22 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.DomainEvents;
+using Etherna.CreditSystem.Domain.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 
-namespace Etherna.CreditSystem.Domain.Events
+namespace Etherna.CreditSystem.ModelBinders
 {
-    public class UserWithdrawEvent(WithdrawOperationLog operationLog) : IDomainEvent
+    public class CustomModelBinderProvider : IModelBinderProvider
     {
-        public WithdrawOperationLog OperationLog { get; } = operationLog;
+        public IModelBinder? GetBinder(ModelBinderProviderContext context)
+        {
+            ArgumentNullException.ThrowIfNull(context, nameof(context));
+
+            if (context.Metadata.ModelType == typeof(XDaiBalance))
+                return new XDaiBalanceModelBinder();
+
+            return null;
+        }
     }
 }

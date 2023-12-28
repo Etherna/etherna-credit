@@ -47,7 +47,8 @@ namespace Etherna.CreditSystem.Services.EventHandlers
         public override async Task HandleAsync(UserDepositEvent @event)
         {
             // Get user shared info.
-            var userSharedInfo = await sharedDbContext.UsersInfo.FindOneAsync(@event.User.SharedInfoId);
+            var userSharedInfo = await sharedDbContext.UsersInfo.FindOneAsync(
+                @event.OperationLog.User.SharedInfoId);
 
             // Get user email.
             var contacts = await serviceSsoClient.ServiceInteract.ContactsAsync(userSharedInfo.EtherAddress);

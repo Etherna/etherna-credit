@@ -19,7 +19,6 @@ using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Manage.Pages
@@ -30,7 +29,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public class InputModel
         {
             [Required]
-            public string Amount { get; set; } = default!;
+            public XDaiBalance Amount { get; set; }
         }
 
         // Fields.
@@ -66,12 +65,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
         public IActionResult OnPostAsync()
         {
-            if (!ModelState.IsValid ||
-                !double.TryParse(
-                    Input.Amount.Trim('$'),
-                    NumberStyles.Any,
-                    CultureInfo.InvariantCulture,
-                    out var amountValue))
+            if (!ModelState.IsValid)
             {
                 StatusMessage = "Error, inserted value is not a valid number";
                 return RedirectToPage();
@@ -80,7 +74,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
             return RedirectToPage("WithdrawProcess", new
             {
                 area = "Withdraw",
-                amount = amountValue
+                amount = Input.Amount
             });
         }
     }
