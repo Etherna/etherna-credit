@@ -21,7 +21,6 @@ using Etherna.CreditSystem.Services.Domain;
 using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Withdraw.Pages
@@ -55,12 +54,12 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
         public XDaiBalance WithdrawAmount { get; set; }
 
         // Methods
-        public async Task OnGetAsync(string amount)
+        public async Task OnGetAsync(XDaiBalance amount)
         {
             ArgumentNullException.ThrowIfNull(amount, nameof(amount));
 
             // Get data.
-            WithdrawAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
+            WithdrawAmount = amount;
             WithdrawAmount = decimal.Truncate(WithdrawAmount.ToDecimal() * 100) / 100; //accept 2 digit precision
 
             var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());

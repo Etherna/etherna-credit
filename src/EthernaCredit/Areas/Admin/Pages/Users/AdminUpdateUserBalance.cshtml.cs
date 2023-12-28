@@ -67,16 +67,16 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
         // Methods.
         public async Task OnGetAsync(string id)
         {
-            var user = await creditDbContext.Users.FindOneAsync(id);
-            
-            Id = id;
-            CurrentBalance = await userService.GetUserBalanceAsync(user);
+            await InitializeAsync(id);
         }
 
         public async Task<IActionResult> OnPostAsync(string id)
         {
             if (!ModelState.IsValid)
+            {
+                await InitializeAsync(id);
                 return Page();
+            }
             
             // Get data.
             var currentUserAddress = await ethernaOidcClient.GetEtherAddressAsync();
@@ -97,6 +97,15 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
             await eventDispatcher.DispatchAsync(new AdminUpdateUserBalanceEvent(adminUpdateLog));
             
             return RedirectToPage("User", new { id }); 
+        }
+        
+        // Helpers.
+        private async Task InitializeAsync(string id)
+        {
+            var user = await creditDbContext.Users.FindOneAsync(id);
+            
+            Id = id;
+            CurrentBalance = await userService.GetUserBalanceAsync(user);
         }
     }
 }
