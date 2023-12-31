@@ -1,4 +1,4 @@
-﻿@*  *   Copyright 2021-present Etherna Sagl
+﻿@*  *   Copyright 2021-present Etherna Sa
     *
     *   Licensed under the Apache License, Version 2.0 (the "License");
     *   you may not use this file except in compliance with the License.
@@ -27,12 +27,12 @@
         <form id="deposit" asp-area="Deposit" asp-page="DepositProcess" method="post" class="form-horizontal">
             <div>
                 <p>
-                    @foreach (var amount in new[] { 0.5m, 1m, 5m, 10m })
+                    @foreach (var amount in new XDaiBalance[] { 0.5, 1, 5, 10 })
                     {
                         <button type="submit"
                                 name="amount"
                                 class="btn btn-primary"
-                                value="@amount">@amount.ToFinancialString(suffixSymbol: " CHF")</button>
+                                value="@amount">@amount.ToFinancialString()</button>
                     }
                 </p>
             </div>

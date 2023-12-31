@@ -1,11 +1,11 @@
-﻿//   Copyright 2021-present Etherna Sagl
-//
+﻿//   Copyright 2021-present Etherna Sa
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -80,12 +80,17 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
         /// </summary>
         /// <param name="address">The user address</param>
         /// <param name="amount">The amount to be updated. Positive for credit, negative for debit</param>
+        /// <param name="isApplied">True if credit update needs to be applied to user balance</param>
         /// <param name="reason">The update reason description</param>
         [HttpPut("users/{address}/credit/balance")]
         [SimpleExceptionFilter]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task RegisterBalanceUpdateAsync([Required] string address, [Required] decimal amount, [Required] string reason) =>
-            service.RegisterBalanceUpdateAsync(address, amount, reason);
+        public Task RegisterBalanceUpdateAsync(
+            [Required] string address,
+            [Required] decimal amount,
+            [Required] string reason,
+            bool isApplied = true) =>
+            service.RegisterBalanceUpdateAsync(address, amount, isApplied, reason);
     }
 }

@@ -1,4 +1,4 @@
-﻿@*  *   Copyright 2021-present Etherna Sagl
+﻿@*  *   Copyright 2021-present Etherna Sa
     *
     *   Licensed under the Apache License, Version 2.0 (the "License");
     *   you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@
     <div class="col-md-6">
         @if (Model.SucceededResult)
         {
-            <p>An amount of @Model.DepositAmount.ToFinancialString(suffixSymbol: " CHF") has been deposited to your account</p>
+            <p>An amount of @Model.DepositAmount.ToFinancialString() has been deposited to your account</p>
         }
         else
         {
-            <p>Sorry, we was not able to deposit an amount of @Model.DepositAmount.ToFinancialString(suffixSymbol: " CHF") to your account</p>
+            <p>Sorry, we was not able to deposit an amount of @Model.DepositAmount.ToFinancialString() to your account</p>
         }
         <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
     </div>

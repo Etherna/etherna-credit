@@ -1,11 +1,11 @@
-﻿//   Copyright 2021-present Etherna Sagl
-//
+﻿//   Copyright 2021-present Etherna Sa
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,6 @@ using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Domain.Models.UserAgg;
-using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Nethereum.Util;
@@ -26,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Services.Domain
 {
-    class UserService : IUserService
+    internal sealed class UserService : IUserService
     {
         // Consts.
         private const decimal DefaultWelcomeCredit = 0.1M;
@@ -95,7 +94,7 @@ namespace Etherna.CreditSystem.Services.Domain
                         .FirstAsync());
         }
 
-        public async Task<decimal> GetUserBalanceAsync(string address)
+        public async Task<XDaiBalance> GetUserBalanceAsync(string address)
         {
             var (user, _) = await TryFindUserAsync(address);
             if (user is null)
@@ -104,10 +103,10 @@ namespace Etherna.CreditSystem.Services.Domain
             return await GetUserBalanceAsync(user);
         }
 
-        public async Task<decimal> GetUserBalanceAsync(User user)
+        public async Task<XDaiBalance> GetUserBalanceAsync(User user)
         {
             var userBalance = await creditDbContext.UserBalances.FindOneAsync(balance => balance.User.Id == user.Id);
-            return Decimal128.ToDecimal(userBalance.Credit);
+            return userBalance.Credit;
         }
 
         public async Task<(User?, UserSharedInfo?)> TryFindUserAsync(string address)
@@ -125,7 +124,7 @@ namespace Etherna.CreditSystem.Services.Domain
             catch (InvalidOperationException) { return null; }
         }
 
-        public async Task<bool> TryIncrementUserBalanceAsync(User user, decimal amount, bool allowBalanceDecreaseNegative)
+        public async Task<bool> TryIncrementUserBalanceAsync(User user, XDaiBalance amount, bool allowBalanceDecreaseNegative)
         {
             if (user.HasUnlimitedCredit)
                 return true;
@@ -135,7 +134,7 @@ namespace Etherna.CreditSystem.Services.Domain
                 var balanceResult = await creditDbContext.UserBalances.AccessToCollectionAsync(collection =>
                     collection.FindOneAndUpdateAsync(
                         balance => balance.User.Id == user.Id,
-                        Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount))));
+                        Builders<UserBalance>.Update.Inc(balance => balance.Credit, amount)));
 
                 return balanceResult is not null;
             }
@@ -144,8 +143,8 @@ namespace Etherna.CreditSystem.Services.Domain
                 var balanceResult = await creditDbContext.UserBalances.AccessToCollectionAsync(collection =>
                     collection.FindOneAndUpdateAsync(
                         balance => balance.User.Id == user.Id &&
-                                   balance.Credit >= new Decimal128(-amount), //verify disponibility
-                        Builders<UserBalance>.Update.Inc(balance => balance.Credit, new Decimal128(amount))));
+                                   balance.Credit >= -amount, //verify disponibility
+                        Builders<UserBalance>.Update.Inc(balance => balance.Credit, amount)));
 
                 return balanceResult is not null;
             }

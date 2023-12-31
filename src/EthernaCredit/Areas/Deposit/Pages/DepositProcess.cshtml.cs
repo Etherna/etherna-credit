@@ -1,11 +1,11 @@
-//   Copyright 2021-present Etherna Sagl
-//
+//   Copyright 2021-present Etherna Sa
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,7 @@
 using Etherna.Authentication;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
 using Etherna.DomainEvents;
@@ -48,7 +49,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
         }
 
         // Properties.
-        public decimal DepositAmount { get; set; }
+        public XDaiBalance DepositAmount { get; set; }
         public bool SucceededResult { get; set; }
 
         // Methods
@@ -57,14 +58,18 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
         public async Task OnPostAsync(string amount)
         {
-            if (amount is null)
-                throw new ArgumentNullException(nameof(amount));
+            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
 
             // Get data.
-            DepositAmount = decimal.Parse(amount.Trim('$'), CultureInfo.InvariantCulture);
+            DepositAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
             var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 
             // Preliminary check.
+            if (DepositAmount <= 0)
+            {
+                SucceededResult = false;
+                return;
+            }
             if (user.HasUnlimitedCredit) //disable deposit if unlimited credit
             {
                 SucceededResult = false;
@@ -79,8 +84,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             await dbContext.OperationLogs.CreateAsync(depositLog);
 
             // Dispatch event.
-            await eventDispatcher.DispatchAsync(new UserDepositEvent(
-                DepositAmount, user));
+            await eventDispatcher.DispatchAsync(new UserDepositEvent(depositLog));
 
             SucceededResult = true;
         }

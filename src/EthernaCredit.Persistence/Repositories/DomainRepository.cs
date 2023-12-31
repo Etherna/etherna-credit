@@ -1,11 +1,11 @@
-﻿//   Copyright 2021-present Etherna Sagl
-//
+﻿//   Copyright 2021-present Etherna Sa
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@ using Etherna.CreditSystem.Domain.Models;
 using Etherna.DomainEvents;
 using Etherna.DomainEvents.Events;
 using Etherna.MongODM.Core.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -23,16 +24,16 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Persistence.Repositories
 {
-    public class DomainCollectionRepository<TModel, TKey> :
-        CollectionRepository<TModel, TKey>
+    public class DomainRepository<TModel, TKey> :
+        Repository<TModel, TKey>
         where TModel : EntityModelBase<TKey>
     {
         // Constructors and initialization.
-        public DomainCollectionRepository(string name)
+        public DomainRepository(string name)
             : base(name)
         { }
 
-        public DomainCollectionRepository(CollectionRepositoryOptions<TModel> options)
+        public DomainRepository(RepositoryOptions<TModel> options)
             : base(options)
         { }
 
@@ -42,27 +43,58 @@ namespace Etherna.CreditSystem.Persistence.Repositories
         // Methods.
         public override async Task CreateAsync(IEnumerable<TModel> models, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(models, nameof(models));
+
+            // Create entity.
             await base.CreateAsync(models, cancellationToken);
 
-            // Dispatch created events.
+            // Dispatch events.
             if (EventDispatcher != null)
-                await EventDispatcher.DispatchAsync(
-                    models.Select(m => new EntityCreatedEvent<TModel>(m)));
+            {
+                //created event
+                await EventDispatcher.DispatchAsync(models.Select(m => new EntityCreatedEvent<TModel>(m)));
+
+                //custom events
+                foreach (var model in models)
+                {
+                    await EventDispatcher.DispatchAsync(model.Events);
+                    model.ClearEvents();
+                }
+            }
         }
 
         public override async Task CreateAsync(TModel model, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(model, nameof(model));
+
+            // Create entity.
             await base.CreateAsync(model, cancellationToken);
 
-            // Dispatch created event.
+            // Dispatch events.
             if (EventDispatcher != null)
-                await EventDispatcher.DispatchAsync(
-                    new EntityCreatedEvent<TModel>(model));
+            {
+                //created event
+                await EventDispatcher.DispatchAsync(new EntityCreatedEvent<TModel>(model));
+
+                //custom events
+                await EventDispatcher.DispatchAsync(model.Events);
+                model.ClearEvents();
+            }
         }
 
         public override async Task DeleteAsync(TModel model, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(model, nameof(model));
+
+            // Delete entity.
             await base.DeleteAsync(model, cancellationToken);
+
+            // Dispatch custom events.
+            if (EventDispatcher != null)
+            {
+                await EventDispatcher.DispatchAsync(model.Events);
+                model.ClearEvents();
+            }
 
             // Dispatch deleted event.
             if (EventDispatcher != null)
