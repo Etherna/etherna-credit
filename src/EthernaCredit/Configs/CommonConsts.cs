@@ -27,7 +27,8 @@ namespace Etherna.CreditSystem.Configs
         public const string HangfireAdminPath = "/admin/hangfire";
 
         public const string RequireAdministratorClaimPolicy = "RequireAdministratorClaimPolicy";
-        public const string ServiceInteractApiScopePolicy = "ServiceInteractApiScope";
+        public const string ServiceInteractApiScopePolicy = "ServiceInteractApiScopePolicy";
+        public const string UserInteractApiScopePolicy = "UserInteractApiScopePolicy";
 
         public const string AdministratorRoleName = "ADMINISTRATOR";
 

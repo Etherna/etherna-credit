@@ -15,10 +15,8 @@
 using Etherna.CreditSystem.Areas.Api.DtoModels;
 using Etherna.CreditSystem.Areas.Api.Services;
 using Etherna.CreditSystem.Attributes;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -28,7 +26,6 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
     [ApiController]
     [ApiVersion("0.3")]
     [Route("api/v{api-version:apiVersion}/[controller]")]
-    [Authorize]
     public class UserController : ControllerBase
     {
         // Fields.
