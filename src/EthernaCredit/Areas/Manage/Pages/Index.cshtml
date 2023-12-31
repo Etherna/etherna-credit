@@ -1,4 +1,4 @@
-﻿@*  *   Copyright 2021-present Etherna Sagl
+﻿@*  *   Copyright 2021-present Etherna Sa
     *
     *   Licensed under the Apache License, Version 2.0 (the "License");
     *   you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="CreditBalance"></label>
-            <p>@Model.CreditBalance.ToFinancialString(suffixSymbol: " CHF")</p>
+            <p>@Model.CreditBalance.ToFinancialString()</p>
         </div>
         @if (Model.HasUnlimitedCredit)
         {

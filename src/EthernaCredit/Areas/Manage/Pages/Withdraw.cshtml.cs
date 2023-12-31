@@ -1,11 +1,11 @@
-//   Copyright 2021-present Etherna Sagl
-//
+//   Copyright 2021-present Etherna Sa
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,11 +14,11 @@
 
 using Etherna.Authentication;
 using Etherna.CreditSystem.Areas.Withdraw.Pages;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Manage.Pages
@@ -29,7 +29,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public class InputModel
         {
             [Required]
-            public string Amount { get; set; } = default!;
+            public XDaiBalance Amount { get; set; }
         }
 
         // Fields.
@@ -52,9 +52,9 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
         public string? StatusMessage { get; set; }
 
         public bool CanWithdraw => CreditBalance >= MinLimit && CreditBalance != 0;
-        public decimal CreditBalance { get; private set; }
-        public decimal MaxLimit => CreditBalance;
-        public decimal MinLimit => WithdrawProcessModel.MinimumWithdraw;
+        public XDaiBalance CreditBalance { get; private set; }
+        public XDaiBalance MaxLimit => CreditBalance;
+        public XDaiBalance MinLimit => WithdrawProcessModel.MinimumWithdraw;
 
         // Methods.
         public async Task<IActionResult> OnGetAsync()
@@ -65,12 +65,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
 
         public IActionResult OnPostAsync()
         {
-            if (!ModelState.IsValid ||
-                !double.TryParse(
-                    Input.Amount.Trim('$'),
-                    NumberStyles.Any,
-                    CultureInfo.InvariantCulture,
-                    out var amountValue))
+            if (!ModelState.IsValid)
             {
                 StatusMessage = "Error, inserted value is not a valid number";
                 return RedirectToPage();
@@ -79,7 +74,7 @@ namespace Etherna.CreditSystem.Areas.Manage.Pages
             return RedirectToPage("WithdrawProcess", new
             {
                 area = "Withdraw",
-                amount = amountValue
+                amount = Input.Amount
             });
         }
     }

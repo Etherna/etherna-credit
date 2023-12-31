@@ -1,11 +1,11 @@
-﻿//   Copyright 2021-present Etherna Sagl
-//
+﻿//   Copyright 2021-present Etherna Sa
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,17 +20,20 @@ namespace Etherna.CreditSystem.Domain.Models.OperationLogs
     {
         // Constructors.
         public UpdateOperationLog(
-            decimal amount,
+            XDaiBalance amount,
             string author,
+            bool isApplied,
             string reason,
             User user)
             : base(amount, author, user)
         {
+            IsApplied = isApplied;
             Reason = reason ?? throw new ArgumentNullException(nameof(reason));
         }
         protected UpdateOperationLog() { }
 
         // Properties.
+        public virtual bool IsApplied { get;  protected set; }
         public override string OperationName => "Service update";
         public virtual string Reason { get; protected set; } = default!;
     }

@@ -1,4 +1,4 @@
-﻿@*  *   Copyright 2021-present Etherna Sagl
+﻿@*  *   Copyright 2021-present Etherna Sa
     *
     *   Licensed under the Apache License, Version 2.0 (the "License");
     *   you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@
         @if (Model.CanWithdraw)
         {
             <p>How much do you want to withdraw from your account? (
-                min: @Model.MinLimit.ToFinancialString(roundMode: MidpointRounding.ToZero, suffixSymbol: " CHF"),
-                max: @Model.MaxLimit.ToFinancialString(roundMode: MidpointRounding.ToZero, suffixSymbol: " CHF"))</p>
+                min: @Model.MinLimit.ToFinancialString(roundMode: MidpointRounding.ToZero),
+                max: @Model.MaxLimit.ToFinancialString(roundMode: MidpointRounding.ToZero))</p>
 
             <form id="withdraw" method="post">
                 <div class="mb-3">

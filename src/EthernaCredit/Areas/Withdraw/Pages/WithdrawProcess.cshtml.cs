@@ -1,11 +1,11 @@
-//   Copyright 2021-present Etherna Sagl
-//
+//   Copyright 2021-present Etherna Sa
+// 
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-//
+// 
 //       http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,12 @@
 using Etherna.Authentication;
 using Etherna.CreditSystem.Domain;
 using Etherna.CreditSystem.Domain.Events;
+using Etherna.CreditSystem.Domain.Models;
 using Etherna.CreditSystem.Domain.Models.OperationLogs;
 using Etherna.CreditSystem.Services.Domain;
 using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Withdraw.Pages
@@ -28,7 +28,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
     public class WithdrawProcessModel : PageModel
     {
         // Consts.
-        public const decimal MinimumWithdraw = 1.0M;
+        public static readonly XDaiBalance MinimumWithdraw = 1.0M;
 
         // Fields.
         private readonly ICreditDbContext dbContext;
@@ -51,17 +51,16 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
 
         // Properties.
         public bool SucceededResult { get; set; }
-        public decimal WithdrawAmount { get; set; }
+        public XDaiBalance WithdrawAmount { get; set; }
 
         // Methods
-        public async Task OnGetAsync(string amount)
+        public async Task OnGetAsync(XDaiBalance amount)
         {
-            if (amount is null)
-                throw new ArgumentNullException(nameof(amount));
+            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
 
             // Get data.
-            WithdrawAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
-            WithdrawAmount = decimal.Truncate(WithdrawAmount * 100) / 100; //accept 2 digit precision
+            WithdrawAmount = amount;
+            WithdrawAmount = decimal.Truncate(WithdrawAmount.ToDecimal() * 100) / 100; //accept 2 digit precision
 
             var (user, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
 
@@ -83,8 +82,7 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
             await dbContext.OperationLogs.CreateAsync(withdrawLog);
 
             // Dispatch event.
-            await eventDispatcher.DispatchAsync(new UserWithdrawEvent(
-                -WithdrawAmount, user));
+            await eventDispatcher.DispatchAsync(new UserWithdrawEvent(withdrawLog));
         }
     }
 }
