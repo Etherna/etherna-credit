@@ -27,7 +27,7 @@ namespace Etherna.CreditSystem.Configs.Hangfire
                 return false;
             var authorizationService = httpContext.RequestServices.GetService<IAuthorizationService>()!;
 
-            var authTask = authorizationService.AuthorizeAsync(httpContext.User, CommonConsts.RequireAdministratorClaimPolicy);
+            var authTask = authorizationService.AuthorizeAsync(httpContext.User, CommonConsts.RequireAdministratorRolePolicy);
             authTask.Wait();
             var result = authTask.Result;
 

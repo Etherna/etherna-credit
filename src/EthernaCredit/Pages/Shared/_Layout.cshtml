@@ -17,7 +17,7 @@
 @using Microsoft.AspNetCore.Authorization;
 @inject IAuthorizationService authorizationService
 @{
-    var userIsAdmin = (await authorizationService.AuthorizeAsync(User, CommonConsts.RequireAdministratorClaimPolicy)).Succeeded;
+    var userIsAdmin = (await authorizationService.AuthorizeAsync(User, CommonConsts.RequireAdministratorRolePolicy)).Succeeded;
 }
 
 <!DOCTYPE html>
