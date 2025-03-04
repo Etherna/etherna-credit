@@ -28,6 +28,7 @@ using Xunit;
 
 namespace Etherna.CreditSystem.Persistence.ModelMaps
 {
+    [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable")]
     public class SharedDbContextDeserializationTest
     {
         // Fields.
