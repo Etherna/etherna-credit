@@ -33,6 +33,7 @@ using System.Threading;
 
 namespace Etherna.CreditSystem.Persistence.Helpers;
 
+#pragma warning disable CA1515
 public static class DbContextMockHelper
 {
     [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Need to keep objects after test construction")]
@@ -131,3 +132,4 @@ public static class DbContextMockHelper
             });
     }
 }
+#pragma warning restore CA1515
