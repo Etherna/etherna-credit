@@ -26,7 +26,7 @@ namespace Etherna.CreditSystem.Configs
         public const string DatabaseAdminPath = "/admin/db";
         public const string HangfireAdminPath = "/admin/hangfire";
 
-        public const string RequireAdministratorClaimPolicy = "RequireAdministratorClaimPolicy";
+        public const string RequireAdministratorRolePolicy = "RequireAdministratorRolePolicy";
         public const string ServiceInteractApiScopePolicy = "ServiceInteractApiScopePolicy";
         public const string UserInteractApiScopePolicy = "UserInteractApiScopePolicy";
 

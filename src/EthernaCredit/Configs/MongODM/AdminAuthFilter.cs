@@ -28,7 +28,7 @@ namespace Etherna.CreditSystem.Configs.MongODM
                 return false;
             var authorizationService = context.RequestServices.GetService<IAuthorizationService>()!;
 
-            var result = await authorizationService.AuthorizeAsync(context.User, CommonConsts.RequireAdministratorClaimPolicy);
+            var result = await authorizationService.AuthorizeAsync(context.User, CommonConsts.RequireAdministratorRolePolicy);
             return result.Succeeded;
         }
     }

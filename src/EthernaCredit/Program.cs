@@ -180,7 +180,7 @@ namespace Etherna.CreditSystem
             services.AddCors();
             services.AddRazorPages(options =>
             {
-                options.Conventions.AuthorizeAreaFolder(CommonConsts.AdminArea, "/", CommonConsts.RequireAdministratorClaimPolicy);
+                options.Conventions.AuthorizeAreaFolder(CommonConsts.AdminArea, "/", CommonConsts.RequireAdministratorRolePolicy);
 
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.DepositArea, "/");
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.ManageArea, "/");
@@ -317,7 +317,7 @@ namespace Etherna.CreditSystem
                     Array.Empty<string>());
 
                 //other policies
-                options.AddPolicy(CommonConsts.RequireAdministratorClaimPolicy,
+                options.AddPolicy(CommonConsts.RequireAdministratorRolePolicy,
                     policy =>
                     {
                         policy.RequireAuthenticatedUser();

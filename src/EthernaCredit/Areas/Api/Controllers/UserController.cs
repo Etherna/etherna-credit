@@ -26,17 +26,8 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
     [ApiController]
     [ApiVersion("0.3")]
     [Route("api/v{api-version:apiVersion}/[controller]")]
-    public class UserController : ControllerBase
+    public class UserController(IUserControllerService service) : ControllerBase
     {
-        // Fields.
-        private readonly IUserControllerService service;
-
-        // Constructors.
-        public UserController(IUserControllerService service)
-        {
-            this.service = service;
-        }
-
         // GET.
 
         /// <summary>

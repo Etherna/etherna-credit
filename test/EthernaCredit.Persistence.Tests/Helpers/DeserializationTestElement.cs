@@ -19,6 +19,7 @@ using System;
 
 namespace Etherna.CreditSystem.Persistence.Helpers;
 
+#pragma warning disable CA1515
 public class DeserializationTestElement<TModel>
 {
     public DeserializationTestElement(string sourceDocument, TModel expectedModel) :
@@ -39,3 +40,4 @@ public class DeserializationTestElement<TModel>
     public TModel ExpectedModel { get; }
     public Action<Mock<IMongoDatabase>, ICreditDbContext> SetupAction { get; }
 }
+#pragma warning restore CA1515

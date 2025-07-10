@@ -19,6 +19,7 @@ using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -34,6 +35,7 @@ namespace Etherna.CreditSystem.Configs.SystemStore
         private readonly IMongoCollection<BsonDocument> collection;
 
         // Constructors.
+        [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
         public XmlRepository(DbContextOptions options)
         {
             ArgumentNullException.ThrowIfNull(options, nameof(options));

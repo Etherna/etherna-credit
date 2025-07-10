@@ -39,9 +39,6 @@ public struct XDaiBalance : IEquatable<XDaiBalance>
         obj is XDaiBalance xDaiObj &&
         Equals(xDaiObj);
     public bool Equals(XDaiBalance other) => _balance == other._balance;
-    public XDaiBalance FromDecimal(decimal value) => new(value);
-    public XDaiBalance FromDouble(double value) => new((decimal)value);
-    public XDaiBalance FromInt32(int value) => new(value);
     public override int GetHashCode() => _balance.GetHashCode();
     public decimal ToDecimal() => _balance;
     public override string ToString() => _balance.ToString(CultureInfo.InvariantCulture);
@@ -50,6 +47,9 @@ public struct XDaiBalance : IEquatable<XDaiBalance>
     public static XDaiBalance Add(XDaiBalance left, XDaiBalance right) => left + right;
     public static XDaiBalance Decrement(XDaiBalance balance)=> --balance;
     public static XDaiBalance Divide(XDaiBalance left, XDaiBalance right) => left / right;
+    public static XDaiBalance FromDecimal(decimal value) => new(value);
+    public static XDaiBalance FromDouble(double value) => new((decimal)value);
+    public static XDaiBalance FromInt32(int value) => new(value);
     public static XDaiBalance Increment(XDaiBalance balance) => ++balance;
     public static XDaiBalance Multiply(XDaiBalance left, XDaiBalance right) => left * right;
     public static XDaiBalance Negate(XDaiBalance balance) => -balance;
