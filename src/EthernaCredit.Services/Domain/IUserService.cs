@@ -12,11 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.UserAgg;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Services.Domain
+namespace Etherna.Credit.Services.Domain
 {
     public interface IUserService
     {

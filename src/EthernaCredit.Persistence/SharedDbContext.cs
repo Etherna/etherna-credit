@@ -12,9 +12,9 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
-using Etherna.CreditSystem.Persistence.Repositories;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.Credit.Persistence.Repositories;
 using Etherna.MongoDB.Driver;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
@@ -24,12 +24,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Etherna.CreditSystem.Persistence
+namespace Etherna.Credit.Persistence
 {
     public class SharedDbContext : DbContext, ISharedDbContext
     {
         // Consts.
-        private const string ModelMapsNamespace = "Etherna.CreditSystem.Persistence.ModelMaps.Shared";
+        private const string ModelMapsNamespace = "Etherna.Credit.Persistence.ModelMaps.Shared";
 
         // Properties.
         //repositories

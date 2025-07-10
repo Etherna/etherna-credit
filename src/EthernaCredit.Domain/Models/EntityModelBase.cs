@@ -17,7 +17,7 @@ using Etherna.MongODM.Core.Domain.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Etherna.CreditSystem.Domain.Models
+namespace Etherna.Credit.Domain.Models
 {
     public abstract class EntityModelBase : ModelBase, IEntityModel
     {

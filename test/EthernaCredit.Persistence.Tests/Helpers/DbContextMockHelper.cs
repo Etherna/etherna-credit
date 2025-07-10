@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-namespace Etherna.CreditSystem.Persistence.Helpers;
+namespace Etherna.Credit.Persistence.Helpers;
 
 #pragma warning disable CA1515
 public static class DbContextMockHelper

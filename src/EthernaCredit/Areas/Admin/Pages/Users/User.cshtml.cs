@@ -12,9 +12,9 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
+namespace Etherna.Credit.Areas.Admin.Pages.Users
 {
     public class UserModel : PageModel
     {

@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
+using Etherna.Credit.Domain.Models;
 using Etherna.DomainEvents;
 using Etherna.DomainEvents.Events;
 using Etherna.MongoDB.Driver;
@@ -23,7 +23,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Persistence.Repositories
+namespace Etherna.Credit.Persistence.Repositories
 {
     public class DomainRepository<TModel, TKey> :
         Repository<TModel, TKey>

@@ -12,16 +12,16 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Areas.Api.DtoModels;
-using Etherna.CreditSystem.Areas.Api.Services;
-using Etherna.CreditSystem.Attributes;
+using Etherna.Credit.Areas.Api.DtoModels;
+using Etherna.Credit.Areas.Api.Services;
+using Etherna.Credit.Attributes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Api.Controllers
+namespace Etherna.Credit.Areas.Api.Controllers
 {
     [ApiController]
     [ApiVersion("0.3")]

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <RootNamespace>Etherna.CreditSystem.Services</RootNamespace>
+    <RootNamespace>Etherna.Credit.Services</RootNamespace>
 
     <Authors>Etherna Sa</Authors>
 

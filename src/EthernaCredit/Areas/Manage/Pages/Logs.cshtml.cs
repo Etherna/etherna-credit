@@ -13,16 +13,16 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Services.Domain;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Manage.Pages
+namespace Etherna.Credit.Areas.Manage.Pages
 {
     public class LogsModel : PageModel
     {

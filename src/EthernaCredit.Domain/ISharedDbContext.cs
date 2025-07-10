@@ -12,11 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models.UserAgg;
+using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
 
-namespace Etherna.CreditSystem.Domain
+namespace Etherna.Credit.Domain
 {
     /// <summary>
     /// Shared DbContext between Etherna services. It's managed by SSO Server, use in read-only mode.

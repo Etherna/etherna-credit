@@ -16,7 +16,7 @@ using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Etherna.CreditSystem.Configs.Hangfire
+namespace Etherna.Credit.Configs.Hangfire
 {
     internal sealed class AdminAuthFilter : IDashboardAuthorizationFilter
     {

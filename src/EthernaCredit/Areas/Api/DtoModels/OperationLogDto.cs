@@ -12,12 +12,12 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Domain.Models.UserAgg;
 using System;
 
-namespace Etherna.CreditSystem.Areas.Api.DtoModels
+namespace Etherna.Credit.Areas.Api.DtoModels
 {
     public class OperationLogDto
     {

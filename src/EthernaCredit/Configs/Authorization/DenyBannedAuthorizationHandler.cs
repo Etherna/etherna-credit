@@ -13,12 +13,12 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Services.Domain;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Configs.Authorization
+namespace Etherna.Credit.Configs.Authorization
 {
     internal sealed class DenyBannedAuthorizationHandler(
         IEthernaOpenIdConnectClient ethernaOidcClient,

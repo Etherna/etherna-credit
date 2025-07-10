@@ -12,9 +12,9 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
-using Etherna.CreditSystem.Persistence.Serializers;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.Credit.Persistence.Serializers;
 using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Bson.Serialization.Serializers;
 using Etherna.MongODM.Core;
@@ -22,7 +22,7 @@ using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
 using Etherna.MongODM.Core.Serialization.Serializers;
 
-namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
+namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
     internal sealed class UserMap : IModelMapsCollector
     {

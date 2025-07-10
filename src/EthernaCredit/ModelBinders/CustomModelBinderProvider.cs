@@ -12,11 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
+using Etherna.Credit.Domain.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 
-namespace Etherna.CreditSystem.ModelBinders
+namespace Etherna.Credit.ModelBinders
 {
     internal sealed class CustomModelBinderProvider : IModelBinderProvider
     {

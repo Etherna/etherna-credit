@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
-using Etherna.CreditSystem.Persistence.Repositories;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.Credit.Persistence.Repositories;
 using Etherna.DomainEvents;
 using Etherna.MongoDB.Driver;
 using Etherna.MongODM.Core;
@@ -29,12 +29,12 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Persistence
+namespace Etherna.Credit.Persistence
 {
     public class CreditDbContext : DbContext, ICreditDbContextInternal, IEventDispatcherDbContext
     {
         // Consts.
-        private const string SerializersNamespace = "Etherna.CreditSystem.Persistence.ModelMaps.Credit";
+        private const string SerializersNamespace = "Etherna.Credit.Persistence.ModelMaps.Credit";
 
         // Constructor.
         public CreditDbContext(

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>Etherna.CreditSystem.Domain</RootNamespace>
+    <RootNamespace>Etherna.Credit.Domain</RootNamespace>
 
     <Authors>Etherna Sa</Authors>
     

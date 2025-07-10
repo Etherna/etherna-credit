@@ -14,7 +14,7 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Etherna.CreditSystem.Areas.Manage.Pages
+namespace Etherna.Credit.Areas.Manage.Pages
 {
     public class DepositModel : PageModel
     {

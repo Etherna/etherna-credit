@@ -13,14 +13,14 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.ACR.Services;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Events;
-using Etherna.CreditSystem.Services.Views.Emails;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Events;
+using Etherna.Credit.Services.Views.Emails;
 using Etherna.DomainEvents;
 using Etherna.ServicesClient.Internal;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Services.EventHandlers
+namespace Etherna.Credit.Services.EventHandlers
 {
     internal sealed class OnUserWithdrawThenSendEmailHandler : EventHandlerBase<UserWithdrawEvent>
     {

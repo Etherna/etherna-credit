@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using System;
 using System.Linq;
 
-namespace Etherna.CreditSystem.Conventions
+namespace Etherna.Credit.Conventions
 {
     internal sealed class RouteTemplateAuthorizationConvention(string routeTemplate, string policyName)
         : IApplicationModelConvention

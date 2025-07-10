@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Configs.MongODM
+namespace Etherna.Credit.Configs.MongODM
 {
     internal sealed class AdminAuthFilter : IDashboardAuthFilter
     {

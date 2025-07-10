@@ -14,7 +14,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 
-namespace Etherna.CreditSystem.Configs.Authorization
+namespace Etherna.Credit.Configs.Authorization
 {
     internal sealed class DenyBannedAuthorizationRequirement : IAuthorizationRequirement
     {

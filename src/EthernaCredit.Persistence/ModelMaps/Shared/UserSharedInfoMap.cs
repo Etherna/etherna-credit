@@ -12,11 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models.UserAgg;
+using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.CreditSystem.Persistence.ModelMaps.Shared
+namespace Etherna.Credit.Persistence.ModelMaps.Shared
 {
     internal sealed class UserSharedInfoMap : IModelMapsCollector
     {

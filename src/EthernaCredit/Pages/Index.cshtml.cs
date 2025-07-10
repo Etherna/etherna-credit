@@ -14,7 +14,7 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Etherna.CreditSystem.Pages
+namespace Etherna.Credit.Pages
 {
     public class IndexModel : PageModel
     {

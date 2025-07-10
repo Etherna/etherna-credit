@@ -14,7 +14,7 @@
 
 using System;
 
-namespace Etherna.CreditSystem.Domain.Models.OperationLogs
+namespace Etherna.Credit.Domain.Models.OperationLogs
 {
     public class AdminUpdateOperationLog : OperationLogBase
     {

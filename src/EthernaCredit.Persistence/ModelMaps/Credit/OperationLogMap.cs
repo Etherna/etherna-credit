@@ -12,15 +12,15 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.CreditSystem.Persistence.Serializers;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Persistence.Serializers;
 using Etherna.MongoDB.Bson;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Extensions;
 using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.CreditSystem.Persistence.ModelMaps.Credit
+namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
     internal sealed class OperationLogMap : IModelMapsCollector
     {

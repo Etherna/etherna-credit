@@ -13,11 +13,11 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Events;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Events;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Services.Domain;
 using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,7 +25,7 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Deposit.Pages
+namespace Etherna.Credit.Areas.Deposit.Pages
 {
     public class DepositProcessModel : PageModel
     {

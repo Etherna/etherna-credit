@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
-using Etherna.CreditSystem.Persistence.Helpers;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.Credit.Persistence.Helpers;
 using Etherna.DomainEvents;
 using Etherna.MongoDB.Bson.IO;
 using Etherna.MongoDB.Bson.Serialization;
@@ -30,7 +30,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 
-namespace Etherna.CreditSystem.Persistence.ModelMaps
+namespace Etherna.Credit.Persistence.ModelMaps
 {
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable")]
     public class CreditDbContextDeserializationTest

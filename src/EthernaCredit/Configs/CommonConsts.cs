@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-namespace Etherna.CreditSystem.Configs
+namespace Etherna.Credit.Configs
 {
     internal static class CommonConsts
     {

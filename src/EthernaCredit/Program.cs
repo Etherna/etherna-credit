@@ -16,18 +16,18 @@ using Etherna.ACR.Exceptions;
 using Etherna.ACR.Middlewares.DebugPages;
 using Etherna.ACR.Settings;
 using Etherna.Authentication.AspNetCore;
-using Etherna.CreditSystem.Configs;
-using Etherna.CreditSystem.Configs.Authorization;
-using Etherna.CreditSystem.Configs.MongODM;
-using Etherna.CreditSystem.Configs.Swagger;
-using Etherna.CreditSystem.Conventions;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Extensions;
-using Etherna.CreditSystem.ModelBinders;
-using Etherna.CreditSystem.Persistence;
-using Etherna.CreditSystem.Services;
-using Etherna.CreditSystem.Services.Settings;
-using Etherna.CreditSystem.Services.Tasks;
+using Etherna.Credit.Configs;
+using Etherna.Credit.Configs.Authorization;
+using Etherna.Credit.Configs.MongODM;
+using Etherna.Credit.Configs.Swagger;
+using Etherna.Credit.Conventions;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Extensions;
+using Etherna.Credit.ModelBinders;
+using Etherna.Credit.Persistence;
+using Etherna.Credit.Services;
+using Etherna.Credit.Services.Settings;
+using Etherna.Credit.Services.Tasks;
 using Etherna.DomainEvents;
 using Etherna.MongODM;
 using Etherna.MongODM.AspNetCore.UI;
@@ -66,7 +66,7 @@ using System.Threading.Tasks;
 using DashboardOptions = Etherna.MongODM.AspNetCore.UI.DashboardOptions;
 using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 
-namespace Etherna.CreditSystem
+namespace Etherna.Credit
 {
     public static class Program
     {

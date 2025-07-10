@@ -13,11 +13,11 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.DomainEvents;
-using Etherna.CreditSystem.Domain.Models;
+using Etherna.Credit.Domain.Models;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Repositories;
 
-namespace Etherna.CreditSystem.Domain
+namespace Etherna.Credit.Domain
 {
     public interface ICreditDbContext : IDbContext
     {

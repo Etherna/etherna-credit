@@ -13,15 +13,14 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.CreditSystem.Areas.Api.DtoModels;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Services.Domain;
-using Etherna.MongoDB.Driver.Linq;
+using Etherna.Credit.Areas.Api.DtoModels;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Services.Domain;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Api.Services
+namespace Etherna.Credit.Areas.Api.Services
 {
     internal sealed class UserControllerService(
         ICreditDbContext dbContext,

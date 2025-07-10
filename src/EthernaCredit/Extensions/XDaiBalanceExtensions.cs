@@ -12,12 +12,12 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models;
+using Etherna.Credit.Domain.Models;
 using System;
 using System.Globalization;
 using System.Text;
 
-namespace Etherna.CreditSystem.Extensions
+namespace Etherna.Credit.Extensions
 {
     internal static class XDaiBalanceExtensions
     {

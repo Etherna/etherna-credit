@@ -12,11 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Areas.Api.DtoModels;
+using Etherna.Credit.Areas.Api.DtoModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Api.Services
+namespace Etherna.Credit.Areas.Api.Services
 {
     public interface IUserControllerService
     {

@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
+using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.DomainEvents;
 
-namespace Etherna.CreditSystem.Domain.Events
+namespace Etherna.Credit.Domain.Events
 {
     public class AdminUpdateUserBalanceEvent(AdminUpdateOperationLog operationLog) : IDomainEvent
     {

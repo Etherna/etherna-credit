@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>Etherna.CreditSystem</RootNamespace>
+    <RootNamespace>Etherna.Credit</RootNamespace>
 
     <Authors>Etherna Sa</Authors>
     <Description>Service implementing logic to manage user credits</Description>

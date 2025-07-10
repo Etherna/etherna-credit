@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Nethereum.Util;
@@ -23,7 +23,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Services.Domain
+namespace Etherna.Credit.Services.Domain
 {
     internal sealed class UserService : IUserService
     {

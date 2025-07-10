@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Etherna.CreditSystem.Areas.Account.Pages
+namespace Etherna.Credit.Areas.Account.Pages
 {
     [Authorize]
     public class LoginModel : PageModel

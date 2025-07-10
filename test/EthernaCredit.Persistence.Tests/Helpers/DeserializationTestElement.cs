@@ -12,12 +12,12 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain;
+using Etherna.Credit.Domain;
 using Etherna.MongoDB.Driver;
 using Moq;
 using System;
 
-namespace Etherna.CreditSystem.Persistence.Helpers;
+namespace Etherna.Credit.Persistence.Helpers;
 
 #pragma warning disable CA1515
 public class DeserializationTestElement<TModel>

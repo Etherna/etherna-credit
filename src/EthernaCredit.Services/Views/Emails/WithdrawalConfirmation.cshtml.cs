@@ -14,7 +14,7 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Etherna.CreditSystem.Services.Views.Emails
+namespace Etherna.Credit.Services.Views.Emails
 {
     public class WithdrawalConfirmationModel : PageModel
     {

@@ -13,15 +13,15 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.CreditSystem.Areas.Withdraw.Pages;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Areas.Withdraw.Pages;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Manage.Pages
+namespace Etherna.Credit.Areas.Manage.Pages
 {
     public class WithdrawModel : PageModel
     {

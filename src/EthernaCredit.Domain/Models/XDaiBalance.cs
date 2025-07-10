@@ -12,11 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.MongoDB.Bson;
 using System;
 using System.Globalization;
 
-namespace Etherna.CreditSystem.Domain.Models;
+namespace Etherna.Credit.Domain.Models;
 
 public struct XDaiBalance : IEquatable<XDaiBalance>
 {

@@ -13,15 +13,14 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.ACR;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Services.Domain;
 using Etherna.DomainEvents;
 using Etherna.DomainEvents.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Etherna.CreditSystem.Services
+namespace Etherna.Credit.Services
 {
     public static class ServiceCollectionExtensions
     {

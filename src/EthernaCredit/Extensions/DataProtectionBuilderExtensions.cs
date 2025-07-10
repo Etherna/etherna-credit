@@ -12,14 +12,14 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Configs.SystemStore;
+using Etherna.Credit.Configs.SystemStore;
 using Etherna.MongODM.Core.Options;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Etherna.CreditSystem.Extensions
+namespace Etherna.Credit.Extensions
 {
     internal static class DataProtectionBuilderExtensions
     {

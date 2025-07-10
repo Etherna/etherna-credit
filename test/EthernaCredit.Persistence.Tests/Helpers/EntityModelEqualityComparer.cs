@@ -17,7 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Etherna.CreditSystem.Persistence.Helpers
+namespace Etherna.Credit.Persistence.Helpers
 {
     internal sealed class EntityModelEqualityComparer : IEqualityComparer<IEntityModel<string>?>
     {

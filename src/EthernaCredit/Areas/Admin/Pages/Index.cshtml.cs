@@ -12,14 +12,9 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Etherna.CreditSystem.Areas.Admin.Pages
+namespace Etherna.Credit.Areas.Admin.Pages
 {
     public class IndexModel : PageModel
     {

@@ -24,7 +24,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Etherna.CreditSystem.Configs.SystemStore
+namespace Etherna.Credit.Configs.SystemStore
 {
     internal sealed class XmlRepository : IXmlRepository
     {
