@@ -18,7 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Etherna.CreditSystem.Configs.Hangfire
 {
-    public class AdminAuthFilter : IDashboardAuthorizationFilter
+    internal sealed class AdminAuthFilter : IDashboardAuthorizationFilter
     {
         public bool Authorize(DashboardContext context)
         {

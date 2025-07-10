@@ -20,7 +20,7 @@ using System.Linq;
 
 namespace Etherna.CreditSystem.Conventions
 {
-    public class RouteTemplateAuthorizationConvention(string routeTemplate, string policyName)
+    internal sealed class RouteTemplateAuthorizationConvention(string routeTemplate, string policyName)
         : IApplicationModelConvention
     {
         public void Apply(ApplicationModel application)

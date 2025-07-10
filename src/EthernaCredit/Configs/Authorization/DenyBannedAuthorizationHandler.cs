@@ -20,21 +20,11 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Configs.Authorization
 {
-    public class DenyBannedAuthorizationHandler : AuthorizationHandler<DenyBannedAuthorizationRequirement>
+    internal sealed class DenyBannedAuthorizationHandler(
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IUserService userService)
+        : AuthorizationHandler<DenyBannedAuthorizationRequirement>
     {
-        // Fields.
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IUserService userService;
-
-        // Constructor
-        public DenyBannedAuthorizationHandler(
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IUserService userService)
-        {
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.userService = userService;
-        }
-
         // Methods.
         protected override async Task HandleRequirementAsync(
             AuthorizationHandlerContext context,

@@ -23,24 +23,12 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Api.Services
 {
-    public class UserControllerService : IUserControllerService
+    internal sealed class UserControllerService(
+        ICreditDbContext dbContext,
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IUserService userService)
+        : IUserControllerService
     {
-        // Fields.
-        private readonly ICreditDbContext dbContext;
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public UserControllerService(
-            ICreditDbContext dbContext,
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IUserService userService)
-        {
-            this.dbContext = dbContext;
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.userService = userService;
-        }
-
         // Methods.
         public Task<string> GetAddressAsync() =>
             ethernaOidcClient.GetEtherAddressAsync();

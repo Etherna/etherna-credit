@@ -21,7 +21,7 @@ using System;
 
 namespace Etherna.CreditSystem.Extensions
 {
-    public static class DataProtectionBuilderExtensions
+    internal static class DataProtectionBuilderExtensions
     {
         /// <summary>
         /// Configures the data protection system to persist keys to a MongoDb datastore

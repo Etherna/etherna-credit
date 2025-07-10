@@ -18,7 +18,7 @@ using System;
 
 namespace Etherna.CreditSystem.ModelBinders
 {
-    public class CustomModelBinderProvider : IModelBinderProvider
+    internal sealed class CustomModelBinderProvider : IModelBinderProvider
     {
         public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {

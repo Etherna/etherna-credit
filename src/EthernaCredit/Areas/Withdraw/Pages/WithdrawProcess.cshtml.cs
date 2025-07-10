@@ -56,8 +56,6 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
         // Methods
         public async Task OnGetAsync(XDaiBalance amount)
         {
-            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
-
             // Get data.
             WithdrawAmount = amount;
             WithdrawAmount = decimal.Truncate(WithdrawAmount.ToDecimal() * 100) / 100; //accept 2 digit precision

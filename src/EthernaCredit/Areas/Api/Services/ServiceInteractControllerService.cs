@@ -27,24 +27,12 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Areas.Api.Services
 {
-    public class ServiceInteractControllerService : IServiceInteractControllerService
+    internal sealed class ServiceInteractControllerService(
+        ICreditDbContext dbContext,
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IUserService userService)
+        : IServiceInteractControllerService
     {
-        // Fields.
-        private readonly ICreditDbContext dbContext;
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public ServiceInteractControllerService(
-            ICreditDbContext dbContext,
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IUserService userService)
-        {
-            this.dbContext = dbContext;
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.userService = userService;
-        }
-
         // Methods.
         public async Task<IEnumerable<OperationLogDto>> GetServiceOpLogsWithUserAsync(
             string address,

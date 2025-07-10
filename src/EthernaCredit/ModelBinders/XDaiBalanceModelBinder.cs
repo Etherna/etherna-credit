@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.ModelBinders
 {
-    public class XDaiBalanceModelBinder : IModelBinder
+    internal sealed class XDaiBalanceModelBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {

@@ -19,7 +19,7 @@ using System.Text;
 
 namespace Etherna.CreditSystem.Extensions
 {
-    public static class XDaiBalanceExtensions
+    internal static class XDaiBalanceExtensions
     {
         /// <summary>
         /// Format a XDaiBalance to a financial string

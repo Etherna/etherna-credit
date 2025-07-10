@@ -25,7 +25,7 @@ namespace Etherna.CreditSystem.Configs.Swagger
     /// </summary>
     /// <remarks>This allows API versioning to define a Swagger document per API version after the
     /// <see cref="IApiVersionDescriptionProvider"/> service has been resolved from the service container.</remarks>
-    public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
+    internal sealed class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     {
         readonly IApiVersionDescriptionProvider provider;
 

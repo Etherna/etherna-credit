@@ -26,7 +26,7 @@ using System.Xml.Linq;
 
 namespace Etherna.CreditSystem.Configs.SystemStore
 {
-    public class XmlRepository : IXmlRepository
+    internal sealed class XmlRepository : IXmlRepository
     {
         // Consts.
         public const string CollectionName = "dataProtectionKeys";

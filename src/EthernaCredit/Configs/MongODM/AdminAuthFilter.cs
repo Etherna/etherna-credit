@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Etherna.CreditSystem.Configs.MongODM
 {
-    public class AdminAuthFilter : IDashboardAuthFilter
+    internal sealed class AdminAuthFilter : IDashboardAuthFilter
     {
         public async Task<bool> AuthorizeAsync(HttpContext? context)
         {
