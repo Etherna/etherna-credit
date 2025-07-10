@@ -5,7 +5,7 @@
     <RootNamespace>Etherna.CreditSystem</RootNamespace>
 
     <Authors>Etherna Sa</Authors>
-    <Description>Service implementing logic for manage user credits</Description>
+    <Description>Service implementing logic to manage user credits</Description>
 
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
@@ -30,6 +30,11 @@
     <ProjectReference Include="..\EthernaCredit.Domain\EthernaCredit.Domain.csproj" />
     <ProjectReference Include="..\EthernaCredit.Persistence\EthernaCredit.Persistence.csproj" />
     <ProjectReference Include="..\EthernaCredit.Services\EthernaCredit.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\COPYING" />
+    <None Include="..\..\README.md" />
   </ItemGroup>
 
   <Target Name="DeleteDist" AfterTargets="Clean">
