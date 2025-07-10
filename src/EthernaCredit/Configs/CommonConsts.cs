@@ -14,7 +14,7 @@
 
 namespace Etherna.Credit.Configs
 {
-    internal static class CommonConsts
+    public static class CommonConsts
     {
         public const string AccountArea = "Account";
         public const string AdminArea = "Admin";
