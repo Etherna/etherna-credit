@@ -30,18 +30,8 @@ namespace Etherna.CreditSystem.Areas.Api.Controllers
     [ApiVersion("0.3")]
     [Route("api/v{api-version:apiVersion}/[controller]")]
     [Authorize(CommonConsts.ServiceInteractApiScopePolicy)]
-    public class ServiceInteractController : ControllerBase
+    public class ServiceInteractController(IServiceInteractControllerService service) : ControllerBase
     {
-        // Fields.
-        private readonly IServiceInteractControllerService service;
-
-        // Constructor.
-        public ServiceInteractController(
-            IServiceInteractControllerService service)
-        {
-            this.service = service;
-        }
-
         // Get.
 
         /// <summary>
