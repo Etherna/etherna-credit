@@ -14,6 +14,7 @@
 
 using Etherna.ACR;
 using Etherna.Credit.Services.Domain;
+using Etherna.Credit.Services.Tasks.Infrastructure.Cron;
 using Etherna.DomainEvents;
 using Etherna.DomainEvents.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,10 @@ namespace Etherna.Credit.Services
             // Services.
             //domain
             services.AddScoped<IUserService, UserService>();
+            
+            // Tasks.
+            //infrastructure cron
+            services.AddScoped<ICleanupOldFailedTasksTask, CleanupOldFailedTasksTask>();
         }
     }
 }
