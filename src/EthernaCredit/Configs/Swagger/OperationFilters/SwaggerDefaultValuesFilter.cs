@@ -19,14 +19,14 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
 
-namespace Etherna.Credit.Configs.Swagger
+namespace Etherna.Credit.Configs.Swagger.OperationFilters
 {
     /// <summary>
     /// Represents the Swagger/Swashbuckle operation filter used to document the implicit API version parameter.
     /// </summary>
     /// <remarks>This <see cref="IOperationFilter"/> is only required due to bugs in the <see cref="SwaggerGenerator"/>.
     /// Once they are fixed and published, this class can be removed.</remarks>
-    internal sealed class SwaggerDefaultValues : IOperationFilter
+    internal sealed class SwaggerDefaultValuesFilter : IOperationFilter
     {
         /// <summary>
         /// Applies the filter to the specified operation using the given context.
