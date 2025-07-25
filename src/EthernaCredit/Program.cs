@@ -173,7 +173,7 @@ namespace Etherna.Credit
                         return new IPNetwork(
                             IPAddress.Parse(parts[0]),
                             int.Parse(parts[1], CultureInfo.InvariantCulture));
-                    }) ?? Array.Empty<IPNetwork>();
+                    }) ?? [];
 
                     foreach (var network in networks)
                         options.KnownNetworks.Add(network);
@@ -312,20 +312,20 @@ namespace Etherna.Credit
             {
                 //default policy
                 options.DefaultPolicy = new AuthorizationPolicy(
-                    new IAuthorizationRequirement[]
-                    {
+                    [
                         new DenyAnonymousAuthorizationRequirement(),
                         new DenyBannedAuthorizationRequirement()
-                    },
-                    Array.Empty<string>());
+                    ],
+                    []);
 
                 //other policies
                 options.AddPolicy(CommonConsts.RequireAdministratorRolePolicy,
                     policy =>
                     {
                         policy.RequireAuthenticatedUser();
-                        policy.RequireRole(CommonConsts.AdministratorRoleName);
                         policy.AddRequirements(new DenyBannedAuthorizationRequirement());
+                        policy.AddRequirements(new RequireRoleAuthorizationRequirement(
+                            CommonConsts.AdministratorRoleName));
                     });
                 
                 options.AddPolicy(CommonConsts.UserInteractApiScopePolicy, policy =>
@@ -346,6 +346,7 @@ namespace Etherna.Credit
 
             //requirement handlers
             services.AddScoped<IAuthorizationHandler, DenyBannedAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, RequireRoleAuthorizationHandler>();
 
             // Configure Hangfire server.
             if (!env.IsStaging()) //don't start server in staging
