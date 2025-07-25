@@ -17,32 +17,18 @@ using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Events;
 using Etherna.Credit.Services.Views.Emails;
 using Etherna.DomainEvents;
-using Etherna.ServicesClient.Internal;
+using Etherna.Sdk.Internal.Clients;
 using System.Threading.Tasks;
 
 namespace Etherna.Credit.Services.EventHandlers
 {
-    internal sealed class OnUserDepositThenSendEmailHandler : EventHandlerBase<UserDepositEvent>
+    internal sealed class OnUserDepositThenSendEmailHandler(
+        IEmailSender emailSender,
+        IRazorViewRenderer razorViewRenderer,
+        IEthernaInternalSsoClient serviceSsoClient,
+        ISharedDbContext sharedDbContext)
+        : EventHandlerBase<UserDepositEvent>
     {
-        // Fields.
-        private readonly IEmailSender emailSender;
-        private readonly IRazorViewRenderer razorViewRenderer;
-        private readonly IEthernaInternalSsoClient serviceSsoClient;
-        private readonly ISharedDbContext sharedDbContext;
-
-        // Constructor.
-        public OnUserDepositThenSendEmailHandler(
-            IEmailSender emailSender,
-            IRazorViewRenderer razorViewRenderer,
-            IEthernaInternalSsoClient serviceSsoClient,
-            ISharedDbContext sharedDbContext)
-        {
-            this.emailSender = emailSender;
-            this.razorViewRenderer = razorViewRenderer;
-            this.serviceSsoClient = serviceSsoClient;
-            this.sharedDbContext = sharedDbContext;
-        }
-
         // Methods.
         public override async Task HandleAsync(UserDepositEvent @event)
         {
@@ -51,7 +37,7 @@ namespace Etherna.Credit.Services.EventHandlers
                 @event.OperationLog.User.SharedInfoId);
 
             // Get user email.
-            var contacts = await serviceSsoClient.ServiceInteract.ContactsAsync(userSharedInfo.EtherAddress);
+            var contacts = await serviceSsoClient.GetUserContactsAsync(userSharedInfo.EtherAddress);
             if (contacts.Email is null)
                 return;
 

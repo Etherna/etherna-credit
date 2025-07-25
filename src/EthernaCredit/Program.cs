@@ -29,11 +29,12 @@ using Etherna.Credit.Persistence;
 using Etherna.Credit.Services;
 using Etherna.Credit.Services.Settings;
 using Etherna.Credit.Services.Tasks;
+using Etherna.Credit.Services.Tasks.Infrastructure.Cron;
 using Etherna.DomainEvents;
 using Etherna.MongODM;
 using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
-using Etherna.ServicesClient.Internal.AspNetCore;
+using Etherna.Sdk.Internal.AspNetCore;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -352,11 +353,11 @@ namespace Etherna.Credit
                 //register hangfire server
                 services.AddHangfireServer(options =>
                 {
-                    options.Queues = new[]
-                    {
+                    options.Queues =
+                    [
                         Queues.DB_MAINTENANCE,
                         "default"
-                    };
+                    ];
                     options.WorkerCount = Environment.ProcessorCount * 2;
                 });
             }
@@ -528,6 +529,13 @@ namespace Etherna.Credit
             // Add pages and controllers.
             app.MapControllers();
             app.MapRazorPages();
+            
+            // Register cron tasks.
+            //infrastructure.
+            RecurringJob.AddOrUpdate<ICleanupOldFailedTasksTask>(
+                CleanupOldFailedTasksTask.TaskId,
+                task => task.RunAsync(),
+                Cron.Daily);
         }
     }
 }
