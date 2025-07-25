@@ -366,6 +366,7 @@ namespace Etherna.Credit
             services.AddSwaggerGen(options =>
             {
                 options.SupportNonNullableReferenceTypes();
+                options.UseAllOfToExtendReferenceSchemas();
                 options.UseInlineDefinitionsForEnums();
 
                 //add custom operation filters
