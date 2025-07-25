@@ -17,7 +17,7 @@ using System;
 
 namespace Etherna.Credit.Areas.Manage.Pages
 {
-    internal static class ManageNavPages
+    public static class ManageNavPages
     {
         // Properties.
         public static string Status => "Status";

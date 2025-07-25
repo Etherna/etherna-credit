@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.ACR.Conventions;
 using Etherna.ACR.Exceptions;
 using Etherna.ACR.Middlewares.DebugPages;
 using Etherna.ACR.Settings;
@@ -20,7 +21,7 @@ using Etherna.Credit.Configs;
 using Etherna.Credit.Configs.Authorization;
 using Etherna.Credit.Configs.MongODM;
 using Etherna.Credit.Configs.Swagger;
-using Etherna.Credit.Conventions;
+using Etherna.Credit.Configs.Swagger.OperationFilters;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Extensions;
 using Etherna.Credit.ModelBinders;
@@ -28,11 +29,12 @@ using Etherna.Credit.Persistence;
 using Etherna.Credit.Services;
 using Etherna.Credit.Services.Settings;
 using Etherna.Credit.Services.Tasks;
+using Etherna.Credit.Services.Tasks.Infrastructure.Cron;
 using Etherna.DomainEvents;
 using Etherna.MongODM;
 using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
-using Etherna.ServicesClient.Internal.AspNetCore;
+using Etherna.Sdk.Internal.AspNetCore;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
@@ -50,6 +52,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
@@ -170,7 +173,7 @@ namespace Etherna.Credit
                         return new IPNetwork(
                             IPAddress.Parse(parts[0]),
                             int.Parse(parts[1], CultureInfo.InvariantCulture));
-                    }) ?? Array.Empty<IPNetwork>();
+                    }) ?? [];
 
                     foreach (var network in networks)
                         options.KnownNetworks.Add(network);
@@ -309,20 +312,20 @@ namespace Etherna.Credit
             {
                 //default policy
                 options.DefaultPolicy = new AuthorizationPolicy(
-                    new IAuthorizationRequirement[]
-                    {
+                    [
                         new DenyAnonymousAuthorizationRequirement(),
                         new DenyBannedAuthorizationRequirement()
-                    },
-                    Array.Empty<string>());
+                    ],
+                    []);
 
                 //other policies
                 options.AddPolicy(CommonConsts.RequireAdministratorRolePolicy,
                     policy =>
                     {
                         policy.RequireAuthenticatedUser();
-                        policy.RequireRole(CommonConsts.AdministratorRoleName);
                         policy.AddRequirements(new DenyBannedAuthorizationRequirement());
+                        policy.AddRequirements(new RequireRoleAuthorizationRequirement(
+                            CommonConsts.AdministratorRoleName));
                     });
                 
                 options.AddPolicy(CommonConsts.UserInteractApiScopePolicy, policy =>
@@ -343,6 +346,7 @@ namespace Etherna.Credit
 
             //requirement handlers
             services.AddScoped<IAuthorizationHandler, DenyBannedAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, RequireRoleAuthorizationHandler>();
 
             // Configure Hangfire server.
             if (!env.IsStaging()) //don't start server in staging
@@ -350,11 +354,11 @@ namespace Etherna.Credit
                 //register hangfire server
                 services.AddHangfireServer(options =>
                 {
-                    options.Queues = new[]
-                    {
+                    options.Queues =
+                    [
                         Queues.DB_MAINTENANCE,
                         "default"
-                    };
+                    ];
                     options.WorkerCount = Environment.ProcessorCount * 2;
                 });
             }
@@ -364,15 +368,36 @@ namespace Etherna.Credit
             services.AddSwaggerGen(options =>
             {
                 options.SupportNonNullableReferenceTypes();
+                options.UseAllOfToExtendReferenceSchemas();
                 options.UseInlineDefinitionsForEnums();
 
-                //add a custom operation filter which sets default values
-                options.OperationFilter<SwaggerDefaultValues>();
+                //add custom operation filters
+                options.OperationFilter<ApiMethodNeedsAuthFilter>();
+                options.OperationFilter<SwaggerDefaultValuesFilter>();
 
                 //integrate xml comments
                 var xmlFile = typeof(Program).GetTypeInfo().Assembly.GetName().Name + ".xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
+                
+                //enable sso auth
+                var ssoBaseUrl = config["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
+                var scheme = new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri($"{ssoBaseUrl}/connect/authorize"),
+                            TokenUrl = new Uri($"{ssoBaseUrl}/connect/token")
+                        }
+                    },
+                    Type = SecuritySchemeType.OAuth2
+                };
+
+                options.AddSecurityDefinition("OAuth", scheme);
             });
 
             // Configure Etherna SSO Client services.
@@ -431,8 +456,9 @@ namespace Etherna.Credit
         
         private static void ConfigureApplication(WebApplication app)
         {
-            var env = app.Environment;
             var apiProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+            var config = app.Configuration;
+            var env = app.Environment;
 
             if (env.IsDevelopment())
             {
@@ -493,11 +519,24 @@ namespace Etherna.Credit
                 {
                     options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                 }
+                
+                //enable oauth
+                options.OAuthClientId(config["SsoServer:Clients:Swagger:ClientId"] ?? throw new ServiceConfigurationException());
+                options.OAuthScopes("openid", "profile", "ether_accounts", "role", "userApi.credit");
+                options.OAuthUsePkce();
+                options.EnablePersistAuthorization();
             });
 
             // Add pages and controllers.
             app.MapControllers();
             app.MapRazorPages();
+            
+            // Register cron tasks.
+            //infrastructure.
+            RecurringJob.AddOrUpdate<ICleanupOldFailedTasksTask>(
+                CleanupOldFailedTasksTask.TaskId,
+                task => task.RunAsync(),
+                Cron.Daily);
         }
     }
 }

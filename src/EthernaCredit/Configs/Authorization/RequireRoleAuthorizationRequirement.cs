@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,13 +12,13 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Etherna.Credit.Areas.Api.DtoModels
+namespace Etherna.Credit.Configs.Authorization
 {
-    public class CreditDto(XDaiBalance balance, bool isUnlimited)
+    internal sealed class RequireRoleAuthorizationRequirement(string roleName)
+        : IAuthorizationRequirement
     {
-        public decimal Balance { get; } = balance.ToDecimal();
-        public bool IsUnlimited { get; } = isUnlimited;
+        public string RoleName { get; } = roleName;
     }
 }

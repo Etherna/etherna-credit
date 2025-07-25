@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,13 +12,17 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
+using Hangfire;
+using System.Threading.Tasks;
 
-namespace Etherna.Credit.Areas.Api.DtoModels
+namespace Etherna.Credit.Services.Tasks.Infrastructure.Cron
 {
-    public class CreditDto(XDaiBalance balance, bool isUnlimited)
+    /// <summary>
+    /// Delete failed tasks older than a month from Hangfire
+    /// </summary>
+    public interface ICleanupOldFailedTasksTask
     {
-        public decimal Balance { get; } = balance.ToDecimal();
-        public bool IsUnlimited { get; } = isUnlimited;
+        [Queue(Queues.DB_MAINTENANCE)]
+        Task RunAsync();
     }
 }

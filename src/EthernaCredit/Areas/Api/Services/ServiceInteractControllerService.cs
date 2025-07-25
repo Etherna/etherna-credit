@@ -13,6 +13,7 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
+using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Api.DtoModels;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models;

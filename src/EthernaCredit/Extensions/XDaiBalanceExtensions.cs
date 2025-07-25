@@ -12,14 +12,14 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.Credit.Domain.Models;
+using Etherna.BeeNet.Models;
 using System;
 using System.Globalization;
 using System.Text;
 
 namespace Etherna.Credit.Extensions
 {
-    internal static class XDaiBalanceExtensions
+    public static class XDaiBalanceExtensions
     {
         /// <summary>
         /// Format a XDaiBalance to a financial string

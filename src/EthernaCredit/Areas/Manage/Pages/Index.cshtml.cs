@@ -13,7 +13,7 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.Credit.Domain.Models;
+using Etherna.BeeNet.Models;
 using Etherna.Credit.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,21 +22,11 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Manage.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel(
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IUserService userService)
+        : PageModel
     {
-        // Fields.
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public IndexModel(
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IUserService userService)
-        {
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.userService = userService;
-        }
-
         // Properties.
         [Display(Name = "Credit balance")]
         public XDaiBalance CreditBalance { get; private set; }
