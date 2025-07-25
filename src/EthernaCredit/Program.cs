@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.ACR.Conventions;
 using Etherna.ACR.Exceptions;
 using Etherna.ACR.Middlewares.DebugPages;
 using Etherna.ACR.Settings;
@@ -21,7 +22,6 @@ using Etherna.Credit.Configs.Authorization;
 using Etherna.Credit.Configs.MongODM;
 using Etherna.Credit.Configs.Swagger;
 using Etherna.Credit.Configs.Swagger.OperationFilters;
-using Etherna.Credit.Conventions;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Extensions;
 using Etherna.Credit.ModelBinders;
