@@ -12,19 +12,13 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.Credit.Domain.Models;
+using Etherna.BeeNet.Models;
 
 namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    public class CreditDto
+    public class CreditDto(XDaiBalance balance, bool isUnlimited)
     {
-        public CreditDto(XDaiBalance balance, bool isUnlimited)
-        {
-            Balance = balance.ToDecimal();
-            IsUnlimited = isUnlimited;
-        }
-
-        public decimal Balance { get; }
-        public bool IsUnlimited { get; }
+        public decimal Balance { get; } = balance.ToDecimal();
+        public bool IsUnlimited { get; } = isUnlimited;
     }
 }

@@ -13,8 +13,8 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
+using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Withdraw.Pages;
-using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

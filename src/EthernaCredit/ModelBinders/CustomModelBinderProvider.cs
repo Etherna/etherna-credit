@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.Credit.Domain.Models;
+using Etherna.BeeNet.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 
