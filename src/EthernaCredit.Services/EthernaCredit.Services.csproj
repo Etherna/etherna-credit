@@ -18,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Etherna.Authentication.AspNetCore" Version="0.4.0-alpha.36" />
+    <PackageReference Include="Etherna.Authentication.AspNetCore" Version="0.4.0-alpha.37" />
     <PackageReference Include="Etherna.DomainEvents.AspNetCore" Version="1.5.0" />
     <PackageReference Include="EthernaACR" Version="0.4.0-alpha.63" />
-    <PackageReference Include="EthernaSdk.Internal.AspNetCore" Version="0.4.0-alpha.188" />
-    <PackageReference Include="MongODM.Hangfire" Version="0.25.0-alpha.27" />
+    <PackageReference Include="EthernaSdk.Internal.AspNetCore" Version="0.4.0-alpha.192" />
+    <PackageReference Include="MongODM.Hangfire" Version="0.25.0-alpha.34" />
   </ItemGroup>
 
   <ItemGroup>
