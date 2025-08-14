@@ -20,7 +20,7 @@ namespace Etherna.Credit.Domain.Models.OperationLogs
     {
         // Constructors.
         public WithdrawOperationLog(
-            XDaiBalance amount,
+            XDaiValue amount,
             string author,
             User user)
             : base(amount, author, user)

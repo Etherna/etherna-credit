@@ -14,7 +14,6 @@
 
 using Etherna.BeeNet.Models;
 using Etherna.Credit.Domain;
-using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,7 +24,11 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Admin.Pages.Users
 {
-    public class UserModel : PageModel
+    public class UserModel(
+        ICreditDbContext creditDbContext,
+        ISharedDbContext sharedDbContext,
+        IUserService userService)
+        : PageModel
     {
         // Models.
         public class InputModel
@@ -33,35 +36,19 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
             public bool HasUnlimitedCredit { get; set; }
         }
 
-        // Fields.
-        private readonly ICreditDbContext creditDbContext;
-        private readonly ISharedDbContext sharedDbContext;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public UserModel(
-            ICreditDbContext creditDbContext,
-            ISharedDbContext sharedDbContext,
-            IUserService userService)
-        {
-            this.creditDbContext = creditDbContext;
-            this.sharedDbContext = sharedDbContext;
-            this.userService = userService;
-        }
-
         // Properties.
-        public string Id { get; private set; } = default!;
+        public string Id { get; private set; } = null!;
 
-        public XDaiBalance Balance { get; private set; }
+        public XDaiValue Balance { get; private set; }
 
         [Display(Name = "Ethereum address")]
         public string? EtherAddress { get; private set; }
 
         [Display(Name = "Previous ethereum addresses")]
-        public IEnumerable<string> EtherPreviousAddresses { get; private set; } = Array.Empty<string>();
+        public IEnumerable<string> EtherPreviousAddresses { get; private set; } = [];
 
         [BindProperty]
-        public InputModel Input { get; set; } = default!;
+        public InputModel Input { get; set; } = null!;
 
         // Methods.
         public async Task OnGetAsync(string id)

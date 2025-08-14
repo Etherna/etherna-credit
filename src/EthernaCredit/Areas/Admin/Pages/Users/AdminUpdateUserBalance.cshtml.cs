@@ -26,43 +26,29 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Admin.Pages.Users
 {
-    public class AdminUpdateUserBalanceModel : PageModel
+    public class AdminUpdateUserBalanceModel(
+        ICreditDbContext creditDbContext,
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IEventDispatcher eventDispatcher,
+        IUserService userService)
+        : PageModel
     {
         // Models.
         public class InputModel
         {
             [Required]
-            public XDaiBalance ChangeAmount { get; set; } //TODO: Use model binder
+            public XDaiValue ChangeAmount { get; set; } //TODO: Use model binder
             
             [Required]
-            public string Reason { get; set; } = default!;
+            public string Reason { get; set; } = null!;
         }
-        
-        // Fields.
-        private readonly ICreditDbContext creditDbContext;
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IEventDispatcher eventDispatcher;
-        private readonly IUserService userService;
 
-        // Constructor.
-        public AdminUpdateUserBalanceModel(
-            ICreditDbContext creditDbContext,
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IEventDispatcher eventDispatcher,
-            IUserService userService)
-        {
-            this.creditDbContext = creditDbContext;
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.eventDispatcher = eventDispatcher;
-            this.userService = userService;
-        }
-        
         // Properties.
         [BindProperty]
-        public InputModel Input { get; set; } = default!;
+        public InputModel Input { get; set; } = null!;
         
-        public XDaiBalance CurrentBalance { get; private set; }
-        public string Id { get; private set; } = default!;
+        public XDaiValue CurrentBalance { get; private set; }
+        public string Id { get; private set; } = null!;
 
         // Methods.
         public async Task OnGetAsync(string id)

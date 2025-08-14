@@ -24,7 +24,7 @@ namespace Etherna.Credit.ModelBinders
         {
             ArgumentNullException.ThrowIfNull(context, nameof(context));
 
-            if (context.Metadata.ModelType == typeof(XDaiBalance))
+            if (context.Metadata.ModelType == typeof(XDaiValue))
                 return new XDaiBalanceModelBinder();
 
             return null;

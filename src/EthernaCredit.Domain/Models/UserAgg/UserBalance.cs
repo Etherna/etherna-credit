@@ -23,7 +23,7 @@ namespace Etherna.Credit.Domain.Models.UserAgg
     public class UserBalance : EntityModelBase<string>
     {
         // Constructors.
-        public UserBalance(User user, XDaiBalance welcomeCredit)
+        public UserBalance(User user, XDaiValue welcomeCredit)
         {
             Credit = welcomeCredit;
             User = user;
@@ -31,7 +31,7 @@ namespace Etherna.Credit.Domain.Models.UserAgg
         protected UserBalance() { }
 
         // Properties.
-        public virtual XDaiBalance Credit { get; protected set; }
+        public virtual XDaiValue Credit { get; protected set; }
         public virtual User User { get; protected set; } = default!;
     }
 }

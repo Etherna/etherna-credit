@@ -52,7 +52,7 @@ namespace Etherna.Credit.ModelBinders
                 return Task.CompletedTask;
             }
 
-            bindingContext.Result = ModelBindingResult.Success(new XDaiBalance(balance));
+            bindingContext.Result = ModelBindingResult.Success(new XDaiValue(balance));
             return Task.CompletedTask;
         }
     }

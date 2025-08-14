@@ -20,33 +20,33 @@ using Etherna.MongoDB.Bson.Serialization.Serializers;
 
 namespace Etherna.Credit.Persistence.Serializers
 {
-    public class XDaiBalanceSerializer : StructSerializerBase<XDaiBalance>, IRepresentationConfigurable<XDaiBalanceSerializer>, IRepresentationConverterConfigurable<XDaiBalanceSerializer>
+    public class XDaiValueSerializer : StructSerializerBase<XDaiValue>, IRepresentationConfigurable<XDaiValueSerializer>, IRepresentationConverterConfigurable<XDaiValueSerializer>
     {
         // Fields.
         private readonly Decimal128Serializer balanceSerializer;
 
         // Constructors.
         /// <summary>
-        /// Initializes a new instance of the <see cref="XDaiBalanceSerializer"/> class.
+        /// Initializes a new instance of the <see cref="XDaiValueSerializer"/> class.
         /// </summary>
-        public XDaiBalanceSerializer()
+        public XDaiValueSerializer()
             : this(BsonType.String)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XDaiBalanceSerializer"/> class.
+        /// Initializes a new instance of the <see cref="XDaiValueSerializer"/> class.
         /// </summary>
         /// <param name="representation">The representation.</param>
-        public XDaiBalanceSerializer(BsonType representation)
+        public XDaiValueSerializer(BsonType representation)
             : this(representation, new RepresentationConverter(false, false))
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XDaiBalanceSerializer"/> class.
+        /// Initializes a new instance of the <see cref="XDaiValueSerializer"/> class.
         /// </summary>
         /// <param name="representation">The representation.</param>
         /// <param name="converter">The converter.</param>
-        public XDaiBalanceSerializer(BsonType representation, RepresentationConverter converter)
+        public XDaiValueSerializer(BsonType representation, RepresentationConverter converter)
         {
             balanceSerializer = new Decimal128Serializer(representation, converter);
         }
@@ -56,13 +56,13 @@ namespace Etherna.Credit.Persistence.Serializers
         public BsonType Representation => balanceSerializer.Representation;
         
         // Methods.
-        public override XDaiBalance Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+        public override XDaiValue Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
             var value = balanceSerializer.Deserialize(context, args);
-            return new XDaiBalance(Decimal128.ToDecimal(value));
+            return new XDaiValue(Decimal128.ToDecimal(value));
         }
 
-        public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, XDaiBalance value) =>
+        public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, XDaiValue value) =>
             balanceSerializer.Serialize(context, args, new Decimal128(value.ToDecimal()));
         
         /// <summary>
@@ -70,20 +70,20 @@ namespace Etherna.Credit.Persistence.Serializers
         /// </summary>
         /// <param name="converter">The converter.</param>
         /// <returns>The reconfigured serializer.</returns>
-        public XDaiBalanceSerializer WithConverter(RepresentationConverter converter) =>
+        public XDaiValueSerializer WithConverter(RepresentationConverter converter) =>
             converter == Converter ?
                 this :
-                new XDaiBalanceSerializer(Representation, converter);
+                new XDaiValueSerializer(Representation, converter);
 
         /// <summary>
         /// Returns a serializer that has been reconfigured with the specified representation.
         /// </summary>
         /// <param name="representation">The representation.</param>
         /// <returns>The reconfigured serializer.</returns>
-        public XDaiBalanceSerializer WithRepresentation(BsonType representation) =>
+        public XDaiValueSerializer WithRepresentation(BsonType representation) =>
             representation == Representation ?
                 this :
-                new XDaiBalanceSerializer(representation, Converter);
+                new XDaiValueSerializer(representation, Converter);
         
         // Explicit interface implementations.
         IBsonSerializer IRepresentationConverterConfigurable.WithConverter(RepresentationConverter converter) =>

@@ -21,7 +21,7 @@ namespace Etherna.Credit.Domain.Models.OperationLogs
     {
         // Constructors.
         public UpdateOperationLog(
-            XDaiBalance amount,
+            XDaiValue amount,
             string author,
             bool isApplied,
             string reason,

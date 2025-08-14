@@ -13,7 +13,7 @@
         <form id="deposit" asp-area="Deposit" asp-page="DepositProcess" method="post" class="form-horizontal">
             <div>
                 <p>
-                    @foreach (var amount in new XDaiBalance[] { 0.5, 1, 5, 10 })
+                    @foreach (var amount in new XDaiValue[] { 0.5, 1, 5, 10 })
                     {
                         <button type="submit"
                                 name="amount"

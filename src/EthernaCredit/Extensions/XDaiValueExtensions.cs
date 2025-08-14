@@ -19,7 +19,7 @@ using System.Text;
 
 namespace Etherna.Credit.Extensions
 {
-    public static class XDaiBalanceExtensions
+    public static class XDaiValueExtensions
     {
         /// <summary>
         /// Format a XDaiBalance to a financial string
@@ -33,7 +33,7 @@ namespace Etherna.Credit.Extensions
         /// <param name="usePlusSign">Use '+' as prefix if positive</param>
         /// <returns>The converted string</returns>
         public static string ToFinancialString(
-            this XDaiBalance value,
+            this XDaiValue value,
             int? allowedDecimals = 2,
             int printedDecimals = 2,
             MidpointRounding roundMode = MidpointRounding.AwayFromZero,

@@ -27,29 +27,15 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Deposit.Pages
 {
-    public class DepositProcessModel : PageModel
+    public class DepositProcessModel(
+        ICreditDbContext dbContext,
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IEventDispatcher eventDispatcher,
+        IUserService userService)
+        : PageModel
     {
-        // Fields.
-        private readonly ICreditDbContext dbContext;
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IEventDispatcher eventDispatcher;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public DepositProcessModel(
-            ICreditDbContext dbContext,
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IEventDispatcher eventDispatcher,
-            IUserService userService)
-        {
-            this.dbContext = dbContext;
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.eventDispatcher = eventDispatcher;
-            this.userService = userService;
-        }
-
         // Properties.
-        public XDaiBalance DepositAmount { get; set; }
+        public XDaiValue DepositAmount { get; set; }
         public bool SucceededResult { get; set; }
 
         // Methods

@@ -23,26 +23,16 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Manage.Pages
 {
-    public class WithdrawModel : PageModel
+    public class WithdrawModel(
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IUserService userService)
+        : PageModel
     {
         // Models.
         public class InputModel
         {
             [Required]
-            public XDaiBalance Amount { get; set; }
-        }
-
-        // Fields.
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public WithdrawModel(
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IUserService userService)
-        {
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.userService = userService;
+            public XDaiValue Amount { get; set; }
         }
 
         // Properties.
@@ -52,9 +42,9 @@ namespace Etherna.Credit.Areas.Manage.Pages
         public string? StatusMessage { get; set; }
 
         public bool CanWithdraw => CreditBalance >= MinLimit && CreditBalance != 0;
-        public XDaiBalance CreditBalance { get; private set; }
-        public XDaiBalance MaxLimit => CreditBalance;
-        public XDaiBalance MinLimit => WithdrawProcessModel.MinimumWithdraw;
+        public XDaiValue CreditBalance { get; private set; }
+        public XDaiValue MaxLimit => CreditBalance;
+        public XDaiValue MinLimit => WithdrawProcessModel.MinimumWithdraw;
 
         // Methods.
         public async Task<IActionResult> OnGetAsync()

@@ -44,7 +44,7 @@ namespace Etherna.Credit.Areas.Api.Services
 
             var (user, userSharedInfo) = await userService.TryFindUserAsync(address);
             if (user is null)
-                return Array.Empty<OperationLogDto>();
+                return [];
 
             var result = await dbContext.OperationLogs.QueryElementsAsync(
                 elements => elements.Where(l => l.Author == clientId)
@@ -70,7 +70,7 @@ namespace Etherna.Credit.Areas.Api.Services
 
         public async Task RegisterBalanceUpdateAsync(
             string address,
-            XDaiBalance amount,
+            XDaiValue amount,
             bool isApplied,
             string reason)
         {

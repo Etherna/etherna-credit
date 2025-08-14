@@ -95,7 +95,7 @@ namespace Etherna.Credit.Services.Domain
                         .FirstAsync());
         }
 
-        public async Task<XDaiBalance> GetUserBalanceAsync(string address)
+        public async Task<XDaiValue> GetUserBalanceAsync(string address)
         {
             var (user, _) = await TryFindUserAsync(address);
             if (user is null)
@@ -104,7 +104,7 @@ namespace Etherna.Credit.Services.Domain
             return await GetUserBalanceAsync(user);
         }
 
-        public async Task<XDaiBalance> GetUserBalanceAsync(User user)
+        public async Task<XDaiValue> GetUserBalanceAsync(User user)
         {
             var userBalance = await creditDbContext.UserBalances.FindOneAsync(balance => balance.User.Id == user.Id);
             return userBalance.Credit;
@@ -125,7 +125,7 @@ namespace Etherna.Credit.Services.Domain
             catch (InvalidOperationException) { return null; }
         }
 
-        public async Task<bool> TryIncrementUserBalanceAsync(User user, XDaiBalance amount, bool allowBalanceDecreaseNegative)
+        public async Task<bool> TryIncrementUserBalanceAsync(User user, XDaiValue amount, bool allowBalanceDecreaseNegative)
         {
             if (user.HasUnlimitedCredit)
                 return true;

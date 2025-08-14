@@ -27,19 +27,22 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Admin.Pages.Users
 {
-    public class IndexModel : PageModel
+    public class IndexModel(
+        ISharedDbContext sharedDbContext,
+        IUserService userService)
+        : PageModel
     {
         // Models.
         public class InputModel
         {
             [Required]
             [Display(Name = "Ethereum address")]
-            public string FindAddress { get; set; } = default!;
+            public string FindAddress { get; set; } = null!;
         }
 
         public class UserDto
         {
-            public UserDto(User user, UserSharedInfo userSharedInfo, XDaiBalance balance)
+            public UserDto(User user, UserSharedInfo userSharedInfo, XDaiValue balance)
             {
                 ArgumentNullException.ThrowIfNull(user, nameof(user));
                 ArgumentNullException.ThrowIfNull(userSharedInfo, nameof(userSharedInfo));
@@ -51,7 +54,7 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
             }
 
             public string Id { get; }
-            public XDaiBalance Balance { get; }
+            public XDaiValue Balance { get; }
             public string EtherAddress { get; }
             public bool HasUnlimitedCredit { get; }
         }
@@ -59,22 +62,9 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
         // Consts.
         private const int PageSize = 20;
 
-        // Fields.
-        private readonly ISharedDbContext sharedDbContext;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public IndexModel(
-            ISharedDbContext sharedDbContext,
-            IUserService userService)
-        {
-            this.sharedDbContext = sharedDbContext;
-            this.userService = userService;
-        }
-
         // Properties.
         [BindProperty]
-        public InputModel Input { get; set; } = default!;
+        public InputModel Input { get; set; } = null!;
 
         public int CurrentPage { get; private set; }
         public long MaxPage { get; private set; }

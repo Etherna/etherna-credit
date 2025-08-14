@@ -24,36 +24,22 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Withdraw.Pages
 {
-    public class WithdrawProcessModel : PageModel
+    public class WithdrawProcessModel(
+        ICreditDbContext dbContext,
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IEventDispatcher eventDispatcher,
+        IUserService userService)
+        : PageModel
     {
         // Consts.
-        public static readonly XDaiBalance MinimumWithdraw = 1.0M;
-
-        // Fields.
-        private readonly ICreditDbContext dbContext;
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IEventDispatcher eventDispatcher;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public WithdrawProcessModel(
-            ICreditDbContext dbContext,
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IEventDispatcher eventDispatcher,
-            IUserService userService)
-        {
-            this.dbContext = dbContext;
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.eventDispatcher = eventDispatcher;
-            this.userService = userService;
-        }
+        public static readonly XDaiValue MinimumWithdraw = 1.0M;
 
         // Properties.
         public bool SucceededResult { get; set; }
-        public XDaiBalance WithdrawAmount { get; set; }
+        public XDaiValue WithdrawAmount { get; set; }
 
         // Methods
-        public async Task OnGetAsync(XDaiBalance amount)
+        public async Task OnGetAsync(XDaiValue amount)
         {
             // Get data.
             WithdrawAmount = amount;
