@@ -13,6 +13,7 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.ExecContext.AsyncLocal;
+using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Bson.Serialization;
 using Etherna.MongoDB.Driver;
 using Etherna.MongODM.Core;
@@ -39,7 +40,7 @@ public static class DbContextMockHelper
     [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Need to keep objects after test construction")]
     public static void InitializeDbContextMock(DbContext dbContext, Mock<IMongoDatabase>? mongoDatabaseMock = null)
     {
-        ArgumentNullException.ThrowIfNull(dbContext, nameof(dbContext));
+        ArgumentNullException.ThrowIfNull(dbContext);
 
         // Setup dbContext dependencies for initialization.
         Mock<IDbDependencies> dbDependenciesMock = new();
@@ -64,8 +65,13 @@ public static class DbContextMockHelper
             .Returns(mongoDatabaseMock.Object);
 
         // Register static integration with drivers.
-        BsonSerializer.TryRegisterDiscriminatorConvention(typeof(object),
-            new HierarchicalProxyTolerantDiscriminatorConvention("_t", execContext));
+        try
+        {
+            BsonSerializer.RegisterDiscriminatorConvention(typeof(object),
+                new HierarchicalProxyTolerantDiscriminatorConvention("_t", execContext));
+        }
+        catch (BsonSerializationException)
+        { }
 
         BsonSerializer.SetSerializationContextAccessor(new SerializationContextAccessor(execContext));
 
