@@ -23,36 +23,36 @@ namespace Etherna.Credit.Areas.Manage.Pages
         public static string Status => "Status";
         public static string Logs => "Logs";
         public static string Deposit => "Deposit";
-        public static string Withdraw => "Withdraw";
+        // public static string Withdraw => "Withdraw";
 
         // Methods.
         public static string? StatusNavClass(ViewContext viewContext)
         {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
+            ArgumentNullException.ThrowIfNull(viewContext);
 
             return PageNavClass(viewContext, Status);
         }
 
         public static string? LogsNavClass(ViewContext viewContext)
         {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
+            ArgumentNullException.ThrowIfNull(viewContext);
 
             return PageNavClass(viewContext, Logs);
         }
 
         public static string? DepositNavClass(ViewContext viewContext)
         {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
+            ArgumentNullException.ThrowIfNull(viewContext);
 
             return PageNavClass(viewContext, Deposit);
         }
 
-        public static string? WithdrawNavClass(ViewContext viewContext)
-        {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
-
-            return PageNavClass(viewContext, Withdraw);
-        }
+        // public static string? WithdrawNavClass(ViewContext viewContext)
+        // {
+        //     ArgumentNullException.ThrowIfNull(viewContext);
+        //
+        //     return PageNavClass(viewContext, Withdraw);
+        // }
 
         // Helpers.
         private static string? PageNavClass(ViewContext viewContext, string page)

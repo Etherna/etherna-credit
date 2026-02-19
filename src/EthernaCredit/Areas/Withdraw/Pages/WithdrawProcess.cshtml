@@ -1,20 +1,20 @@
-﻿@page
-@model Etherna.Credit.Areas.Withdraw.Pages.WithdrawProcessModel
-@{
-    ViewData["Title"] = "Withdraw confirm";
-}
-
-<h4>@ViewData["Title"]</h4>
-<div class="row">
-    <div class="col-md-6">
-        @if (Model.SucceededResult)
-        {
-            <p>An amount of @Model.WithdrawAmount.ToFinancialString() has been withdrawn from your account</p>
-        }
-        else
-        {
-            <p>Sorry, we was not able to withdraw an amount of @Model.WithdrawAmount.ToFinancialString() from your account</p>
-        }
-        <p><a asp-area="Manage" asp-page="index">Return to account</a></p>
-    </div>
-</div>
+﻿@* @page *@
+@* @model Etherna.Credit.Areas.Withdraw.Pages.WithdrawProcessModel *@
+@* @{ *@
+@*     ViewData["Title"] = "Withdraw confirm"; *@
+@* } *@
+@* *@
+@* <h4>@ViewData["Title"]</h4> *@
+@* <div class="row"> *@
+@*     <div class="col-md-6"> *@
+@*         @if (Model.SucceededResult) *@
+@*         { *@
+@*             <p>An amount of @Model.WithdrawAmount.ToFinancialString() has been withdrawn from your account</p> *@
+@*         } *@
+@*         else *@
+@*         { *@
+@*             <p>Sorry, we was not able to withdraw an amount of @Model.WithdrawAmount.ToFinancialString() from your account</p> *@
+@*         } *@
+@*         <p><a asp-area="Manage" asp-page="index">Return to account</a></p> *@
+@*     </div> *@
+@* </div> *@

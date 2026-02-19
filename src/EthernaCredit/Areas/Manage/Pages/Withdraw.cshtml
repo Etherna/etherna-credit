@@ -1,39 +1,39 @@
-﻿@page
-@model Etherna.Credit.Areas.Manage.Pages.WithdrawModel
-@{
-    ViewData["Title"] = "Withdraw";
-    ViewData["ActivePage"] = ManageNavPages.Withdraw;
-}
-
-<h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" for="StatusMessage"/>
-<div class="row">
-    <div class="col-md-6">
-        @if (Model.CanWithdraw)
-        {
-            <p>How much do you want to withdraw from your account? (
-                min: @Model.MinLimit.ToFinancialString(roundMode: MidpointRounding.ToZero),
-                max: @Model.MaxLimit.ToFinancialString(roundMode: MidpointRounding.ToZero))</p>
-
-            <form id="withdraw" method="post">
-                <div class="mb-3">
-                    <label asp-for="Input.Amount"></label>
-                    <input asp-for="Input.Amount" class="form-control"/>
-                    <span asp-validation-for="Input.Amount" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Withdraw</button>
-                </div>
-            </form>
-        }
-        else
-        {
-            <p>Sorry, currently you cannot withdarw any credit.</p>
-        }
-    </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
-}
+﻿@* @page *@
+@* @model Etherna.Credit.Areas.Manage.Pages.WithdrawModel *@
+@* @{ *@
+@*     ViewData["Title"] = "Withdraw"; *@
+@*     ViewData["ActivePage"] = ManageNavPages.Withdraw; *@
+@* } *@
+@* *@
+@* <h4>@ViewData["Title"]</h4> *@
+@* <partial name="_StatusMessage" for="StatusMessage"/> *@
+@* <div class="row"> *@
+@*     <div class="col-md-6"> *@
+@*         @if (Model.CanWithdraw) *@
+@*         { *@
+@*             <p>How much do you want to withdraw from your account? ( *@
+@*                 min: @Model.MinLimit.ToFinancialString(roundMode: MidpointRounding.ToZero), *@
+@*                 max: @Model.MaxLimit.ToFinancialString(roundMode: MidpointRounding.ToZero))</p> *@
+@* *@
+@*             <form id="withdraw" method="post"> *@
+@*                 <div class="mb-3"> *@
+@*                     <label asp-for="Input.Amount"></label> *@
+@*                     <input asp-for="Input.Amount" class="form-control"/> *@
+@*                     <span asp-validation-for="Input.Amount" class="text-danger"></span> *@
+@*                 </div> *@
+@* *@
+@*                 <div class="mb-3"> *@
+@*                     <button type="submit" class="btn btn-primary">Withdraw</button> *@
+@*                 </div> *@
+@*             </form> *@
+@*         } *@
+@*         else *@
+@*         { *@
+@*             <p>Sorry, currently you cannot withdarw any credit.</p> *@
+@*         } *@
+@*     </div> *@
+@* </div> *@
+@* *@
+@* @section Scripts { *@
+@*     <partial name="_ValidationScriptsPartial"/> *@
+@* } *@
