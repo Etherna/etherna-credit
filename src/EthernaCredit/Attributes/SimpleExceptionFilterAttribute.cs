@@ -15,6 +15,7 @@
 using Etherna.MongODM.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Serilog;
 using System;
 using System.Collections.Generic;
 
@@ -24,22 +25,35 @@ namespace Etherna.Credit.Attributes
     {
         public override void OnException(ExceptionContext context)
         {
-            ArgumentNullException.ThrowIfNull(context, nameof(context));
+            ArgumentNullException.ThrowIfNull(context);
+            
+            // Log exception.
+            Log.Warning(context.Exception, "API exception");
 
             switch (context.Exception)
             {
+                // Error code 400.
                 case ArgumentException _:
                 case FormatException _:
-                case InvalidOperationException _:
                 case MongodmInvalidEntityTypeException _:
                     context.Result = new BadRequestObjectResult(context.Exception.Message);
                     break;
+                
+                // Error code 401.
+                case UnauthorizedAccessException _:
+                    context.Result = new UnauthorizedResult();
+                    break;
+                
+                // Error code 404.
                 case KeyNotFoundException _:
                 case MongodmEntityNotFoundException _:
                     context.Result = new NotFoundObjectResult(context.Exception.Message);
                     break;
-                case UnauthorizedAccessException _:
-                    context.Result = new UnauthorizedResult();
+                
+                // Error code 500.
+                case InvalidOperationException _:
+                default:
+                    context.Result = new StatusCodeResult(500);
                     break;
             }
         }
