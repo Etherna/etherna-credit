@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -13,21 +13,22 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.BeeNet.Models;
+using Etherna.Credit.Persistence.Serializers;
+using Etherna.MongoDB.Bson;
+using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.Credit.Domain.Models.OperationLogs
+namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
-    public class WelcomeCreditDepositOperationLog : OperationLogBase
+    internal sealed class BeeNetMap : IModelMapsCollector
     {
-        // Constructors.
-        public WelcomeCreditDepositOperationLog(
-            XDaiValue amount,
-            string author,
-            User user)
-            : base(amount, author, user)
-        { }
-        protected WelcomeCreditDepositOperationLog() { }
-
-        // Properties.
-        public override string OperationName => "Welcome Credit Deposit";
+        public void Register(IDbContext dbContext)
+        {
+            dbContext.MapRegistry.AddCustomSerializerMap<EthAddress>( //v0.4.0
+                new EthAddressSerializer());
+            
+            dbContext.MapRegistry.AddCustomSerializerMap<XDaiValue>( //v0.4.0
+                new XDaiValueSerializer(BsonType.Decimal128));
+        }
     }
 }

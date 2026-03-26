@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,22 +12,29 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using System;
 
-namespace Etherna.Credit.Domain.Models.OperationLogs
+namespace Etherna.Credit.Areas.Api
 {
-    public class WelcomeCreditDepositOperationLog : OperationLogBase
+    public static class CreditApiMapper
     {
-        // Constructors.
-        public WelcomeCreditDepositOperationLog(
-            XDaiValue amount,
-            string author,
-            User user)
-            : base(amount, author, user)
-        { }
-        protected WelcomeCreditDepositOperationLog() { }
+        // Methods.
+        public static void MapCreditApi(this WebApplication app)
+        {
+            ArgumentNullException.ThrowIfNull(app);
 
-        // Properties.
-        public override string OperationName => "Welcome Credit Deposit";
+            // APIs.
+            ConfigureV03Maps(app.MapGroup("/api/v0.3").WithMetadata(new CreditApiMarker()));
+        }
+
+        // Helpers.
+        private static void ConfigureV03Maps(RouteGroupBuilder builder)
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
     }
 }

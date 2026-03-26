@@ -33,8 +33,8 @@ namespace Etherna.Credit.Domain.Models
 
         // Properties.
         public virtual XDaiValue Amount { get; protected set; }
-        public virtual string Author { get; protected set; } = default!;
+        public virtual string Author { get; protected set; } = null!;
         public abstract string OperationName { get; }
-        public virtual User User { get; protected set; } = default!;
+        public virtual User User { get; protected set; } = null!;
     }
 }

@@ -69,7 +69,7 @@ namespace Etherna.Credit.Services.Domain
                 if (welcomeCredit > 0)
                 {
                     var depositLog = new WelcomeCreditDepositOperationLog(
-                        welcomeCredit, userSharedInfo.EtherAddress, user);
+                        welcomeCredit, userSharedInfo.EtherAddress.ToString(), user);
                     await creditDbContext.OperationLogs.CreateAsync(depositLog);
                 }
 

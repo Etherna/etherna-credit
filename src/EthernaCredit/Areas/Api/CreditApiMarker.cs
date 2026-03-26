@@ -12,22 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
-
-namespace Etherna.Credit.ModelBinders
+namespace Etherna.Credit.Areas.Api
 {
-    internal sealed class CustomModelBinderProvider : IModelBinderProvider
+    internal sealed class CreditApiMarker
     {
-        public IModelBinder? GetBinder(ModelBinderProviderContext context)
-        {
-            ArgumentNullException.ThrowIfNull(context, nameof(context));
-
-            if (context.Metadata.ModelType == typeof(XDaiValue))
-                return new XDaiBalanceModelBinder();
-
-            return null;
-        }
+        
     }
 }

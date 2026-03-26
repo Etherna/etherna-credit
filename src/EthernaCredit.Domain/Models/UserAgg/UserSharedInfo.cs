@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.BeeNet.Models;
 using System;
 using System.Collections.Generic;
 
@@ -26,17 +27,17 @@ namespace Etherna.Credit.Domain.Models.UserAgg
     public class UserSharedInfo : EntityModelBase<string>
     {
         // Fields.
-        private List<string> _etherPreviousAddresses = new();
+        private List<EthAddress> _etherPreviousAddresses = new();
 
         // Constructors.
         protected UserSharedInfo() { }
 
         // Properties.
-        public virtual string EtherAddress { get; protected set; } = default!;
-        public virtual IEnumerable<string> EtherPreviousAddresses
+        public virtual EthAddress EtherAddress { get; protected set; } = default!;
+        public virtual IEnumerable<EthAddress> EtherPreviousAddresses
         {
             get => _etherPreviousAddresses;
-            protected set => _etherPreviousAddresses = new List<string>(value ?? Array.Empty<string>());
+            protected set => _etherPreviousAddresses = [..value ?? Array.Empty<EthAddress>()];
         }
         public bool IsLockedOutNow => LockoutEnabled && LockoutEnd >= DateTimeOffset.UtcNow;
         public virtual bool LockoutEnabled { get; protected set; }

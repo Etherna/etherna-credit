@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,22 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
-
-namespace Etherna.Credit.Domain.Models.OperationLogs
+namespace Etherna.Credit.Areas.Api
 {
-    public class WelcomeCreditDepositOperationLog : OperationLogBase
+    internal sealed class CreditApiHandler : ICreditApiHandler
     {
-        // Constructors.
-        public WelcomeCreditDepositOperationLog(
-            XDaiValue amount,
-            string author,
-            User user)
-            : base(amount, author, user)
-        { }
-        protected WelcomeCreditDepositOperationLog() { }
-
-        // Properties.
-        public override string OperationName => "Welcome Credit Deposit";
+        
     }
 }

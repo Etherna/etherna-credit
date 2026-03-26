@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.BeeNet.Models;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Domain.Models.UserAgg;
@@ -23,10 +24,10 @@ namespace Etherna.Credit.Areas.Api.DtoModels
     {
         public OperationLogDto(OperationLogBase operationLog, UserSharedInfo userSharedInfo)
         {
-            ArgumentNullException.ThrowIfNull(operationLog, nameof(operationLog));
-            ArgumentNullException.ThrowIfNull(userSharedInfo, nameof(userSharedInfo));
+            ArgumentNullException.ThrowIfNull(operationLog);
+            ArgumentNullException.ThrowIfNull(userSharedInfo);
 
-            Amount = operationLog.Amount.ToDecimal();
+            Amount = operationLog.Amount;
             Author = operationLog.Author;
             CreationDateTime = operationLog.CreationDateTime;
             OperationName = operationLog.OperationName;
@@ -41,12 +42,12 @@ namespace Etherna.Credit.Areas.Api.DtoModels
             }
         }
 
-        public decimal Amount { get; }
+        public XDaiValue Amount { get; }
         public string Author { get; }
         public DateTime CreationDateTime { get; }
         public bool? IsApplied { get; }
         public string OperationName { get; }
         public string? Reason { get; }
-        public string UserAddress { get; }
+        public EthAddress UserAddress { get; }
     }
 }

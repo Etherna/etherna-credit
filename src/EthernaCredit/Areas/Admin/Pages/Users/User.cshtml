@@ -4,7 +4,7 @@
     ViewData["Title"] = "User";
 
     var etherPrevAddressesToString = Model.EtherPreviousAddresses.Any() ?
-        Model.EtherPreviousAddresses.Aggregate((a, b) => a + '\n' + b) : "";
+        Model.EtherPreviousAddresses.Aggregate((a, b) => a.ToString() + '\n' + b) : "";
 }
 
 <div class="row">

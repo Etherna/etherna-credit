@@ -44,7 +44,7 @@ namespace Etherna.Credit.Areas.Deposit.Pages
 
         public async Task OnPostAsync(string amount)
         {
-            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
+            ArgumentNullException.ThrowIfNull(amount);
 
             // Get data.
             DepositAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
@@ -66,7 +66,10 @@ namespace Etherna.Credit.Areas.Deposit.Pages
             await userService.TryIncrementUserBalanceAsync(user, DepositAmount, false);
 
             // Report log.
-            var depositLog = new DepositOperationLog(DepositAmount, userSharedInfo.EtherAddress, user);
+            var depositLog = new DepositOperationLog(
+                DepositAmount,
+                userSharedInfo.EtherAddress.ToString(),
+                user);
             await dbContext.OperationLogs.CreateAsync(depositLog);
 
             // Dispatch event.

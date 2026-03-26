@@ -28,28 +28,28 @@ namespace Etherna.Credit.Areas.Manage.Pages
         // Methods.
         public static string? StatusNavClass(ViewContext viewContext)
         {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
+            ArgumentNullException.ThrowIfNull(viewContext);
 
             return PageNavClass(viewContext, Status);
         }
 
         public static string? LogsNavClass(ViewContext viewContext)
         {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
+            ArgumentNullException.ThrowIfNull(viewContext);
 
             return PageNavClass(viewContext, Logs);
         }
 
         public static string? DepositNavClass(ViewContext viewContext)
         {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
+            ArgumentNullException.ThrowIfNull(viewContext);
 
             return PageNavClass(viewContext, Deposit);
         }
 
         public static string? WithdrawNavClass(ViewContext viewContext)
         {
-            ArgumentNullException.ThrowIfNull(viewContext, nameof(viewContext));
+            ArgumentNullException.ThrowIfNull(viewContext);
 
             return PageNavClass(viewContext, Withdraw);
         }
