@@ -23,6 +23,7 @@ using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +35,33 @@ namespace Etherna.Credit.Areas.Api
         IUserService userService)
         : ICreditApiHandler
     {
+        public Task<IResult> GetCurrentUserAddressAsync() =>
+            ExceptionHandler.RunAsync(async () =>
+            {
+                EthAddress address = await ethernaOidcClient.GetEtherAddressAsync();
+                return Results.Json(address);
+            });
+
+        public Task<IResult> GetCurrentUserCreditAsync() =>
+            ExceptionHandler.RunAsync(async () =>
+            {
+                var (userModel, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
+                var balance = await userService.GetUserBalanceAsync(userModel);
+                return Results.Json(new CreditDto(balance, userModel.HasUnlimitedCredit));
+            });
+
+        public Task<IResult> GetCurrentUserLogsAsync(int page, int take) =>
+            ExceptionHandler.RunAsync(async () =>
+            {
+                var (userModel, userSharedInfo) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
+                var paginatedLogs = await dbContext.OperationLogs.QueryPaginatedElementsAsync(
+                    elements => elements.Where(l => l.User.Id == userModel.Id),
+                    l => l.CreationDateTime,
+                    page,
+                    take);
+                return Results.Json(paginatedLogs.Elements.Select(l => new OperationLogDto(l, userSharedInfo)));
+            });
+        
         public Task<IResult> GetServiceOpLogsWithUserAsync(
             EthAddress address,
             DateTime? fromDate,

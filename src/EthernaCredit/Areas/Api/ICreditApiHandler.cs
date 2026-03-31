@@ -21,6 +21,9 @@ namespace Etherna.Credit.Areas.Api
 {
     internal interface ICreditApiHandler
     {
+        Task<IResult> GetCurrentUserAddressAsync();
+        Task<IResult> GetCurrentUserCreditAsync();
+        Task<IResult> GetCurrentUserLogsAsync(int page, int take);
         Task<IResult> GetServiceOpLogsWithUserAsync(EthAddress address, DateTime? fromDate, DateTime? toDate);
         Task<IResult> GetUserCreditAsync(EthAddress address);
         Task<IResult> RegisterBalanceUpdateAsync(EthAddress address, XDaiValue amount, bool isApplied, string reason);

@@ -70,7 +70,25 @@ namespace Etherna.Credit.Areas.Api
                 .Produces(StatusCodes.Status400BadRequest);
             
             //user
+            builder.MapGet("user/address",
+                    (ICreditApiHandler handler) =>
+                        handler.GetCurrentUserAddressAsync())
+                .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
+                .Produces<EthAddress>();
 
+            builder.MapGet("user/credit",
+                    (ICreditApiHandler handler) =>
+                        handler.GetCurrentUserCreditAsync())
+                .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
+                .Produces<CreditDto>();
+
+            builder.MapGet("user/logs",
+                    (ICreditApiHandler handler,
+                            [FromQuery] int page,
+                            [FromQuery] int take = 25) =>
+                        handler.GetCurrentUserLogsAsync(page, take))
+                .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
+                .Produces<IEnumerable<OperationLogDto>>();
 #pragma warning restore CS0618 // Type or member is obsolete
         }
     }
