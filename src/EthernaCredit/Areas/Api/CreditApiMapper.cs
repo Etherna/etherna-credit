@@ -12,9 +12,15 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.BeeNet.Models;
+using Etherna.Credit.Areas.Api.DtoModels;
+using Etherna.Credit.Configs;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
+using System.Collections.Generic;
 
 namespace Etherna.Credit.Areas.Api
 {
@@ -33,6 +39,37 @@ namespace Etherna.Credit.Areas.Api
         private static void ConfigureV03Maps(RouteGroupBuilder builder)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
+            //serviceInteract
+            builder.MapGet("serviceInteract/users/{address}/credit",
+                    (ICreditApiHandler handler,
+                            [FromRoute] EthAddress address) =>
+                        handler.GetUserCreditAsync(address))
+                .RequireAuthorization(CommonConsts.ServiceInteractApiScopePolicy)
+                .Produces<CreditDto>()
+                .Produces(StatusCodes.Status400BadRequest);
+            
+            builder.MapGet("serviceInteract/users/{address}/oplogs",
+                    (ICreditApiHandler handler,
+                            [FromRoute] EthAddress address,
+                            [FromQuery] DateTime? fromDate,
+                            [FromQuery] DateTime? toDate) =>
+                        handler.GetServiceOpLogsWithUserAsync(address, fromDate, toDate))
+                .RequireAuthorization(CommonConsts.ServiceInteractApiScopePolicy)
+                .Produces<IEnumerable<OperationLogDto>>()
+                .Produces(StatusCodes.Status400BadRequest);
+            
+            builder.MapPut("serviceInteract/users/{address}/credit/balance",
+                    (ICreditApiHandler handler,
+                            [FromRoute] EthAddress address,
+                            [FromQuery] XDaiValue amount,
+                            [FromQuery] string reason,
+                            [FromQuery] bool isApplied = true) =>
+                        handler.RegisterBalanceUpdateAsync(address, amount, isApplied, reason))
+                .RequireAuthorization(CommonConsts.ServiceInteractApiScopePolicy)
+                .Produces(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status400BadRequest);
+            
+            //user
 
 #pragma warning restore CS0618 // Type or member is obsolete
         }
