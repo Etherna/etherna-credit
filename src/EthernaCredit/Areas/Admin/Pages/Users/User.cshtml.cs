@@ -42,10 +42,10 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
         public XDaiValue Balance { get; private set; }
 
         [Display(Name = "Ethereum address")]
-        public string? EtherAddress { get; private set; }
+        public EthAddress? EtherAddress { get; private set; }
 
         [Display(Name = "Previous ethereum addresses")]
-        public IEnumerable<string> EtherPreviousAddresses { get; private set; } = [];
+        public IEnumerable<EthAddress> EtherPreviousAddresses { get; private set; } = [];
 
         [BindProperty]
         public InputModel Input { get; set; } = null!;

@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,16 +12,23 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.Credit.Areas.Api.DtoModels;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Etherna.BeeNet.Models;
+using Etherna.Credit.Persistence.Serializers;
+using Etherna.MongoDB.Bson;
+using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.Credit.Areas.Api.Services
+namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
-    public interface IUserControllerService
+    internal sealed class BeeNetMap : IModelMapsCollector
     {
-        Task<string> GetAddressAsync();
-        Task<CreditDto> GetCreditAsync();
-        Task<IEnumerable<OperationLogDto>> GetLogsAsync(int page, int take);
+        public void Register(IDbContext dbContext)
+        {
+            dbContext.MapRegistry.AddCustomSerializerMap<EthAddress>( //v0.4.0
+                new EthAddressSerializer());
+            
+            dbContext.MapRegistry.AddCustomSerializerMap<XDaiValue>( //v0.4.0
+                new XDaiValueSerializer(BsonType.Decimal128));
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace Etherna.Credit.Extensions
             this IDataProtectionBuilder builder,
             DbContextOptions dbContextOptions)
         {
-            ArgumentNullException.ThrowIfNull(builder, nameof(builder));
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Services.Configure<KeyManagementOptions>(options =>
             {

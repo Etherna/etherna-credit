@@ -61,7 +61,10 @@
 //                 return;
 //
 //             // Report log.
-//             var withdrawLog = new WithdrawOperationLog(-WithdrawAmount, userSharedInfo.EtherAddress, user);
+//             var withdrawLog = new WithdrawOperationLog(
+//                 -WithdrawAmount,
+//                 userSharedInfo.EtherAddress.ToString(),
+//                 user);
 //             await dbContext.OperationLogs.CreateAsync(withdrawLog);
 //
 //             // Dispatch event.

@@ -22,7 +22,7 @@ namespace Etherna.Credit.Domain.Models
         // Constructors.
         public User(UserSharedInfo sharedInfo)
         {
-            ArgumentNullException.ThrowIfNull(sharedInfo, nameof(sharedInfo));
+            ArgumentNullException.ThrowIfNull(sharedInfo);
 
             SharedInfoId = sharedInfo.Id;
         }
@@ -38,6 +38,6 @@ namespace Etherna.Credit.Domain.Models
          * pointing to SharedInfo internal property.
          */
         //protected virtual SharedUserInfo SharedInfo { get; set; }
-        public virtual string SharedInfoId { get; protected set; } = default!;
+        public virtual string SharedInfoId { get; protected set; } = null!;
     }
 }

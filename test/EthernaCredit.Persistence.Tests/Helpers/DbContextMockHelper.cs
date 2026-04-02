@@ -91,8 +91,8 @@ public static class DbContextMockHelper
         IRepository<TModel, TKey> collection)
          where TModel : class, IEntityModel<TKey>
     {
-        ArgumentNullException.ThrowIfNull(mongoDatabaseMock, nameof(mongoDatabaseMock));
-        ArgumentNullException.ThrowIfNull(collection, nameof(collection));
+        ArgumentNullException.ThrowIfNull(mongoDatabaseMock);
+        ArgumentNullException.ThrowIfNull(collection);
 
         var collectionMock = new Mock<IMongoCollection<TModel>>();
 
@@ -106,7 +106,7 @@ public static class DbContextMockHelper
         Mock<IMongoCollection<TModel>> collectionMock,
         Func<FilterDefinition<TModel>, IEnumerable<TModel>> modelSelector)
     {
-        ArgumentNullException.ThrowIfNull(collectionMock, nameof(collectionMock));
+        ArgumentNullException.ThrowIfNull(collectionMock);
 
         // Setup collection.
         collectionMock.Setup(c => c.FindAsync(

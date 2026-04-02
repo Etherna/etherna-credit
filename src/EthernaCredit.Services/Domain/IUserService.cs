@@ -21,13 +21,13 @@ namespace Etherna.Credit.Services.Domain
 {
     public interface IUserService
     {
-        Task<(User, UserSharedInfo)> FindUserAsync(string address);
+        Task<(User, UserSharedInfo)> FindUserAsync(EthAddress address);
         Task<(User, UserSharedInfo)> FindUserAsync(UserSharedInfo userSharedInfo);
-        Task<UserSharedInfo> FindUserSharedInfoByAddressAsync(string address);
-        Task<XDaiValue> GetUserBalanceAsync(string address);
+        Task<UserSharedInfo> FindUserSharedInfoByAddressAsync(EthAddress address);
+        Task<XDaiValue> GetUserBalanceAsync(EthAddress address);
         Task<XDaiValue> GetUserBalanceAsync(User user);
-        Task<(User?, UserSharedInfo?)> TryFindUserAsync(string address);
-        Task<UserSharedInfo?> TryFindUserSharedInfoByAddressAsync(string address);
+        Task<(User?, UserSharedInfo?)> TryFindUserAsync(EthAddress address);
+        Task<UserSharedInfo?> TryFindUserSharedInfoByAddressAsync(EthAddress address);
         Task<bool> TryIncrementUserBalanceAsync(User user, XDaiValue amount, bool allowBalanceDecreaseNegative);
     }
 }

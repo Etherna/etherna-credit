@@ -38,7 +38,7 @@ namespace Etherna.Credit.Configs.SystemStore
         [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
         public XmlRepository(DbContextOptions options)
         {
-            ArgumentNullException.ThrowIfNull(options, nameof(options));
+            ArgumentNullException.ThrowIfNull(options);
 
             // Initialize MongoDB driver.
             var client = new MongoClient(options.ConnectionString);
@@ -64,7 +64,7 @@ namespace Etherna.Credit.Configs.SystemStore
 
         public void StoreElement(XElement element, string friendlyName)
         {
-            ArgumentNullException.ThrowIfNull(element, nameof(element));
+            ArgumentNullException.ThrowIfNull(element);
 
             //remove all comments. Json doesn't support it, but Json.NET serialize them anyway
             element.DescendantNodes().Where(x => x.NodeType == XmlNodeType.Comment).Remove();

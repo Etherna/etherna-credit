@@ -31,7 +31,7 @@ namespace Etherna.Credit.Areas.Manage.Pages
         [Display(Name = "Credit balance")]
         public XDaiValue CreditBalance { get; private set; }
         [Display(Name = "Ethereum address")]
-        public string EthereumAddress { get; private set; } = default!;
+        public EthAddress EthereumAddress { get; private set; }
         public bool HasUnlimitedCredit { get; private set; }
 
         // Methods.
