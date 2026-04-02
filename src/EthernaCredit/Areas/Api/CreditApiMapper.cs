@@ -15,6 +15,7 @@
 using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Api.DtoModels;
 using Etherna.Credit.Configs;
+using Etherna.Credit.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -75,7 +76,8 @@ namespace Etherna.Credit.Areas.Api
                     (ICreditApiHandler handler) =>
                         handler.GetCurrentUserAddressAsync())
                 .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
-                .Produces<EthAddress>();
+                .Produces<EthAddress>()
+                .IsDeprecated("Get from claims instead");
 
             builder.MapGet("user/credit",
                     (ICreditApiHandler handler) =>
