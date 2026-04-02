@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Etherna.Credit.Areas.Api
 {
@@ -84,8 +85,8 @@ namespace Etherna.Credit.Areas.Api
 
             builder.MapGet("user/logs",
                     (ICreditApiHandler handler,
-                            [FromQuery] int page,
-                            [FromQuery] int take = 25) =>
+                            [FromQuery][Range(0, int.MaxValue)] int page = 0,
+                            [FromQuery][Range(1, 1000)] int take = 50) =>
                         handler.GetCurrentUserLogsAsync(page, take))
                 .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
                 .Produces<IEnumerable<OperationLogDto>>();

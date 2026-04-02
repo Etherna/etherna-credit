@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.BeeNet.JsonConverters;
 using Etherna.BeeNet.Models;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
@@ -22,9 +23,9 @@ using System.Threading.Tasks;
 namespace Etherna.Credit.Configs.OpenApi
 {
     public sealed class SwarmModelsSchemaTransformer(
-        bool bzzAsString = true,
+        NumericFormat bzzFormat = NumericFormat.AsString,
         bool dateTimeOffsetAsString = true,
-        bool xdaiAsString = true)
+        NumericFormat xdaiFormat = NumericFormat.AsString)
         : IOpenApiSchemaTransformer
     {
         public Task TransformAsync(
@@ -37,15 +38,22 @@ namespace Etherna.Credit.Configs.OpenApi
 
             if (context.JsonTypeInfo.Type == typeof(BzzValue) || context.JsonTypeInfo.Type == typeof(BzzValue?))
             {
-                if (bzzAsString)
+                switch (bzzFormat)
                 {
-                    schema.Type = JsonSchemaType.String;
-                    schema.Format = null;
-                }
-                else
-                {
-                    schema.Type = JsonSchemaType.Integer;
-                    schema.Format = "int64";
+                    case NumericFormat.AsFloat:
+                        schema.Type = JsonSchemaType.Number;
+                        schema.Format = "double";
+                        break;
+                    case NumericFormat.AsInteger:
+                        schema.Type = JsonSchemaType.Integer;
+                        schema.Format = "int64";
+                        break;
+                    case NumericFormat.AsString:
+                        schema.Type = JsonSchemaType.String;
+                        schema.Format = null;
+                        break;
+                    default:
+                        throw new InvalidOperationException();
                 }
             }
             if (context.JsonTypeInfo.Type == typeof(DateTimeOffset) || context.JsonTypeInfo.Type == typeof(DateTimeOffset?))
@@ -170,15 +178,22 @@ namespace Etherna.Credit.Configs.OpenApi
             }
             if (context.JsonTypeInfo.Type == typeof(XDaiValue) || context.JsonTypeInfo.Type == typeof(XDaiValue?))
             {
-                if (xdaiAsString)
+                switch (xdaiFormat)
                 {
-                    schema.Type = JsonSchemaType.String;
-                    schema.Format = null;
-                }
-                else
-                {
-                    schema.Type = JsonSchemaType.Integer;
-                    schema.Format = "int64";
+                    case NumericFormat.AsFloat:
+                        schema.Type = JsonSchemaType.Number;
+                        schema.Format = "double";
+                        break;
+                    case NumericFormat.AsInteger:
+                        schema.Type = JsonSchemaType.Integer;
+                        schema.Format = "int64";
+                        break;
+                    case NumericFormat.AsString:
+                        schema.Type = JsonSchemaType.String;
+                        schema.Format = null;
+                        break;
+                    default:
+                        throw new InvalidOperationException();
                 }
             }
 

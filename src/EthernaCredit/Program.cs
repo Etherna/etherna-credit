@@ -187,7 +187,7 @@ namespace Etherna.Credit
                 options.AddOperationTransformer<RemoveDefaultResponse200OperationTransformer>();
                 options.AddOperationTransformer<CreditOperationTransformer>();
                 
-                options.AddSchemaTransformer(new SwarmModelsSchemaTransformer());
+                options.AddSchemaTransformer(new SwarmModelsSchemaTransformer(xdaiFormat: NumericFormat.AsFloat));
             });
             services.AddRazorPages(options =>
             {
@@ -201,7 +201,7 @@ namespace Etherna.Credit
             {
                 options.SerializerOptions.Converters.Add(new EthAddressJsonConverter());
                 options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                options.SerializerOptions.Converters.Add(new XDaiValueJsonConverter(true));
+                options.SerializerOptions.Converters.Add(new XDaiValueJsonConverter(NumericFormat.AsFloat));
 
                 options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
