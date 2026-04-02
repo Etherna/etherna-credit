@@ -18,7 +18,7 @@ namespace Etherna.Credit.Areas.Api.DtoModels
 {
     public class CreditDto(XDaiValue balance, bool isUnlimited)
     {
-        public decimal Balance { get; } = balance.ToDecimal();
+        public XDaiValue Balance { get; } = balance;
         public bool IsUnlimited { get; } = isUnlimited;
     }
 }

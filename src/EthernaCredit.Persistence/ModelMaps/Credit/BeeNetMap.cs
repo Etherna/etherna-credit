@@ -13,21 +13,22 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.BeeNet.Models;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
+using Etherna.Credit.Persistence.Serializers;
+using Etherna.MongoDB.Bson;
+using Etherna.MongODM.Core;
+using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.Credit.ModelBinders
+namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
-    internal sealed class CustomModelBinderProvider : IModelBinderProvider
+    internal sealed class BeeNetMap : IModelMapsCollector
     {
-        public IModelBinder? GetBinder(ModelBinderProviderContext context)
+        public void Register(IDbContext dbContext)
         {
-            ArgumentNullException.ThrowIfNull(context, nameof(context));
-
-            if (context.Metadata.ModelType == typeof(XDaiValue))
-                return new XDaiBalanceModelBinder();
-
-            return null;
+            dbContext.MapRegistry.AddCustomSerializerMap<EthAddress>( //v0.4.0
+                new EthAddressSerializer());
+            
+            dbContext.MapRegistry.AddCustomSerializerMap<XDaiValue>( //v0.4.0
+                new XDaiValueSerializer(BsonType.Decimal128));
         }
     }
 }

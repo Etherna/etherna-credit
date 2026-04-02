@@ -44,8 +44,8 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
         {
             public UserDto(User user, UserSharedInfo userSharedInfo, XDaiValue balance)
             {
-                ArgumentNullException.ThrowIfNull(user, nameof(user));
-                ArgumentNullException.ThrowIfNull(userSharedInfo, nameof(userSharedInfo));
+                ArgumentNullException.ThrowIfNull(user);
+                ArgumentNullException.ThrowIfNull(userSharedInfo);
 
                 Id = user.Id;
                 Balance = balance;
@@ -55,7 +55,7 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
 
             public string Id { get; }
             public XDaiValue Balance { get; }
-            public string EtherAddress { get; }
+            public EthAddress EtherAddress { get; }
             public bool HasUnlimitedCredit { get; }
         }
 

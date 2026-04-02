@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,27 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
-using Etherna.Credit.Areas.Api.DtoModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Etherna.Credit.Areas.Api.Services
+namespace Etherna.Credit.Areas.Api
 {
-    public interface IServiceInteractControllerService
+    internal sealed class CreditApiMarker
     {
-        Task<CreditDto> GetUserCreditAsync(string address);
-
-        Task<IEnumerable<OperationLogDto>> GetServiceOpLogsWithUserAsync(
-            string address,
-            DateTime? fromDate,
-            DateTime? toDate);
-
-        Task RegisterBalanceUpdateAsync(
-            string address,
-            XDaiValue amount,
-            bool isApplied,
-            string reason);
+        
     }
 }

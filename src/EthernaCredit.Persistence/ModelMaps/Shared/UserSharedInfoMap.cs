@@ -12,7 +12,9 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.BeeNet.Models;
 using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.Credit.Persistence.Serializers;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Serialization;
 
@@ -22,13 +24,18 @@ namespace Etherna.Credit.Persistence.ModelMaps.Shared
     {
         public void Register(IDbContext dbContext)
         {
-            dbContext.MapRegistry.AddModelMap<UserSharedInfo>("6d0d2ee1-6aa3-42ea-9833-ac592bfc6613", mm =>
-            {
-                mm.AutoMap();
+            dbContext.MapRegistry.AddCustomSerializerMap<EthAddress>( //v0.4.0
+                new EthAddressSerializer());
 
-                // Set members to ignore if null or default.
-                mm.GetMemberMap(u => u.LockoutEnd).SetIgnoreIfNull(true);
-            });
+            dbContext.MapRegistry.AddModelMap<UserSharedInfo>(
+                "6d0d2ee1-6aa3-42ea-9833-ac592bfc6613", //from sso v0.3.0
+                mm =>
+                {
+                    mm.AutoMap();
+
+                    // Set members to ignore if null or default.
+                    mm.GetMemberMap(u => u.LockoutEnd).SetIgnoreIfNull(true);
+                });
         }
     }
 }

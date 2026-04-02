@@ -32,7 +32,6 @@ namespace Etherna.Credit.Persistence.ModelMaps.Credit
                     mm.AutoMap();
 
                     // Set members with custom serializers.
-                    mm.SetMemberSerializer(l => l.Amount, new XDaiValueSerializer(BsonType.Decimal128));
                     mm.SetMemberSerializer(l => l.User, UserMap.ReferenceSerializer(dbContext));
                 });
             dbContext.MapRegistry.AddModelMap<AdminUpdateOperationLog>("3610fd2e-5f43-490b-bcfc-435a970a59cf"); //v0.3.12

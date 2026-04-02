@@ -12,19 +12,18 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.ACR.Conventions;
 using Etherna.ACR.Exceptions;
 using Etherna.ACR.Middlewares.DebugPages;
 using Etherna.ACR.Settings;
 using Etherna.Authentication.AspNetCore;
+using Etherna.BeeNet.JsonConverters;
+using Etherna.Credit.Areas.Api;
 using Etherna.Credit.Configs;
 using Etherna.Credit.Configs.Authorization;
 using Etherna.Credit.Configs.MongODM;
-using Etherna.Credit.Configs.Swagger;
-using Etherna.Credit.Configs.Swagger.OperationFilters;
+using Etherna.Credit.Configs.OpenApi;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Extensions;
-using Etherna.Credit.ModelBinders;
 using Etherna.Credit.Persistence;
 using Etherna.Credit.Services;
 using Etherna.Credit.Services.Settings;
@@ -45,25 +44,21 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using DashboardOptions = Etherna.MongODM.AspNetCore.UI.DashboardOptions;
@@ -181,6 +176,19 @@ namespace Etherna.Credit
             });
 
             services.AddCors();
+            services.AddOpenApi("Credit03", options =>
+            {
+                options.AddDocumentTransformer(new CreditDocumentTransformer(
+                    config["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException()));
+                options.AddDocumentTransformer<MetadataFilterDocumentTransformer<CreditApiMarker>>();
+
+                options.AddOperationTransformer<ApiMethodNeedsAuthOperationTransformer>();
+                options.AddOperationTransformer<DeprecatedOperationTransformer>();
+                options.AddOperationTransformer<RemoveDefaultResponse200OperationTransformer>();
+                options.AddOperationTransformer<CreditOperationTransformer>();
+                
+                options.AddSchemaTransformer(new SwarmModelsSchemaTransformer(xdaiFormat: NumericFormat.AsFloat));
+            });
             services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.AdminArea, "/", CommonConsts.RequireAdministratorRolePolicy);
@@ -189,33 +197,13 @@ namespace Etherna.Credit
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.ManageArea, "/");
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.WithdrawArea, "/");
             });
-            services.AddControllers(options =>
-                {
-                    //api by default requires authentication with user interact policy
-                    options.Conventions.Add(
-                        new RouteTemplateAuthorizationConvention(
-                            CommonConsts.ApiArea,
-                            CommonConsts.UserInteractApiScopePolicy));
-                    
-                    options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
-                })
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });
-            services.AddApiVersioning(options =>
+            services.ConfigureHttpJsonOptions(options =>
             {
-                options.ReportApiVersions = true;
-            });
-            services.AddVersionedApiExplorer(options =>
-            {
-                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-                // note: the specified format code will format the version as "'v'major[.minor][-status]"
-                options.GroupNameFormat = "'v'VVV";
+                options.SerializerOptions.Converters.Add(new EthAddressJsonConverter());
+                options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.SerializerOptions.Converters.Add(new XDaiValueJsonConverter(NumericFormat.AsFloat));
 
-                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-                // can also be used to control the format of the API version in route templates
-                options.SubstituteApiVersionInUrl = true;
+                options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
 
             // Configure authentication.
@@ -363,43 +351,6 @@ namespace Etherna.Credit
                 });
             }
 
-            // Configure Swagger services.
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen(options =>
-            {
-                options.SupportNonNullableReferenceTypes();
-                options.UseAllOfToExtendReferenceSchemas();
-                options.UseInlineDefinitionsForEnums();
-
-                //add custom operation filters
-                options.OperationFilter<ApiMethodNeedsAuthFilter>();
-                options.OperationFilter<SwaggerDefaultValuesFilter>();
-
-                //integrate xml comments
-                var xmlFile = typeof(Program).GetTypeInfo().Assembly.GetName().Name + ".xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
-                
-                //enable sso auth
-                var ssoBaseUrl = config["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException();
-                var scheme = new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        AuthorizationCode = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri($"{ssoBaseUrl}/connect/authorize"),
-                            TokenUrl = new Uri($"{ssoBaseUrl}/connect/token")
-                        }
-                    },
-                    Type = SecuritySchemeType.OAuth2
-                };
-
-                options.AddSecurityDefinition("OAuth", scheme);
-            });
-
             // Configure Etherna SSO Client services.
             services.AddEthernaInternalClients(
                 new Uri(config["SsoServer:BaseUrl"] ?? throw new ServiceConfigurationException()),
@@ -411,6 +362,9 @@ namespace Etherna.Credit
             // Configure setting.
             services.Configure<EmailSettings>(config.GetSection("Email") ?? throw new ServiceConfigurationException());
             services.Configure<SsoServerSettings>(config.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
+            
+            // Configure api handler.
+            services.AddScoped<ICreditApiHandler, CreditApiHandler>();
 
             // Configure persistence.
             services.AddMongODMWithHangfire(configureHangfireOptions: options =>
@@ -456,7 +410,6 @@ namespace Etherna.Credit
         
         private static void ConfigureApplication(WebApplication app)
         {
-            var apiProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
             var config = app.Configuration;
             var env = app.Environment;
 
@@ -500,6 +453,12 @@ namespace Etherna.Credit
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Add api and pages.
+            app.MapOpenApi();
+            app.MapRazorPages();
+
+            app.MapCreditApi();
+
             // Add Hangfire.
             app.UseHangfireDashboard(
                 CommonConsts.HangfireAdminPath,
@@ -508,28 +467,18 @@ namespace Etherna.Credit
                     Authorization = new[] { new Configs.Hangfire.AdminAuthFilter() }
                 });
 
-            // Add Swagger and SwaggerUI.
-            app.UseSwagger();
+            // Add SwaggerUI.
             app.UseSwaggerUI(options =>
             {
                 options.DocumentTitle = "Etherna Credit API";
-                
+
                 //build a swagger endpoint for each discovered API version
-                foreach (var description in apiProvider.ApiVersionDescriptions)
-                {
-                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-                }
+                options.SwaggerEndpoint("/openapi/credit03.json", "Credit v0.3 API");
                 
-                //enable oauth
                 options.OAuthClientId(config["SsoServer:Clients:Swagger:ClientId"] ?? throw new ServiceConfigurationException());
                 options.OAuthScopes("openid", "profile", "ether_accounts", "role", "userApi.credit");
                 options.OAuthUsePkce();
-                options.EnablePersistAuthorization();
             });
-
-            // Add pages and controllers.
-            app.MapControllers();
-            app.MapRazorPages();
             
             // Register cron tasks.
             //infrastructure.

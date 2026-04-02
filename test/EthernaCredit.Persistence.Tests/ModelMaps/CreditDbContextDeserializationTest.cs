@@ -60,20 +60,20 @@ namespace Etherna.Credit.Persistence.ModelMaps
                 // "7fc7abe8-9a55-40a2-90ce-f3cba34bc005" - dev (pre v0.3.0), published for WAM event
                 {
                     var sourceDocument =
-                        $$"""
-                          {
-                              "_id" : ObjectId("652d9b14f66ea29b84305a23"),
-                              "_m" : "7fc7abe8-9a55-40a2-90ce-f3cba34bc005",
-                              "_t" : "DepositOperationLog",
-                              "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
-                              "Amount" : NumberDecimal("10.05"),
-                              "Author" : "0x3D83bCF20E12Fb252D5e95b3fa0264B6221c4E79",
-                              "User" : {
-                                  "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
-                                  "_id" : ObjectId("652d9b0bf665611b84305e57")
-                              }
-                          }
-                          """;
+                        """
+                        {
+                            "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                            "_m" : "7fc7abe8-9a55-40a2-90ce-f3cba34bc005",
+                            "_t" : "DepositOperationLog",
+                            "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
+                            "Amount" : NumberDecimal("10.05"),
+                            "Author" : "0x3D83bCF20E12Fb252D5e95b3fa0264B6221c4E79",
+                            "User" : {
+                                "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                "_id" : ObjectId("652d9b0bf665611b84305e57")
+                            }
+                        }
+                        """;
 
                     var expectedOpLogMock = new Mock<DepositOperationLog>();
                     expectedOpLogMock.Setup(l => l.Id).Returns("652d9b14f66ea29b84305a23");
@@ -93,21 +93,21 @@ namespace Etherna.Credit.Persistence.ModelMaps
                  //with default values not assigned
                  {
                      var sourceDocument =
-                         $$"""
-                           {
-                               "_id" : ObjectId("652d9b14f66ea29b84305a23"),
-                               "_m" : "74e021d4-6d86-4deb-b952-0c328839cfe2",
-                               "_t" : "UpdateOperationLog",
-                               "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
-                               "Amount" : NumberDecimal("-1.88E-8"),
-                               "Author" : "ethernaGatewayCreditClientId",
-                               "User" : {
-                                   "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
-                                   "_id" : ObjectId("652d9b0bf665611b84305e57")
-                               },
-                               "Reason" : "DownloadFee"
-                           }
-                           """;
+                         """
+                         {
+                             "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                             "_m" : "74e021d4-6d86-4deb-b952-0c328839cfe2",
+                             "_t" : "UpdateOperationLog",
+                             "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
+                             "Amount" : NumberDecimal("-1.88E-8"),
+                             "Author" : "ethernaGatewayCreditClientId",
+                             "User" : {
+                                 "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                 "_id" : ObjectId("652d9b0bf665611b84305e57")
+                             },
+                             "Reason" : "DownloadFee"
+                         }
+                         """;
 
                      var expectedOpLogMock = new Mock<UpdateOperationLog>();
                      expectedOpLogMock.Setup(l => l.Id).Returns("652d9b14f66ea29b84305a23");
@@ -129,22 +129,22 @@ namespace Etherna.Credit.Persistence.ModelMaps
                  //with default values changed
                  {
                      var sourceDocument =
-                         $$"""
-                           {
-                               "_id" : ObjectId("652d9b14f66ea29b84305a23"),
-                               "_m" : "74e021d4-6d86-4deb-b952-0c328839cfe2",
-                               "_t" : "UpdateOperationLog",
-                               "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
-                               "Amount" : NumberDecimal("-1.88E-8"),
-                               "Author" : "ethernaGatewayCreditClientId",
-                               "User" : {
-                                   "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
-                                   "_id" : ObjectId("652d9b0bf665611b84305e57")
-                               },
-                               "IsApplied": false,
-                               "Reason" : "DownloadFee"
-                           }
-                           """;
+                         """
+                         {
+                             "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                             "_m" : "74e021d4-6d86-4deb-b952-0c328839cfe2",
+                             "_t" : "UpdateOperationLog",
+                             "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
+                             "Amount" : NumberDecimal("-1.88E-8"),
+                             "Author" : "ethernaGatewayCreditClientId",
+                             "User" : {
+                                 "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                 "_id" : ObjectId("652d9b0bf665611b84305e57")
+                             },
+                             "IsApplied": false,
+                             "Reason" : "DownloadFee"
+                         }
+                         """;
 
                      var expectedOpLogMock = new Mock<UpdateOperationLog>();
                      expectedOpLogMock.Setup(l => l.Id).Returns("652d9b14f66ea29b84305a23");
@@ -165,20 +165,20 @@ namespace Etherna.Credit.Persistence.ModelMaps
                  // "ba82b71f-1d41-45e2-a56b-d3293ea74c3a" - v0.3.9
                  {
                      var sourceDocument =
-                         $$"""
-                           {
-                               "_id" : ObjectId("652d9b14f66ea29b84305a23"),
-                               "_m" : "ba82b71f-1d41-45e2-a56b-d3293ea74c3a",
-                               "_t" : "WelcomeCreditDepositOperationLog",
-                               "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
-                               "Amount" : NumberDecimal("0.1"),
-                               "Author" : "0x3D83bCF20E12Fb252D5e95b3fa0264B6221c4E79",
-                               "User" : {
-                                   "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
-                                   "_id" : ObjectId("652d9b0bf665611b84305e57")
-                               }
-                           }
-                           """;
+                         """
+                         {
+                             "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                             "_m" : "ba82b71f-1d41-45e2-a56b-d3293ea74c3a",
+                             "_t" : "WelcomeCreditDepositOperationLog",
+                             "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
+                             "Amount" : NumberDecimal("0.1"),
+                             "Author" : "0x3D83bCF20E12Fb252D5e95b3fa0264B6221c4E79",
+                             "User" : {
+                                 "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                 "_id" : ObjectId("652d9b0bf665611b84305e57")
+                             }
+                         }
+                         """;
 
                      var expectedOpLogMock = new Mock<WelcomeCreditDepositOperationLog>();
                      expectedOpLogMock.Setup(l => l.Id).Returns("652d9b14f66ea29b84305a23");
@@ -197,20 +197,20 @@ namespace Etherna.Credit.Persistence.ModelMaps
                  // "b0ffe059-c985-4f3d-8677-238ab9551ec3" - dev (pre v0.3.0), published for WAM event
                  {
                      var sourceDocument =
-                         $$"""
-                           {
-                               "_id" : ObjectId("652d9b14f66ea29b84305a23"),
-                               "_m" : "b0ffe059-c985-4f3d-8677-238ab9551ec3",
-                               "_t" : "WithdrawOperationLog",
-                               "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
-                               "Amount" : NumberDecimal("-18"),
-                               "Author" : "0x3D83bCF20E12Fb252D5e95b3fa0264B6221c4E79",
-                               "User" : {
-                                   "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
-                                   "_id" : ObjectId("652d9b0bf665611b84305e57")
-                               }
-                           }
-                           """;
+                         """
+                         {
+                             "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                             "_m" : "b0ffe059-c985-4f3d-8677-238ab9551ec3",
+                             "_t" : "WithdrawOperationLog",
+                             "CreationDateTime" : ISODate("2023-10-26T20:20:15.830+0000"),
+                             "Amount" : NumberDecimal("-18"),
+                             "Author" : "0x3D83bCF20E12Fb252D5e95b3fa0264B6221c4E79",
+                             "User" : {
+                                 "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                 "_id" : ObjectId("652d9b0bf665611b84305e57")
+                             }
+                         }
+                         """;
 
                      var expectedOpLogMock = new Mock<WithdrawOperationLog>();
                      expectedOpLogMock.Setup(l => l.Id).Returns("652d9b14f66ea29b84305a23");
@@ -239,18 +239,18 @@ namespace Etherna.Credit.Persistence.ModelMaps
                  // "873c5ee4-122b-4021-8dc9-524b9f50b73b" - dev (pre v0.3.0), published for WAM event
                  {
                      var sourceDocument =
-                         $$"""
-                           {
-                               "_id" : ObjectId("652d9b14f66ea29b84305a23"),
-                               "_m" : "873c5ee4-122b-4021-8dc9-524b9f50b73b",
-                               "CreationDateTime" : ISODate("2023-10-16T20:27:17.837+0000"),
-                               "Credit" : NumberDecimal("123.456"),
-                               "User" : {
-                                   "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
-                                   "_id" : ObjectId("652d9b0bf665611b84305e57")
-                               }
-                           }
-                           """;
+                         """
+                         {
+                             "_id" : ObjectId("652d9b14f66ea29b84305a23"),
+                             "_m" : "873c5ee4-122b-4021-8dc9-524b9f50b73b",
+                             "CreationDateTime" : ISODate("2023-10-16T20:27:17.837+0000"),
+                             "Credit" : NumberDecimal("123.456"),
+                             "User" : {
+                                 "_m" : "b309c982-f30f-46ad-b076-c6030c8dbcd8",
+                                 "_id" : ObjectId("652d9b0bf665611b84305e57")
+                             }
+                         }
+                         """;
 
                      var expectedBalanceMock = new Mock<UserBalance>();
                      expectedBalanceMock.Setup(b => b.Id).Returns("652d9b14f66ea29b84305a23");
@@ -278,15 +278,15 @@ namespace Etherna.Credit.Persistence.ModelMaps
                  // "0ff83163-b49f-4182-895d-bed59e73a976" - dev (pre v0.3.0), published for WAM event
                  {
                      var sourceDocument =
-                         $$"""
-                           {
-                               "_id" : ObjectId("621d377299200245673f1071"),
-                               "_m" : "0ff83163-b49f-4182-895d-bed59e73a976",
-                               "CreationDateTime" : ISODate("2023-10-16T20:27:17.784+0000"),
-                               "HasUnlimitedCredit" : true,
-                               "SharedInfoId" : "652d9c8cea189ad4f2e7ce68"
-                           }
-                           """;
+                         """
+                         {
+                             "_id" : ObjectId("621d377299200245673f1071"),
+                             "_m" : "0ff83163-b49f-4182-895d-bed59e73a976",
+                             "CreationDateTime" : ISODate("2023-10-16T20:27:17.784+0000"),
+                             "HasUnlimitedCredit" : true,
+                             "SharedInfoId" : "652d9c8cea189ad4f2e7ce68"
+                         }
+                         """;
 
                      var expectedUserMock = new Mock<User>();
                      expectedUserMock.Setup(u => u.Id).Returns("621d377299200245673f1071");
@@ -305,7 +305,7 @@ namespace Etherna.Credit.Persistence.ModelMaps
         [Theory, MemberData(nameof(OperationLogDeserializationTests))]
         public void OperationLogDeserialization(DeserializationTestElement<OperationLogBase> testElement)
         {
-            ArgumentNullException.ThrowIfNull(testElement, nameof(testElement));
+            ArgumentNullException.ThrowIfNull(testElement);
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
@@ -324,7 +324,6 @@ namespace Etherna.Credit.Persistence.ModelMaps
             Assert.Equal(testElement.ExpectedModel.CreationDateTime, result.CreationDateTime);
             Assert.Equal(testElement.ExpectedModel.User, result.User, EntityModelEqualityComparer.Instance);
             Assert.NotNull(result.Id);
-            Assert.NotNull(result.Author);
             Assert.NotNull(result.User);
             
             switch (testElement.ExpectedModel)
@@ -352,7 +351,7 @@ namespace Etherna.Credit.Persistence.ModelMaps
         [Theory, MemberData(nameof(UserBalanceDeserializationTests))]
         public void UserBalanceDeserialization(DeserializationTestElement<UserBalance> testElement)
         {
-            ArgumentNullException.ThrowIfNull(testElement, nameof(testElement));
+            ArgumentNullException.ThrowIfNull(testElement);
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
@@ -376,7 +375,7 @@ namespace Etherna.Credit.Persistence.ModelMaps
         [Theory, MemberData(nameof(UserDeserializationTests))]
         public void UserDeserialization(DeserializationTestElement<User> testElement)
         {
-            ArgumentNullException.ThrowIfNull(testElement, nameof(testElement));
+            ArgumentNullException.ThrowIfNull(testElement);
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);

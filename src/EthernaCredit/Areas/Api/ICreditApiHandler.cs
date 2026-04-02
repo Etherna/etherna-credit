@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -13,21 +13,19 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.BeeNet.Models;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
-namespace Etherna.Credit.Domain.Models.OperationLogs
+namespace Etherna.Credit.Areas.Api
 {
-    public class WelcomeCreditDepositOperationLog : OperationLogBase
+    internal interface ICreditApiHandler
     {
-        // Constructors.
-        public WelcomeCreditDepositOperationLog(
-            XDaiValue amount,
-            string author,
-            User user)
-            : base(amount, author, user)
-        { }
-        protected WelcomeCreditDepositOperationLog() { }
-
-        // Properties.
-        public override string OperationName => "Welcome Credit Deposit";
+        Task<IResult> GetCurrentUserAddressAsync();
+        Task<IResult> GetCurrentUserCreditAsync();
+        Task<IResult> GetCurrentUserLogsAsync(int page, int take);
+        Task<IResult> GetServiceOpLogsWithUserAsync(EthAddress address, DateTime? fromDate, DateTime? toDate);
+        Task<IResult> GetUserCreditAsync(EthAddress address);
+        Task<IResult> RegisterBalanceUpdateAsync(EthAddress address, XDaiValue amount, bool isApplied, string reason);
     }
 }

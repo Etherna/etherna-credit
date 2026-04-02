@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,16 +12,13 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.Credit.Areas.Api.DtoModels;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Etherna.Credit.Areas.Api.Services
+namespace Etherna.Credit.Configs.OpenApi
 {
-    public interface IUserControllerService
+    /// <summary>
+    /// Required because of https://github.com/dotnet/aspnetcore/issues/43330
+    /// </summary>
+    public sealed class RemoveResponse200EndpointMetadata
     {
-        Task<string> GetAddressAsync();
-        Task<CreditDto> GetCreditAsync();
-        Task<IEnumerable<OperationLogDto>> GetLogsAsync(int page, int take);
+        
     }
 }
