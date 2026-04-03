@@ -12,22 +12,27 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.Credit.Shkeeper.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Etherna.Credit.Shkeeper
 {
-    public class SHKeeperClient : ISHKeeperClient, IDisposable
+    public class ShKeeperClient : IShKeeperClient, IDisposable
     {
         // Fields.
-        private readonly SHKeeperGeneratedClient generatedClient;
+        private readonly ShKeeperGeneratedClient generatedClient;
         private readonly HttpClient httpClient;
         
         private bool disposed;
         
         // Constructor.
-        public SHKeeperClient(
-            SHKeeperOptions options,
+        public ShKeeperClient(
+            ShKeeperOptions options,
             HttpClient? httpClient = null)
         {
             ArgumentNullException.ThrowIfNull(options);
@@ -36,7 +41,7 @@ namespace Etherna.Credit.Shkeeper
 
             ApiKey = options.ApiKey;
             BaseUrl = new Uri(options.Url);
-            generatedClient = new SHKeeperGeneratedClient(this.httpClient) { BaseUrl = BaseUrl.ToString() };
+            generatedClient = new ShKeeperGeneratedClient(this.httpClient) { BaseUrl = BaseUrl.ToString() };
         }
 
         // Dispose.
@@ -62,6 +67,10 @@ namespace Etherna.Credit.Shkeeper
         public Uri BaseUrl { get; }
         
         // Methods.
-        
+        public async Task<IEnumerable<PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await generatedClient.ApiV1CryptoAsync(cancellationToken);
+            return result.Crypto_list.Select(c => new PaymentCrypto(c.Display_name, c.Name));
+        }
     }
 }

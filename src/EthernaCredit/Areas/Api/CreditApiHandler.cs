@@ -19,6 +19,7 @@ using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Services.Domain;
+using Etherna.Credit.Shkeeper;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Microsoft.AspNetCore.Http;
@@ -31,9 +32,17 @@ namespace Etherna.Credit.Areas.Api
     internal sealed class CreditApiHandler(
         ICreditDbContext dbContext,
         IEthernaOpenIdConnectClient ethernaOidcClient,
+        IShKeeperClient shkeperClient,
         IUserService userService)
         : ICreditApiHandler
     {
+        public Task<IResult> GetAvailablePaymentCryptosAsync() =>
+            ExceptionHandler.RunAsync(async () =>
+            {
+                var cryptos = await shkeperClient.GetAvailableCryptosAsync();
+                return Results.Json(cryptos.Select(c => new PaymentCryptoDto(c.DisplayName, c.Symbol)));
+            });
+
         public Task<IResult> GetCurrentUserAddressAsync() =>
             ExceptionHandler.RunAsync(async () =>
             {

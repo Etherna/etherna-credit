@@ -27,7 +27,7 @@ namespace Etherna.Credit.Shkeeper
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial interface ISHKeeperGeneratedClient
+    internal partial interface IShKeeperGeneratedClient
     {
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -38,7 +38,7 @@ namespace Etherna.Credit.Shkeeper
         /// Get a list of cryptocurrencies available for operation from SHKeeper (these are the ones that are online and not disabled in the admin panel).
         /// </remarks>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GetCryptoResponse> ApiV1CryptoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -47,7 +47,7 @@ namespace Etherna.Credit.Shkeeper
         /// </summary>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<CreatePaymentRequestResponse> ApiV1PaymentRequestAsync(Crypto_name crypto_name, CreatePaymentRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -59,7 +59,7 @@ namespace Etherna.Credit.Shkeeper
         /// </remarks>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GetInvoiceByExternalIdResponse> ApiV1InvoicesAsync(string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -71,7 +71,7 @@ namespace Etherna.Credit.Shkeeper
         /// </remarks>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GetAddressesByCryptoNameResponse> ApiV1AddressesAsync(Crypto_name crypto_name, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -84,7 +84,7 @@ namespace Etherna.Credit.Shkeeper
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <param name="addr">Cryptocurrency address</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GetTransactionsByCryptoNameAndAddrResponse> ApiV1TransactionsAsync(Crypto_name crypto_name, string addr, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -97,7 +97,7 @@ namespace Etherna.Credit.Shkeeper
         /// <param name="txid">Cryptocurrency payment transaction ID</param>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GetTransactionInfoByTxidAndExternalIdResponse> ApiV1TxInfoAsync(string txid, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -105,7 +105,7 @@ namespace Etherna.Credit.Shkeeper
         /// Decrypt Wallets
         /// </summary>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Response> ApiV1DecryptionKeyAsync(Body body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -116,7 +116,7 @@ namespace Etherna.Credit.Shkeeper
         /// Get SHKeeper metrics for wallets status
         /// </remarks>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<string> MetricsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -125,7 +125,7 @@ namespace Etherna.Credit.Shkeeper
         /// </summary>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Response2> ApiV1PayoutAsync(Crypto_name crypto_name, CreatePayoutTaskRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -137,7 +137,7 @@ namespace Etherna.Credit.Shkeeper
         /// </remarks>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<Response3> ApiV1MultipayoutAsync(Crypto_name crypto_name, System.Collections.Generic.IEnumerable<Anonymous> body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -150,13 +150,13 @@ namespace Etherna.Credit.Shkeeper
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <param name="task_id">Payout task ID</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GetTaskStatusResponse> ApiV1TaskAsync(Crypto_name crypto_name, System.Guid task_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    internal partial class SHKeeperGeneratedClient : ISHKeeperGeneratedClient
+    internal partial class ShKeeperGeneratedClient : IShKeeperGeneratedClient
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -167,7 +167,7 @@ namespace Etherna.Credit.Shkeeper
         private System.Text.Json.JsonSerializerOptions _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public SHKeeperGeneratedClient(System.Net.Http.HttpClient httpClient)
+        public ShKeeperGeneratedClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = "https://demo.shkeeper.io";
@@ -211,7 +211,7 @@ namespace Etherna.Credit.Shkeeper
         /// Get a list of cryptocurrencies available for operation from SHKeeper (these are the ones that are online and not disabled in the admin panel).
         /// </remarks>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<GetCryptoResponse> ApiV1CryptoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
@@ -256,7 +256,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<GetCryptoResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -264,12 +264,12 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 404)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Not found", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Not found", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ShKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -292,7 +292,7 @@ namespace Etherna.Credit.Shkeeper
         /// </summary>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<CreatePaymentRequestResponse> ApiV1PaymentRequestAsync(Crypto_name crypto_name, CreatePaymentRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
@@ -349,7 +349,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<CreatePaymentRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -357,22 +357,22 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 500)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Internal Server Error", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Internal Server Error", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Response4>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new SHKeeperApiException<Response4>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ShKeeperApiException<Response4>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally
@@ -398,7 +398,7 @@ namespace Etherna.Credit.Shkeeper
         /// </remarks>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<GetInvoiceByExternalIdResponse> ApiV1InvoicesAsync(string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (external_id == null)
@@ -447,7 +447,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<GetInvoiceByExternalIdResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -455,12 +455,12 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ShKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -486,7 +486,7 @@ namespace Etherna.Credit.Shkeeper
         /// </remarks>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<GetAddressesByCryptoNameResponse> ApiV1AddressesAsync(Crypto_name crypto_name, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
@@ -536,7 +536,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<GetAddressesByCryptoNameResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -544,12 +544,12 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ShKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -576,7 +576,7 @@ namespace Etherna.Credit.Shkeeper
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <param name="addr">Cryptocurrency address</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<GetTransactionsByCryptoNameAndAddrResponse> ApiV1TransactionsAsync(Crypto_name crypto_name, string addr, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
@@ -630,7 +630,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<GetTransactionsByCryptoNameAndAddrResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -638,12 +638,12 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ShKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -670,7 +670,7 @@ namespace Etherna.Credit.Shkeeper
         /// <param name="txid">Cryptocurrency payment transaction ID</param>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<GetTransactionInfoByTxidAndExternalIdResponse> ApiV1TxInfoAsync(string txid, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (txid == null)
@@ -724,7 +724,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<GetTransactionInfoByTxidAndExternalIdResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -732,12 +732,12 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ShKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -759,7 +759,7 @@ namespace Etherna.Credit.Shkeeper
         /// Decrypt Wallets
         /// </summary>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<Response> ApiV1DecryptionKeyAsync(Body body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
@@ -812,7 +812,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<Response>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -820,16 +820,16 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Response5>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new SHKeeperApiException<Response5>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ShKeeperApiException<Response5>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally
@@ -854,7 +854,7 @@ namespace Etherna.Credit.Shkeeper
         /// Get SHKeeper metrics for wallets status
         /// </remarks>
         /// <returns>Success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<string> MetricsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
@@ -904,18 +904,18 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 500)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Internal Serer Error", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Internal Serer Error", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            throw new ShKeeperApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
@@ -938,7 +938,7 @@ namespace Etherna.Credit.Shkeeper
         /// </summary>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<Response2> ApiV1PayoutAsync(Crypto_name crypto_name, CreatePayoutTaskRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
@@ -995,7 +995,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<Response2>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -1003,22 +1003,22 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 500)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Internal Server Error", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Internal Server Error", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Response6>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new SHKeeperApiException<Response6>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ShKeeperApiException<Response6>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally
@@ -1044,7 +1044,7 @@ namespace Etherna.Credit.Shkeeper
         /// </remarks>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<Response3> ApiV1MultipayoutAsync(Crypto_name crypto_name, System.Collections.Generic.IEnumerable<Anonymous> body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
@@ -1101,7 +1101,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<Response3>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -1109,22 +1109,22 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         if (status_ == 500)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Internal Server Error", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Internal Server Error", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Response7>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new SHKeeperApiException<Response7>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ShKeeperApiException<Response7>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally
@@ -1151,7 +1151,7 @@ namespace Etherna.Credit.Shkeeper
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <param name="task_id">Payout task ID</param>
         /// <returns>success</returns>
-        /// <exception cref="SHKeeperApiException">A server side error occurred.</exception>
+        /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<GetTaskStatusResponse> ApiV1TaskAsync(Crypto_name crypto_name, System.Guid task_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
@@ -1205,7 +1205,7 @@ namespace Etherna.Credit.Shkeeper
                             var objectResponse_ = await ReadObjectResponseAsync<GetTaskStatusResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
                         }
@@ -1213,16 +1213,16 @@ namespace Etherna.Credit.Shkeeper
                         if (status_ == 405)
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new SHKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
+                            throw new ShKeeperApiException("Method Not Allowed", status_, responseText_, headers_, null);
                         }
                         else
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Response8>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
-                                throw new SHKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                                throw new ShKeeperApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new SHKeeperApiException<Response8>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ShKeeperApiException<Response8>("Unexpected error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally
@@ -1292,7 +1292,7 @@ namespace Etherna.Credit.Shkeeper
                 catch (System.Text.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
-                    throw new SHKeeperApiException(message, (int)response.StatusCode, responseText, headers, exception);
+                    throw new ShKeeperApiException(message, (int)response.StatusCode, responseText, headers, exception);
                 }
             }
             else
@@ -1308,7 +1308,7 @@ namespace Etherna.Credit.Shkeeper
                 catch (System.Text.Json.JsonException exception)
                 {
                     var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
-                    throw new SHKeeperApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
+                    throw new ShKeeperApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
                 }
             }
         }
@@ -2585,7 +2585,7 @@ namespace Etherna.Credit.Shkeeper
 
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SHKeeperApiException : System.Exception
+    public partial class ShKeeperApiException : System.Exception
     {
         public int StatusCode { get; private set; }
 
@@ -2593,7 +2593,7 @@ namespace Etherna.Credit.Shkeeper
 
         public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
 
-        public SHKeeperApiException(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception? innerException)
+        public ShKeeperApiException(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception? innerException)
             : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
         {
             StatusCode = statusCode;
@@ -2608,11 +2608,11 @@ namespace Etherna.Credit.Shkeeper
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SHKeeperApiException<TResult> : SHKeeperApiException
+    public partial class ShKeeperApiException<TResult> : ShKeeperApiException
     {
         public TResult Result { get; private set; }
 
-        public SHKeeperApiException(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception? innerException)
+        public ShKeeperApiException(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception? innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;

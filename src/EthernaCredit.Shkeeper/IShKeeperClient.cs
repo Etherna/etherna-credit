@@ -12,21 +12,15 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
-using Microsoft.AspNetCore.Http;
-using System;
+using Etherna.Credit.Shkeeper.Models;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Etherna.Credit.Areas.Api
+namespace Etherna.Credit.Shkeeper
 {
-    internal interface ICreditApiHandler
+    public interface IShKeeperClient
     {
-        Task<IResult> GetAvailablePaymentCryptosAsync();
-        Task<IResult> GetCurrentUserAddressAsync();
-        Task<IResult> GetCurrentUserCreditAsync();
-        Task<IResult> GetCurrentUserLogsAsync(int page, int take);
-        Task<IResult> GetServiceOpLogsWithUserAsync(EthAddress address, DateTime? fromDate, DateTime? toDate);
-        Task<IResult> GetUserCreditAsync(EthAddress address);
-        Task<IResult> RegisterBalanceUpdateAsync(EthAddress address, XDaiValue amount, bool isApplied, string reason);
+        Task<IEnumerable<PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default);
     }
 }

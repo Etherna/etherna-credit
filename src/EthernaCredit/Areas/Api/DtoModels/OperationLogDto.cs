@@ -20,7 +20,7 @@ using System;
 
 namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    public class OperationLogDto
+    public sealed class OperationLogDto
     {
         public OperationLogDto(OperationLogBase operationLog, UserSharedInfo userSharedInfo)
         {

@@ -21,7 +21,7 @@
       "disposeHttpClient": true,
       "protectedMethods": [],
       "generateExceptionClasses": true,
-      "exceptionClass": "SHKeeperApiException",
+      "exceptionClass": "ShKeeperApiException",
       "wrapDtoExceptions": true,
       "useHttpClientCreationMethod": false,
       "httpClientType": "System.Net.Http.HttpClient",
@@ -44,7 +44,7 @@
       "useRequestAndResponseSerializationSettings": false,
       "serializeTypeInformation": false,
       "queryNullValue": "",
-      "className": "SHKeeperGeneratedClient",
+      "className": "ShKeeperGeneratedClient",
       "operationGenerationMode": "SingleClientFromPathSegments",
       "additionalNamespaceUsages": [],
       "additionalContractNamespaceUsages": [],
@@ -93,7 +93,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../src/EthernaCredit.Shkeeper/SHKeeperGeneratedClient.cs",
+      "output": "../src/EthernaCredit.Shkeeper/ShKeeperGeneratedClient.cs",
       "newLineBehavior": "Auto"
     }
   }

@@ -41,6 +41,12 @@ namespace Etherna.Credit.Areas.Api
         private static void ConfigureV03Maps(RouteGroupBuilder builder)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
+            //payments
+            builder.MapGet("payments/cryptos",
+                    (ICreditApiHandler handler) =>
+                        handler.GetAvailablePaymentCryptosAsync())
+                .Produces<IEnumerable<PaymentCryptoDto>>();
+
             //serviceInteract
             builder.MapGet("serviceInteract/users/{address}/credit",
                     (ICreditApiHandler handler,

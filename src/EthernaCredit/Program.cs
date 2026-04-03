@@ -411,12 +411,12 @@ namespace Etherna.Credit
             var shKeeperSection = config.GetSection("Payments:ShKeeper");
             if (shKeeperSection.Exists())
             {
-                var shKeeperOptions = shKeeperSection.Get<SHKeeperOptions>() ?? throw new ServiceConfigurationException();
-                services.AddSingleton<ISHKeeperClient>(new SHKeeperClient(shKeeperOptions));
+                var shKeeperOptions = shKeeperSection.Get<ShKeeperOptions>() ?? throw new ServiceConfigurationException();
+                services.AddSingleton<IShKeeperClient>(new ShKeeperClient(shKeeperOptions));
             }
             else
             {
-                services.AddSingleton<ISHKeeperClient, DisabledSHKeeperClient>();
+                services.AddSingleton<IShKeeperClient, DisabledShKeeperClient>();
             }
 
             // Configure domain services.
