@@ -27,15 +27,16 @@ namespace Etherna.Credit.Shkeeper
         
         // Constructor.
         public SHKeeperClient(
-            Uri baseUrl,
+            SHKeeperOptions options,
             HttpClient? httpClient = null)
         {
-            ArgumentNullException.ThrowIfNull(baseUrl);
-            
+            ArgumentNullException.ThrowIfNull(options);
+
             this.httpClient = httpClient ?? new HttpClient();
 
-            generatedClient = new SHKeeperGeneratedClient(this.httpClient) { BaseUrl = baseUrl.ToString() };
-            BaseUrl = baseUrl;
+            ApiKey = options.ApiKey;
+            BaseUrl = new Uri(options.Url);
+            generatedClient = new SHKeeperGeneratedClient(this.httpClient) { BaseUrl = BaseUrl.ToString() };
         }
 
         // Dispose.
@@ -57,6 +58,10 @@ namespace Etherna.Credit.Shkeeper
         }
 
         // Properties.
+        public string ApiKey { get; }
         public Uri BaseUrl { get; }
+        
+        // Methods.
+        
     }
 }

@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EthernaCredit.Domain\EthernaCredit.Domain.csproj" />
+    <ProjectReference Include="..\EthernaCredit.Shkeeper\EthernaCredit.Shkeeper.csproj" />
   </ItemGroup>
 
 </Project>

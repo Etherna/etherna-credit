@@ -18,6 +18,7 @@ using Etherna.ACR.Settings;
 using Etherna.Authentication.AspNetCore;
 using Etherna.BeeNet.JsonConverters;
 using Etherna.Credit.Areas.Api;
+using Etherna.Credit.Shkeeper;
 using Etherna.Credit.Configs;
 using Etherna.Credit.Configs.Authorization;
 using Etherna.Credit.Configs.MongODM;
@@ -54,6 +55,7 @@ using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -138,6 +140,7 @@ namespace Etherna.Credit
             };
         }
 
+        [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
         private static void ConfigureServices(WebApplicationBuilder builder)
         {
             var services = builder.Services;
@@ -400,9 +403,21 @@ namespace Etherna.Credit
 
             services.AddMongODMAdminDashboard(new DashboardOptions
             {
-                AuthFilters = new[] { new AdminAuthFilter() },
+                AuthFilters = [new AdminAuthFilter()],
                 BasePath = CommonConsts.DatabaseAdminPath
             });
+
+            // Configure SHKeeper client.
+            var shKeeperSection = config.GetSection("Payments:ShKeeper");
+            if (shKeeperSection.Exists())
+            {
+                var shKeeperOptions = shKeeperSection.Get<SHKeeperOptions>() ?? throw new ServiceConfigurationException();
+                services.AddSingleton<ISHKeeperClient>(new SHKeeperClient(shKeeperOptions));
+            }
+            else
+            {
+                services.AddSingleton<ISHKeeperClient, DisabledSHKeeperClient>();
+            }
 
             // Configure domain services.
             services.AddDomainServices();
@@ -464,7 +479,7 @@ namespace Etherna.Credit
                 CommonConsts.HangfireAdminPath,
                 new Hangfire.DashboardOptions
                 {
-                    Authorization = new[] { new Configs.Hangfire.AdminAuthFilter() }
+                    Authorization = [new Configs.Hangfire.AdminAuthFilter()]
                 });
 
             // Add SwaggerUI.
