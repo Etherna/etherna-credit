@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,19 +12,25 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.DomainEvents;
 using Etherna.Credit.Domain.Models;
 using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Repositories;
+using Etherna.MongODM.Core.Extensions;
+using Etherna.MongODM.Core.Serialization;
 
-namespace Etherna.Credit.Domain
+namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
-    public interface ICreditDbContext : IDbContext
+    internal sealed class CryptoPaymentRequestMap : IModelMapsCollector
     {
-        IRepository<CryptoPaymentRequest, string> CryptoPaymentRequests { get; }
-        IRepository<OperationLogBase, string> OperationLogs { get; }
-        IRepository<User, string> Users { get; }
+        public void Register(IDbContext dbContext)
+        {
+            dbContext.MapRegistry.AddModelMap<CryptoPaymentRequest>("945e9f2f-988f-4a95-b010-c3ea4f58feaa", //0.4.0
+                mm =>
+                {
+                    mm.AutoMap();
 
-        IEventDispatcher EventDispatcher { get; }
+                    // Set members with custom serializers.
+                    mm.SetMemberSerializer(m => m.Author, UserMap.ReferenceSerializer(dbContext));
+                });
+        }
     }
 }

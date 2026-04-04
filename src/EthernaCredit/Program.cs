@@ -407,16 +407,16 @@ namespace Etherna.Credit
                 BasePath = CommonConsts.DatabaseAdminPath
             });
 
-            // Configure SHKeeper client.
+            // Configure SHKeeper service.
             var shKeeperSection = config.GetSection("Payments:ShKeeper");
             if (shKeeperSection.Exists())
             {
                 var shKeeperOptions = shKeeperSection.Get<ShKeeperOptions>() ?? throw new ServiceConfigurationException();
-                services.AddSingleton<IShKeeperClient>(new ShKeeperClient(shKeeperOptions));
+                services.AddSingleton<IShKeeperService>(new ShKeeperService(shKeeperOptions));
             }
             else
             {
-                services.AddSingleton<IShKeeperClient, DisabledShKeeperClient>();
+                services.AddSingleton<IShKeeperService, DisabledShKeeperService>();
             }
 
             // Configure domain services.

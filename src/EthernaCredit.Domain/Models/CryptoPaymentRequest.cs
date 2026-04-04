@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,19 +12,27 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.DomainEvents;
-using Etherna.Credit.Domain.Models;
-using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Repositories;
+using Etherna.BeeNet.Models;
 
-namespace Etherna.Credit.Domain
+namespace Etherna.Credit.Domain.Models
 {
-    public interface ICreditDbContext : IDbContext
+    public class CryptoPaymentRequest : EntityModelBase<string>
     {
-        IRepository<CryptoPaymentRequest, string> CryptoPaymentRequests { get; }
-        IRepository<OperationLogBase, string> OperationLogs { get; }
-        IRepository<User, string> Users { get; }
+        // Constructors.
+        public CryptoPaymentRequest(
+            User author,
+            XDaiValue amount,
+            string symbol)
+        {
+            Amount = amount;
+            Author = author;
+            Symbol = symbol;
+        }
+        protected CryptoPaymentRequest() { }
 
-        IEventDispatcher EventDispatcher { get; }
+        // Properties.
+        public virtual XDaiValue Amount { get; protected set; }
+        public virtual User Author { get; protected set; } = null!;
+        public virtual string Symbol { get; protected set; } = null!;
     }
 }

@@ -1,30 +1,29 @@
 // Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
-//
+// 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
 // GNU Affero General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
-//
+// 
 // Etherna Credit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 // without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Affero General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.Credit.Shkeeper.Models;
+using Etherna.BeeNet.Models;
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Etherna.Credit.Shkeeper
+namespace Etherna.Credit.Shkeeper.Models
 {
-    public class DisabledShKeeperClient : IShKeeperClient
+    public class ShKeeperPaymentRequestResponse
     {
-        private const string ExceptionMessage = "SHKeeper is not configured.";
-        
-        public Task<IEnumerable<PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default) =>
-            throw new InvalidOperationException(ExceptionMessage);
+        public required string DisplayName { get; init; }
+        public required double ExchangeRate { get; init; }
+        public required string Id { get; init; }
+        public required TimeSpan RecalculateAfter { get; init; }
+        public required string Status { get; init; }
+        public required string Wallet { get; init; }
     }
 }

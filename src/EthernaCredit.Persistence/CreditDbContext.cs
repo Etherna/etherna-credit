@@ -31,45 +31,41 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Persistence
 {
-    public class CreditDbContext : DbContext, ICreditDbContextInternal, IEventDispatcherDbContext
+    public class CreditDbContext(
+        IEventDispatcher eventDispatcher,
+        ILogger<CreditDbContext> logger)
+        : DbContext(logger), ICreditDbContextInternal, IEventDispatcherDbContext
     {
         // Consts.
         private const string SerializersNamespace = "Etherna.Credit.Persistence.ModelMaps.Credit";
 
-        // Constructor.
-        public CreditDbContext(
-            IEventDispatcher eventDispatcher,
-            ILogger<CreditDbContext> logger)
-            : base(logger)
-        {
-            EventDispatcher = eventDispatcher;
-        }
-
         // Properties.
         //repositories
+        public IRepository<CryptoPaymentRequest, string> CryptoPaymentRequests { get; } =
+            new DomainRepository<CryptoPaymentRequest, string>("cryptoPaymentRequests");
         public IRepository<OperationLogBase, string> OperationLogs { get; } =
             new DomainRepository<OperationLogBase, string>("logs");
         public IRepository<User, string> Users { get; } = new DomainRepository<User, string>(
             new RepositoryOptions<User>("users")
             {
-                IndexBuilders = new[]
-                {
+                IndexBuilders =
+                [
                     (Builders<User>.IndexKeys.Ascending(u => u.SharedInfoId), new CreateIndexOptions<User> { Unique = true })
-                }
+                ]
             });
 
         //internal repositories
         public IRepository<UserBalance, string> UserBalances { get; } = new DomainRepository<UserBalance, string>(
             new RepositoryOptions<UserBalance>("userBalances")
             {
-                IndexBuilders = new[]
-                {
-                    (Builders<UserBalance>.IndexKeys.Ascending(b => b.User.Id), new CreateIndexOptions<UserBalance> { Unique = true }),
-                }
+                IndexBuilders =
+                [
+                    (Builders<UserBalance>.IndexKeys.Ascending(b => b.User.Id), new CreateIndexOptions<UserBalance> { Unique = true })
+                ]
             });
 
         //other properties
-        public IEventDispatcher EventDispatcher { get; }
+        public IEventDispatcher EventDispatcher { get; } = eventDispatcher;
 
         // Protected properties.
         protected override IEnumerable<IModelMapsCollector> ModelMapsCollectors =>

@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.BeeNet.Models;
 using Etherna.Credit.Shkeeper.Models;
 using System.Collections.Generic;
 using System.Threading;
@@ -19,8 +20,14 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Shkeeper
 {
-    public interface IShKeeperClient
+    public interface IShKeeperService
     {
-        Task<IEnumerable<PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default);
+        Task<ShKeeperPaymentRequestResponse> CreatePaymentRequestAsync(
+            XDaiValue amount,
+            string cryptoSymbol,
+            string externalId,
+            CancellationToken cancellationToken = default);
+        
+        Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default);
     }
 }

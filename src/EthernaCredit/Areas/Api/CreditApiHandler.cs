@@ -32,15 +32,45 @@ namespace Etherna.Credit.Areas.Api
     internal sealed class CreditApiHandler(
         ICreditDbContext dbContext,
         IEthernaOpenIdConnectClient ethernaOidcClient,
-        IShKeeperClient shkeperClient,
+        IShKeeperService shkeperService,
         IUserService userService)
         : ICreditApiHandler
     {
+        public Task<IResult> CreateCryptoPaymentRequestAsync(XDaiValue amount, string cryptoSymbol) =>
+            ExceptionHandler.RunAsync(async () =>
+            {
+                // Verify auth and input.
+                var (author, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
+                var availableCryptos = await shkeperService.GetAvailableCryptosAsync();
+                if (!availableCryptos.ContainsKey(cryptoSymbol))
+                    return Results.BadRequest($"Crypto symbol {cryptoSymbol} not found");
+                
+                // Create payment request on db.
+                var request = new CryptoPaymentRequest(author, amount, cryptoSymbol);
+                await dbContext.CryptoPaymentRequests.CreateAsync(request);
+                
+                // Create payment request on ShKeeper.
+                var shkeeperResponse = await shkeperService.CreatePaymentRequestAsync(
+                    amount,
+                    cryptoSymbol,
+                    request.Id);
+
+                return Results.Json(new CryptoPaymentRequestDto(
+                    request.Id,
+                    amount,
+                    shkeeperResponse.DisplayName,
+                    cryptoSymbol,
+                    shkeeperResponse.ExchangeRate,
+                    shkeeperResponse.RecalculateAfter,
+                    shkeeperResponse.Status,
+                    shkeeperResponse.Wallet));
+            });
+
         public Task<IResult> GetAvailablePaymentCryptosAsync() =>
             ExceptionHandler.RunAsync(async () =>
             {
-                var cryptos = await shkeperClient.GetAvailableCryptosAsync();
-                return Results.Json(cryptos.Select(c => new PaymentCryptoDto(c.DisplayName, c.Symbol)));
+                var cryptos = await shkeperService.GetAvailableCryptosAsync();
+                return Results.Json(cryptos.Values.Select(c => new PaymentCryptoDto(c.DisplayName, c.Symbol)));
             });
 
         public Task<IResult> GetCurrentUserAddressAsync() =>

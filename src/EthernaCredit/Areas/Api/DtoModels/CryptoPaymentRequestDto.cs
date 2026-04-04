@@ -13,21 +13,27 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.BeeNet.Models;
-using Microsoft.AspNetCore.Http;
 using System;
-using System.Threading.Tasks;
 
-namespace Etherna.Credit.Areas.Api
+namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    internal interface ICreditApiHandler
+    public sealed class CryptoPaymentRequestDto(
+        string id,
+        XDaiValue amount,
+        string cryptoDisplayName,
+        string cryptoSymbol,
+        double exchangeRate,
+        TimeSpan recalculateAfter,
+        string status,
+        string wallet)
     {
-        Task<IResult> CreateCryptoPaymentRequestAsync(XDaiValue amount, string cryptoSymbol);
-        Task<IResult> GetAvailablePaymentCryptosAsync();
-        Task<IResult> GetCurrentUserAddressAsync();
-        Task<IResult> GetCurrentUserCreditAsync();
-        Task<IResult> GetCurrentUserLogsAsync(int page, int take);
-        Task<IResult> GetServiceOpLogsWithUserAsync(EthAddress address, DateTime? fromDate, DateTime? toDate);
-        Task<IResult> GetUserCreditAsync(EthAddress address);
-        Task<IResult> RegisterBalanceUpdateAsync(EthAddress address, XDaiValue amount, bool isApplied, string reason);
+        public string Id { get; } = id;
+        public XDaiValue Amount { get; } = amount;
+        public string CryptoDisplayName { get; } = cryptoDisplayName;
+        public string CryptoSymbol { get; } = cryptoSymbol;
+        public double ExchangeRate { get; } = exchangeRate;
+        public TimeSpan RecalculateAfter { get; } = recalculateAfter;
+        public string Status { get; } = status;
+        public string Wallet { get; } = wallet;
     }
 }

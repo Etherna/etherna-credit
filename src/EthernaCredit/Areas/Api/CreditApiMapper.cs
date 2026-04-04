@@ -47,6 +47,15 @@ namespace Etherna.Credit.Areas.Api
                         handler.GetAvailablePaymentCryptosAsync())
                 .Produces<IEnumerable<PaymentCryptoDto>>();
 
+            builder.MapPost("payments/cryptos/{cryptoSymbol}",
+                    (ICreditApiHandler handler,
+                            [FromRoute] string cryptoSymbol,
+                            [FromQuery] decimal amount) =>
+                        handler.CreateCryptoPaymentRequestAsync(amount, cryptoSymbol))
+                .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
+                .Produces<CryptoPaymentRequestDto>()
+                .Produces(StatusCodes.Status400BadRequest);
+
             //serviceInteract
             builder.MapGet("serviceInteract/users/{address}/credit",
                     (ICreditApiHandler handler,
@@ -69,7 +78,7 @@ namespace Etherna.Credit.Areas.Api
             builder.MapPut("serviceInteract/users/{address}/credit/balance",
                     (ICreditApiHandler handler,
                             [FromRoute] EthAddress address,
-                            [FromQuery] XDaiValue amount,
+                            [FromQuery] decimal amount,
                             [FromQuery] string reason,
                             [FromQuery] bool isApplied = true) =>
                         handler.RegisterBalanceUpdateAsync(address, amount, isApplied, reason))

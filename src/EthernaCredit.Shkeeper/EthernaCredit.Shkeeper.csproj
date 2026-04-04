@@ -12,4 +12,8 @@
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\EthernaCredit.Domain\EthernaCredit.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
