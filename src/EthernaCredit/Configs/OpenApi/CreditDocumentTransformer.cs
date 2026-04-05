@@ -49,7 +49,15 @@ namespace Etherna.Credit.Configs.OpenApi
                     AuthorizationCode = new OpenApiOAuthFlow
                     {
                         AuthorizationUrl = new Uri($"{ssoBaseUrl}/connect/authorize", UriKind.Absolute),
-                        TokenUrl = new Uri($"{ssoBaseUrl}/connect/token", UriKind.Absolute)
+                        TokenUrl = new Uri($"{ssoBaseUrl}/connect/token", UriKind.Absolute),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            ["openid"] = "OpenID",
+                            ["profile"] = "Profile",
+                            ["ether_accounts"] = "Ether accounts",
+                            ["role"] = "Role",
+                            ["userApi.credit"] = "Credit API"
+                        }
                     }
                 }
             };

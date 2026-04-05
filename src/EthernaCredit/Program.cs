@@ -49,6 +49,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
@@ -400,7 +401,7 @@ namespace Etherna.Credit
 
             services.AddMongODMAdminDashboard(new DashboardOptions
             {
-                AuthFilters = new[] { new AdminAuthFilter() },
+                AuthFilters = [new AdminAuthFilter()],
                 BasePath = CommonConsts.DatabaseAdminPath
             });
 
@@ -464,20 +465,23 @@ namespace Etherna.Credit
                 CommonConsts.HangfireAdminPath,
                 new Hangfire.DashboardOptions
                 {
-                    Authorization = new[] { new Configs.Hangfire.AdminAuthFilter() }
+                    Authorization = [new Configs.Hangfire.AdminAuthFilter()]
                 });
 
-            // Add SwaggerUI.
-            app.UseSwaggerUI(options =>
+            // Add Scalar API Reference.
+            app.MapScalarApiReference((options, httpContext) =>
             {
-                options.DocumentTitle = "Etherna Credit API";
-
-                //build a swagger endpoint for each discovered API version
-                options.SwaggerEndpoint("/openapi/credit03.json", "Credit v0.3 API");
-                
-                options.OAuthClientId(config["SsoServer:Clients:Swagger:ClientId"] ?? throw new ServiceConfigurationException());
-                options.OAuthScopes("openid", "profile", "ether_accounts", "role", "userApi.credit");
-                options.OAuthUsePkce();
+                options.WithTitle("Etherna Credit API")
+                    .WithOpenApiRoutePattern("/openapi/credit03.json")
+                    .DisableAgent()
+                    .AddPreferredSecuritySchemes("OAuth")
+                    .AddAuthorizationCodeFlow("OAuth", flow =>
+                    {
+                        flow.ClientId = config["SsoServer:Clients:Scalar:ClientId"] ?? throw new ServiceConfigurationException();
+                        flow.RedirectUri = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}/scalar/credit03";
+                        flow.Pkce = Pkce.Sha256;
+                        flow.SelectedScopes = ["openid", "profile", "ether_accounts", "role", "userApi.credit"];
+                    });
             });
             
             // Register cron tasks.
