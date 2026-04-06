@@ -45,10 +45,11 @@ namespace Etherna.Credit.Shkeeper
         /// <summary>
         /// Create/Update SHKeeper invoice
         /// </summary>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CreatePaymentRequestResponse> ApiV1PaymentRequestAsync(Crypto_name crypto_name, CreatePaymentRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<CreatePaymentRequestResponse> ApiV1PaymentRequestAsync(string x_Shkeeper_Api_Key, Crypto_name crypto_name, CreatePaymentRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -57,10 +58,11 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get detailed information about status of created invoice in SHKeeper by external_id
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetInvoiceByExternalIdResponse> ApiV1InvoicesAsync(string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetInvoiceByExternalIdResponse> ApiV1InvoicesAsync(string x_Shkeeper_Api_Key, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -69,10 +71,11 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get all generated cryptocurrency addresses for specified cryptocurrency
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetAddressesByCryptoNameResponse> ApiV1AddressesAsync(Crypto_name crypto_name, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetAddressesByCryptoNameResponse> ApiV1AddressesAsync(string x_Shkeeper_Api_Key, Crypto_name crypto_name, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -81,11 +84,12 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get all transactions related to specified cryptocurrency address
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <param name="addr">Cryptocurrency address</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetTransactionsByCryptoNameAndAddrResponse> ApiV1TransactionsAsync(Crypto_name crypto_name, string addr, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetTransactionsByCryptoNameAndAddrResponse> ApiV1TransactionsAsync(string x_Shkeeper_Api_Key, Crypto_name crypto_name, string addr, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -94,19 +98,21 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get payment info by transaction and external ID
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="txid">Cryptocurrency payment transaction ID</param>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetTransactionInfoByTxidAndExternalIdResponse> ApiV1TxInfoAsync(string txid, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<GetTransactionInfoByTxidAndExternalIdResponse> ApiV1TxInfoAsync(string x_Shkeeper_Api_Key, string txid, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Decrypt Wallets
         /// </summary>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <returns>success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Response> ApiV1DecryptionKeyAsync(Body body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<Response> ApiV1DecryptionKeyAsync(string x_Shkeeper_Api_Key, Body body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -290,10 +296,11 @@ namespace Etherna.Credit.Shkeeper
         /// <summary>
         /// Create/Update SHKeeper invoice
         /// </summary>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CreatePaymentRequestResponse> ApiV1PaymentRequestAsync(Crypto_name crypto_name, CreatePaymentRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CreatePaymentRequestResponse> ApiV1PaymentRequestAsync(string x_Shkeeper_Api_Key, Crypto_name crypto_name, CreatePaymentRequest body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
                 throw new System.ArgumentNullException("crypto_name");
@@ -307,6 +314,10 @@ namespace Etherna.Credit.Shkeeper
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+
+                    if (x_Shkeeper_Api_Key == null)
+                        throw new System.ArgumentNullException("x_Shkeeper_Api_Key");
+                    request_.Headers.TryAddWithoutValidation("X-Shkeeper-Api-Key", ConvertToString(x_Shkeeper_Api_Key, System.Globalization.CultureInfo.InvariantCulture));
                     var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
@@ -396,10 +407,11 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get detailed information about status of created invoice in SHKeeper by external_id
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GetInvoiceByExternalIdResponse> ApiV1InvoicesAsync(string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<GetInvoiceByExternalIdResponse> ApiV1InvoicesAsync(string x_Shkeeper_Api_Key, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (external_id == null)
                 throw new System.ArgumentNullException("external_id");
@@ -410,6 +422,10 @@ namespace Etherna.Credit.Shkeeper
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+
+                    if (x_Shkeeper_Api_Key == null)
+                        throw new System.ArgumentNullException("x_Shkeeper_Api_Key");
+                    request_.Headers.TryAddWithoutValidation("X-Shkeeper-Api-Key", ConvertToString(x_Shkeeper_Api_Key, System.Globalization.CultureInfo.InvariantCulture));
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
@@ -484,10 +500,11 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get all generated cryptocurrency addresses for specified cryptocurrency
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GetAddressesByCryptoNameResponse> ApiV1AddressesAsync(Crypto_name crypto_name, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<GetAddressesByCryptoNameResponse> ApiV1AddressesAsync(string x_Shkeeper_Api_Key, Crypto_name crypto_name, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
                 throw new System.ArgumentNullException("crypto_name");
@@ -498,6 +515,10 @@ namespace Etherna.Credit.Shkeeper
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+
+                    if (x_Shkeeper_Api_Key == null)
+                        throw new System.ArgumentNullException("x_Shkeeper_Api_Key");
+                    request_.Headers.TryAddWithoutValidation("X-Shkeeper-Api-Key", ConvertToString(x_Shkeeper_Api_Key, System.Globalization.CultureInfo.InvariantCulture));
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
@@ -573,11 +594,12 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get all transactions related to specified cryptocurrency address
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="crypto_name">An identifier for cryptocurrency. Check [Get cryptocurrencies](#tag/Cryptos/operation/getCrypto) to get all available list.</param>
         /// <param name="addr">Cryptocurrency address</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GetTransactionsByCryptoNameAndAddrResponse> ApiV1TransactionsAsync(Crypto_name crypto_name, string addr, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<GetTransactionsByCryptoNameAndAddrResponse> ApiV1TransactionsAsync(string x_Shkeeper_Api_Key, Crypto_name crypto_name, string addr, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (crypto_name == null)
                 throw new System.ArgumentNullException("crypto_name");
@@ -591,6 +613,10 @@ namespace Etherna.Credit.Shkeeper
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+
+                    if (x_Shkeeper_Api_Key == null)
+                        throw new System.ArgumentNullException("x_Shkeeper_Api_Key");
+                    request_.Headers.TryAddWithoutValidation("X-Shkeeper-Api-Key", ConvertToString(x_Shkeeper_Api_Key, System.Globalization.CultureInfo.InvariantCulture));
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
@@ -667,11 +693,12 @@ namespace Etherna.Credit.Shkeeper
         /// <remarks>
         /// Get payment info by transaction and external ID
         /// </remarks>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <param name="txid">Cryptocurrency payment transaction ID</param>
         /// <param name="external_id">An identifier order_id or invoice_id from your store.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GetTransactionInfoByTxidAndExternalIdResponse> ApiV1TxInfoAsync(string txid, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<GetTransactionInfoByTxidAndExternalIdResponse> ApiV1TxInfoAsync(string x_Shkeeper_Api_Key, string txid, string external_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (txid == null)
                 throw new System.ArgumentNullException("txid");
@@ -685,6 +712,10 @@ namespace Etherna.Credit.Shkeeper
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+
+                    if (x_Shkeeper_Api_Key == null)
+                        throw new System.ArgumentNullException("x_Shkeeper_Api_Key");
+                    request_.Headers.TryAddWithoutValidation("X-Shkeeper-Api-Key", ConvertToString(x_Shkeeper_Api_Key, System.Globalization.CultureInfo.InvariantCulture));
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
@@ -758,9 +789,10 @@ namespace Etherna.Credit.Shkeeper
         /// <summary>
         /// Decrypt Wallets
         /// </summary>
+        /// <param name="x_Shkeeper_Api_Key">API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -&gt; `Manage` -&gt; `API key`.</param>
         /// <returns>success</returns>
         /// <exception cref="ShKeeperApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Response> ApiV1DecryptionKeyAsync(Body body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<Response> ApiV1DecryptionKeyAsync(string x_Shkeeper_Api_Key, Body body, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -771,6 +803,10 @@ namespace Etherna.Credit.Shkeeper
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+
+                    if (x_Shkeeper_Api_Key == null)
+                        throw new System.ArgumentNullException("x_Shkeeper_Api_Key");
+                    request_.Headers.TryAddWithoutValidation("X-Shkeeper-Api-Key", ConvertToString(x_Shkeeper_Api_Key, System.Globalization.CultureInfo.InvariantCulture));
                     var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var dictionary_ = System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, string>>(json_, JsonSerializerSettings);
                     var content_ = new System.Net.Http.FormUrlEncodedContent(dictionary_);

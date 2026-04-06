@@ -91,6 +91,7 @@ namespace Etherna.Credit.Shkeeper
                 cryptoSymbol.Replace("-", "", StringComparison.InvariantCulture));
             
             var result = await generatedClient.ApiV1PaymentRequestAsync(
+                ApiKey,
                 cryptoSymbolEnum,
                 new CreatePaymentRequest
                 {

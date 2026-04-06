@@ -129,6 +129,9 @@
         ],
         "parameters": [
           {
+            "$ref": "#/components/parameters/XShkeeperApiKey"
+          },
+          {
             "$ref": "#/components/parameters/CryptoName"
           }
         ],
@@ -262,6 +265,9 @@
         ],
         "parameters": [
           {
+            "$ref": "#/components/parameters/XShkeeperApiKey"
+          },
+          {
             "$ref": "#/components/parameters/ExternalId"
           }
         ],
@@ -309,6 +315,9 @@
         ],
         "parameters": [
           {
+            "$ref": "#/components/parameters/XShkeeperApiKey"
+          },
+          {
             "$ref": "#/components/parameters/CryptoName"
           }
         ],
@@ -355,6 +364,9 @@
           }
         ],
         "parameters": [
+          {
+            "$ref": "#/components/parameters/XShkeeperApiKey"
+          },
           {
             "$ref": "#/components/parameters/CryptoName"
           },
@@ -406,6 +418,9 @@
         ],
         "parameters": [
           {
+            "$ref": "#/components/parameters/XShkeeperApiKey"
+          },
+          {
             "$ref": "#/components/parameters/TransactionId"
           },
           {
@@ -454,6 +469,11 @@
         ],
         "operationId": "DecryptWallet",
         "summary": "Decrypt Wallets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/XShkeeperApiKey"
+          }
+        ],
         "tags": [
           "Encryption"
         ],
@@ -1669,6 +1689,16 @@
           "type": "string",
           "format": "uuid",
           "example": "7028c45b-0c88-483e-b703-dd455a361b2e"
+        }
+      },
+      "XShkeeperApiKey": {
+        "name": "X-Shkeeper-Api-Key",
+        "in": "header",
+        "description": "API key for authentication. You can generate or view an API key in the SHKeeper UI under `Wallets` -> `Manage` -> `API key`.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "fs9GYTyNdkjPHX36"
         }
       }
     }
