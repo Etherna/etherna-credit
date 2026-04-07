@@ -12,9 +12,12 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-namespace Etherna.Credit.Areas.Api.DtoModels
+namespace Etherna.Credit.Shkeeper.Models
 {
-    public sealed record PaymentCryptoDto(
-        string DisplayName,
-        string Symbol);
+    public sealed record CryptoTx(
+        string TxId,
+        string Address,
+        double Amount,
+        string Crypto,
+        bool IsConfirmed);
 }

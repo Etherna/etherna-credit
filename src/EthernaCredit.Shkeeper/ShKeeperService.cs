@@ -79,7 +79,7 @@ namespace Etherna.Credit.Shkeeper
         public Uri BaseUrl { get; }
         
         // Methods.
-        public async Task<ShKeeperPaymentRequestResponse> CreatePaymentRequestAsync(
+        public async Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,
             string cryptoSymbol,
             string externalId,
@@ -101,19 +101,19 @@ namespace Etherna.Credit.Shkeeper
                     Fiat = CreatePaymentRequestFiat.USD
                 },
                 cancellationToken);
-            return new ShKeeperPaymentRequestResponse
-            {
-                Id = result.Id,
-                CryptoAmount = double.Parse(result.Amount, CultureInfo.InvariantCulture),
-                DisplayName = result.Display_name,
-                ExchangeRate = double.Parse(result.Exchange_rate, CultureInfo.InvariantCulture),
-                RecalculateAfter = TimeSpan.FromHours(result.Recalculate_after),
-                Status = result.Status,
-                Wallet = result.Wallet
-            };
+            return new ShKeeperPaymentRequestResponse(
+                Id: result.Id,
+                CryptoAmount: double.Parse(result.Amount, CultureInfo.InvariantCulture),
+                DisplayName: result.Display_name,
+                ExchangeRate: double.Parse(result.Exchange_rate, CultureInfo.InvariantCulture),
+                RecalculateAfter: TimeSpan.FromHours(result.Recalculate_after),
+                Status: result.Status,
+                Wallet: result.Wallet
+            );
         }
         
-        public async Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(
+            CancellationToken cancellationToken = default)
         {
             // Try to return from cache.
             if (lastAvailableCryptoFetchTime + AvailableCryptoFetchTTL >= DateTimeOffset.Now)
@@ -140,6 +140,33 @@ namespace Etherna.Credit.Shkeeper
             {
                 availableCryptosSemaphore.Release();
             }
+        }
+
+        public async Task<ShKeeperInvoice> GetInvoiceAsync(
+            string externalId,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await generatedClient.ApiV1InvoicesAsync(ApiKey, externalId, cancellationToken);
+            var invoice = result.Invoices.Single();
+            return new ShKeeperInvoice(
+                Status: invoice.Status switch
+                {
+                    InvoiceStatus.UNPAID => Domain.Models.InvoiceStatus.Unpaid,
+                    InvoiceStatus.PARTIAL => Domain.Models.InvoiceStatus.Partial,
+                    InvoiceStatus.PAID => Domain.Models.InvoiceStatus.Paid,
+                    InvoiceStatus.OVERPAID => Domain.Models.InvoiceStatus.Overpaid,
+                    _ => throw new InvalidOperationException()
+                },
+                Txs: invoice.Txs.Select(tx => new CryptoTx(
+                    Address: tx.Addr,
+                    Amount: double.Parse(tx.Amount, CultureInfo.InvariantCulture),
+                    Crypto: tx.Crypto,
+                    IsConfirmed: tx.Status == TransactionStatus.CONFIRMED,
+                    TxId: tx.Txid
+                )).ToArray(),
+                UsdAmount: XDaiValue.FromString(invoice.Amount_fiat),
+                UsdBalance: XDaiValue.FromString(invoice.Balance_fiat)
+            );
         }
     }
 }

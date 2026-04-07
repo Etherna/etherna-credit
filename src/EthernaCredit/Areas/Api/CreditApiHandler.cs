@@ -36,7 +36,7 @@ namespace Etherna.Credit.Areas.Api
         IUserService userService)
         : ICreditApiHandler
     {
-        public Task<IResult> CreateCryptoPaymentRequestAsync(XDaiValue amount, string cryptoSymbol) =>
+        public Task<IResult> CreateCryptoInvoiceAsync(XDaiValue amount, string cryptoSymbol) =>
             ExceptionHandler.RunAsync(async () =>
             {
                 // Verify auth and input.
@@ -50,21 +50,22 @@ namespace Etherna.Credit.Areas.Api
                 await dbContext.CryptoPaymentRequests.CreateAsync(request);
                 
                 // Create payment request on ShKeeper.
-                var shkeeperResponse = await shkeperService.CreatePaymentRequestAsync(
+                var shkeeperResponse = await shkeperService.CreateInvoiceAsync(
                     amount,
                     cryptoSymbol,
                     request.Id);
 
                 return Results.Json(new CryptoPaymentRequestDto(
-                    request.Id,
-                    amount,
-                    shkeeperResponse.CryptoAmount,
-                    shkeeperResponse.DisplayName,
-                    cryptoSymbol,
-                    shkeeperResponse.ExchangeRate,
-                    shkeeperResponse.RecalculateAfter,
-                    shkeeperResponse.Status,
-                    shkeeperResponse.Wallet));
+                    Id: request.Id,
+                    CoinAmount: shkeeperResponse.CryptoAmount,
+                    CoinDisplayName: shkeeperResponse.DisplayName,
+                    CoinSymbol: cryptoSymbol,
+                    ExchangeRate: shkeeperResponse.ExchangeRate,
+                    RecalculateAfter: shkeeperResponse.RecalculateAfter,
+                    Status: shkeeperResponse.Status,
+                    UsdAmount: amount,
+                    Wallet: shkeeperResponse.Wallet
+                ));
             });
 
         public Task<IResult> GetAvailablePaymentCryptosAsync() =>
@@ -72,6 +73,31 @@ namespace Etherna.Credit.Areas.Api
             {
                 var cryptos = await shkeperService.GetAvailableCryptosAsync();
                 return Results.Json(cryptos.Values.Select(c => new PaymentCryptoDto(c.DisplayName, c.Symbol)));
+            });
+
+        public Task<IResult> GetCryptoInvoiceAsync(string id) =>
+            ExceptionHandler.RunAsync(async () =>
+            {
+                // Verify authorization.
+                var invoiceDb = await dbContext.CryptoPaymentRequests.FindOneAsync(id);
+                var (userModel, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
+                if (!Equals(invoiceDb.Author, userModel))
+                    return Results.NotFound(); //hide existence when not authorized
+                
+                // Get info from shkeeper.
+                var invoiceShKeeper = await shkeperService.GetInvoiceAsync(id);
+                var invoiceDto = new CryptoInvoiceDto(
+                    UsdAmount: invoiceShKeeper.UsdAmount,
+                    UsdBalance: invoiceShKeeper.UsdBalance,
+                    Status: invoiceShKeeper.Status,
+                    Txs: invoiceShKeeper.Txs.Select(tx => new CryptoTxDto(
+                        TxId: tx.TxId,
+                        Address: tx.Address,
+                        Amount: tx.Amount,
+                        Crypto: tx.Crypto,
+                        IsConfirmed: tx.IsConfirmed)));
+
+                return Results.Json(invoiceDto);
             });
 
         public Task<IResult> GetCurrentUserAddressAsync() =>

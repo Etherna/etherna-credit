@@ -21,8 +21,9 @@ namespace Etherna.Credit.Areas.Api
 {
     internal interface ICreditApiHandler
     {
-        Task<IResult> CreateCryptoPaymentRequestAsync(XDaiValue amount, string cryptoSymbol);
+        Task<IResult> CreateCryptoInvoiceAsync(XDaiValue amount, string cryptoSymbol);
         Task<IResult> GetAvailablePaymentCryptosAsync();
+        Task<IResult> GetCryptoInvoiceAsync(string id);
         Task<IResult> GetCurrentUserAddressAsync();
         Task<IResult> GetCurrentUserCreditAsync();
         Task<IResult> GetCurrentUserLogsAsync(int page, int take);

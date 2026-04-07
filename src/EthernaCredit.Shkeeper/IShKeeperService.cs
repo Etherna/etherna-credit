@@ -22,12 +22,17 @@ namespace Etherna.Credit.Shkeeper
 {
     public interface IShKeeperService
     {
-        Task<ShKeeperPaymentRequestResponse> CreatePaymentRequestAsync(
+        Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,
             string cryptoSymbol,
             string externalId,
             CancellationToken cancellationToken = default);
         
-        Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default);
+        Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(
+            CancellationToken cancellationToken = default);
+        
+        Task<ShKeeperInvoice> GetInvoiceAsync(
+            string externalId,
+            CancellationToken cancellationToken = default);
     }
 }

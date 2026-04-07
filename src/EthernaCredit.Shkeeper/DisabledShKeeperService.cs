@@ -25,14 +25,20 @@ namespace Etherna.Credit.Shkeeper
     {
         private const string ExceptionMessage = "SHKeeper is not configured.";
 
-        public Task<ShKeeperPaymentRequestResponse> CreatePaymentRequestAsync(
+        public Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,
             string cryptoSymbol,
             string externalId,
             CancellationToken cancellationToken = default) =>
             throw new InvalidOperationException(ExceptionMessage);
         
-        public Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(CancellationToken cancellationToken = default) =>
+        public Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(
+            CancellationToken cancellationToken = default) =>
+            throw new InvalidOperationException(ExceptionMessage);
+
+        public Task<ShKeeperInvoice> GetInvoiceAsync(
+            string externalId,
+            CancellationToken cancellationToken = default) =>
             throw new InvalidOperationException(ExceptionMessage);
     }
 }

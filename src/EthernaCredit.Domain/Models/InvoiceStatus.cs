@@ -12,9 +12,13 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-namespace Etherna.Credit.Areas.Api.DtoModels
+namespace Etherna.Credit.Domain.Models
 {
-    public sealed record PaymentCryptoDto(
-        string DisplayName,
-        string Symbol);
+    public enum InvoiceStatus
+    {
+        Unpaid = 0,
+        Partial = 1,
+        Paid = 2,
+        Overpaid = 3,
+    }
 }

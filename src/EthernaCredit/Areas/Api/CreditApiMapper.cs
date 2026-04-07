@@ -42,19 +42,27 @@ namespace Etherna.Credit.Areas.Api
         {
 #pragma warning disable CS0618 // Type or member is obsolete
             //payments
-            builder.MapGet("payments/cryptos",
+            builder.MapGet("payments/crypto/available",
                     (ICreditApiHandler handler) =>
                         handler.GetAvailablePaymentCryptosAsync())
                 .Produces<IEnumerable<PaymentCryptoDto>>();
 
-            builder.MapPost("payments/cryptos/{cryptoSymbol}",
+            builder.MapPost("payments/crypto/invoices",
                     (ICreditApiHandler handler,
-                            [FromRoute] string cryptoSymbol,
-                            [FromQuery] decimal amount) =>
-                        handler.CreateCryptoPaymentRequestAsync(amount, cryptoSymbol))
+                            [FromQuery] decimal amount,
+                            [FromQuery] string cryptoSymbol) =>
+                        handler.CreateCryptoInvoiceAsync(amount, cryptoSymbol))
                 .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
                 .Produces<CryptoPaymentRequestDto>()
                 .Produces(StatusCodes.Status400BadRequest);
+
+            builder.MapGet("payments/crypto/invoices/{id}",
+                    (ICreditApiHandler handler,
+                            [FromRoute] string id) =>
+                        handler.GetCryptoInvoiceAsync(id))
+                .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
+                .Produces<CryptoInvoiceDto>()
+                .Produces(StatusCodes.Status404NotFound);
 
             //serviceInteract
             builder.MapGet("serviceInteract/users/{address}/credit",

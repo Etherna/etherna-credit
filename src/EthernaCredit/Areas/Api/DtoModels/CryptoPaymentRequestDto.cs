@@ -17,25 +17,14 @@ using System;
 
 namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    public sealed class CryptoPaymentRequestDto(
-        string id,
-        XDaiValue usdAmount,
-        double cryptoAmount,
-        string cryptoDisplayName,
-        string cryptoSymbol,
-        double exchangeRate,
-        TimeSpan recalculateAfter,
-        string status,
-        string wallet)
-    {
-        public string Id { get; } = id;
-        public double CryptoAmount { get; } = cryptoAmount;
-        public string CryptoDisplayName { get; } = cryptoDisplayName;
-        public string CryptoSymbol { get; } = cryptoSymbol;
-        public double ExchangeRate { get; } = exchangeRate;
-        public TimeSpan RecalculateAfter { get; } = recalculateAfter;
-        public string Status { get; } = status;
-        public XDaiValue UsdAmount { get; } = usdAmount;
-        public string Wallet { get; } = wallet;
-    }
+    public sealed record CryptoPaymentRequestDto(
+        string Id,
+        XDaiValue UsdAmount,
+        double CoinAmount,
+        string CoinDisplayName,
+        string CoinSymbol,
+        double ExchangeRate,
+        TimeSpan RecalculateAfter,
+        string Status,
+        string Wallet);
 }

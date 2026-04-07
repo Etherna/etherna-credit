@@ -16,14 +16,12 @@ using System;
 
 namespace Etherna.Credit.Shkeeper.Models
 {
-    public class ShKeeperPaymentRequestResponse
-    {
-        public required ulong Id { get; init; }
-        public required double CryptoAmount { get; init; }
-        public required string DisplayName { get; init; }
-        public required double ExchangeRate { get; init; }
-        public required TimeSpan RecalculateAfter { get; init; }
-        public required string Status { get; init; }
-        public required string Wallet { get; init; }
-    }
+    public sealed record ShKeeperPaymentRequestResponse(
+        ulong Id,
+        double CryptoAmount,
+        string DisplayName,
+        double ExchangeRate,
+        TimeSpan RecalculateAfter,
+        string Status,
+        string Wallet);
 }

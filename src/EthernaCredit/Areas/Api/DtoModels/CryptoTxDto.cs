@@ -14,7 +14,10 @@
 
 namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    public sealed record PaymentCryptoDto(
-        string DisplayName,
-        string Symbol);
+    public sealed record CryptoTxDto(
+        string TxId,
+        string Address,
+        double Amount,
+        string Crypto,
+        bool IsConfirmed);
 }

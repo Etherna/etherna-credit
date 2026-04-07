@@ -14,11 +14,7 @@
 
 namespace Etherna.Credit.Shkeeper.Models
 {
-    public sealed class PaymentCrypto(
-        string displayName,
-        string symbol)
-    {
-        public string DisplayName { get; } = displayName;
-        public string Symbol { get; } = symbol;
-    }
+    public sealed record PaymentCrypto(
+        string DisplayName,
+        string Symbol);
 }

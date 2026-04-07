@@ -16,9 +16,7 @@ using Etherna.BeeNet.Models;
 
 namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    public sealed class CreditDto(XDaiValue balance, bool isUnlimited)
-    {
-        public XDaiValue Balance { get; } = balance;
-        public bool IsUnlimited { get; } = isUnlimited;
-    }
+    public sealed record CreditDto(
+        XDaiValue Balance,
+        bool IsUnlimited);
 }

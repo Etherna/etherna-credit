@@ -12,9 +12,15 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.BeeNet.Models;
+using Etherna.Credit.Domain.Models;
+using System.Collections.Generic;
+
 namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    public sealed record PaymentCryptoDto(
-        string DisplayName,
-        string Symbol);
+    public sealed record CryptoInvoiceDto(
+        XDaiValue UsdAmount,
+        XDaiValue UsdBalance,
+        InvoiceStatus Status,
+        IEnumerable<CryptoTxDto> Txs);
 }
