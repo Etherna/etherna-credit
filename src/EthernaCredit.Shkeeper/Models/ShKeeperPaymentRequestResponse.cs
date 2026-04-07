@@ -12,16 +12,16 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
 using System;
 
 namespace Etherna.Credit.Shkeeper.Models
 {
     public class ShKeeperPaymentRequestResponse
     {
+        public required ulong Id { get; init; }
+        public required double CryptoAmount { get; init; }
         public required string DisplayName { get; init; }
         public required double ExchangeRate { get; init; }
-        public required string Id { get; init; }
         public required TimeSpan RecalculateAfter { get; init; }
         public required string Status { get; init; }
         public required string Wallet { get; init; }

@@ -19,7 +19,8 @@ namespace Etherna.Credit.Areas.Api.DtoModels
 {
     public sealed class CryptoPaymentRequestDto(
         string id,
-        XDaiValue amount,
+        XDaiValue usdAmount,
+        double cryptoAmount,
         string cryptoDisplayName,
         string cryptoSymbol,
         double exchangeRate,
@@ -28,12 +29,13 @@ namespace Etherna.Credit.Areas.Api.DtoModels
         string wallet)
     {
         public string Id { get; } = id;
-        public XDaiValue Amount { get; } = amount;
+        public double CryptoAmount { get; } = cryptoAmount;
         public string CryptoDisplayName { get; } = cryptoDisplayName;
         public string CryptoSymbol { get; } = cryptoSymbol;
         public double ExchangeRate { get; } = exchangeRate;
         public TimeSpan RecalculateAfter { get; } = recalculateAfter;
         public string Status { get; } = status;
+        public XDaiValue UsdAmount { get; } = usdAmount;
         public string Wallet { get; } = wallet;
     }
 }

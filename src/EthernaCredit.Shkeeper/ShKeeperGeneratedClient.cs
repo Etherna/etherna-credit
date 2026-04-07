@@ -1768,13 +1768,13 @@ namespace Etherna.Credit.Shkeeper
         /// SHKeeper invoice id
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("id")]
-        public string Id { get; set; } = default!;
+        public ulong Id { get; set; } = default!;
 
         /// <summary>
         /// Time to hold exchange rate for the client, if 0 - no recalculate when recived payment
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("recalculate_after")]
-        public string Recalculate_after { get; set; } = default!;
+        public ulong Recalculate_after { get; set; } = default!;
 
         /// <summary>
         /// Creating SHKeeper invoice status

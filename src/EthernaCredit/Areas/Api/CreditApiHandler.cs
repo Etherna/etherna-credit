@@ -58,6 +58,7 @@ namespace Etherna.Credit.Areas.Api
                 return Results.Json(new CryptoPaymentRequestDto(
                     request.Id,
                     amount,
+                    shkeeperResponse.CryptoAmount,
                     shkeeperResponse.DisplayName,
                     cryptoSymbol,
                     shkeeperResponse.ExchangeRate,

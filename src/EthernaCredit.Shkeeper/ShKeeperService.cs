@@ -103,10 +103,11 @@ namespace Etherna.Credit.Shkeeper
                 cancellationToken);
             return new ShKeeperPaymentRequestResponse
             {
+                Id = result.Id,
+                CryptoAmount = double.Parse(result.Amount, CultureInfo.InvariantCulture),
                 DisplayName = result.Display_name,
                 ExchangeRate = double.Parse(result.Exchange_rate, CultureInfo.InvariantCulture),
-                Id = result.Id,
-                RecalculateAfter = TimeSpan.FromSeconds(long.Parse(result.Recalculate_after, CultureInfo.InvariantCulture)),
+                RecalculateAfter = TimeSpan.FromHours(result.Recalculate_after),
                 Status = result.Status,
                 Wallet = result.Wallet
             };

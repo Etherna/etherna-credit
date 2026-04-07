@@ -1163,11 +1163,13 @@
             "description": "cryptocurrency to fiat exchange rate for the moment of invoice generated"
           },
           "id": {
-            "type": "string",
+            "type": "integer",
+            "format": "uint64",
             "description": "SHKeeper invoice id"
           },
           "recalculate_after": {
-            "type": "string",
+            "type": "integer",
+            "format": "uint64",
             "description": "Time to hold exchange rate for the client, if 0 - no recalculate when recived payment"
           },
           "status": {
