@@ -15,6 +15,7 @@
 using Etherna.Authentication;
 using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Api.DtoModels;
+using Etherna.Credit.Areas.Api.InputModels;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
@@ -36,7 +37,13 @@ namespace Etherna.Credit.Areas.Api
         IUserService userService)
         : ICreditApiHandler
     {
-        public Task<IResult> CreateCryptoInvoiceAsync(XDaiValue amount, string cryptoSymbol) =>
+        public Task<IResult> CallbackCryptoPaymentAsync(string apiKey, CallbackPaymentRequestInput body, string secret) =>
+            ExceptionHandler.RunAsync(async () =>
+            {
+                throw new NotImplementedException();
+            });
+
+        public Task<IResult> CreateCryptoInvoiceAsync(XDaiValue amount, string cryptoSymbol, HttpRequest request) =>
             ExceptionHandler.RunAsync(async () =>
             {
                 // Verify auth and input.
@@ -46,17 +53,18 @@ namespace Etherna.Credit.Areas.Api
                     return Results.BadRequest($"Crypto symbol {cryptoSymbol} not found");
                 
                 // Create payment request on db.
-                var request = new CryptoPaymentRequest(author, amount, cryptoSymbol);
-                await dbContext.CryptoPaymentRequests.CreateAsync(request);
+                var paymentRequest = new CryptoPaymentRequest(author, amount, cryptoSymbol);
+                await dbContext.CryptoPaymentRequests.CreateAsync(paymentRequest);
                 
                 // Create payment request on ShKeeper.
                 var shkeeperResponse = await shkeperService.CreateInvoiceAsync(
                     amount,
+                    $"{request.Scheme}://{request.Host}/api/v0.3/payments/crypto/internal/callback/{paymentRequest.Secret}",
                     cryptoSymbol,
-                    request.Id);
+                    paymentRequest.Id);
 
                 return Results.Json(new CryptoPaymentRequestDto(
-                    Id: request.Id,
+                    Id: paymentRequest.Id,
                     CoinAmount: shkeeperResponse.CryptoAmount,
                     CoinDisplayName: shkeeperResponse.DisplayName,
                     CoinSymbol: cryptoSymbol,

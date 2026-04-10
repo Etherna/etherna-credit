@@ -13,6 +13,7 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.BeeNet.Models;
+using System;
 
 namespace Etherna.Credit.Domain.Models
 {
@@ -26,6 +27,7 @@ namespace Etherna.Credit.Domain.Models
         {
             Amount = amount;
             Author = author;
+            Secret = Guid.NewGuid().ToString();
             Symbol = symbol;
         }
         protected CryptoPaymentRequest() { }
@@ -33,6 +35,7 @@ namespace Etherna.Credit.Domain.Models
         // Properties.
         public virtual XDaiValue Amount { get; protected set; }
         public virtual User Author { get; protected set; } = null!;
+        public virtual string Secret { get; protected set; } = null!;
         public virtual string Symbol { get; protected set; } = null!;
     }
 }

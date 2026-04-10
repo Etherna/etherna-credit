@@ -14,6 +14,7 @@
 
 using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Api.DtoModels;
+using Etherna.Credit.Areas.Api.InputModels;
 using Etherna.Credit.Configs;
 using Etherna.Credit.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -47,11 +48,22 @@ namespace Etherna.Credit.Areas.Api
                         handler.GetAvailablePaymentCryptosAsync())
                 .Produces<IEnumerable<PaymentCryptoDto>>();
 
+            builder.MapPost("payments/crypto/internal/callback/{secret}",
+                    (ICreditApiHandler handler,
+                            [FromHeader(Name = "X-Shkeeper-Api-Key")] string apiKey,
+                            [FromRoute] string secret,
+                            [FromBody] CallbackPaymentRequestInput body) =>
+                        handler.CallbackCryptoPaymentAsync(apiKey, body, secret))
+                .Produces(StatusCodes.Status202Accepted) //required to confirm on shkeeper
+                .Produces(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status404NotFound);
+
             builder.MapPost("payments/crypto/invoices",
                     (ICreditApiHandler handler,
+                            HttpRequest request,
                             [FromQuery] decimal amount,
                             [FromQuery] string cryptoSymbol) =>
-                        handler.CreateCryptoInvoiceAsync(amount, cryptoSymbol))
+                        handler.CreateCryptoInvoiceAsync(amount, cryptoSymbol, request))
                 .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
                 .Produces<CryptoPaymentRequestDto>()
                 .Produces(StatusCodes.Status400BadRequest);

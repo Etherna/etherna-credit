@@ -81,6 +81,7 @@ namespace Etherna.Credit.Shkeeper
         // Methods.
         public async Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,
+            string callbackUrl,
             string cryptoSymbol,
             string externalId,
             CancellationToken cancellationToken = default)
@@ -96,7 +97,7 @@ namespace Etherna.Credit.Shkeeper
                 new CreatePaymentRequest
                 {
                     Amount = amount.ToString(),
-                    Callback_url = "https://test.com/sas",
+                    Callback_url = callbackUrl,
                     External_id = externalId,
                     Fiat = CreatePaymentRequestFiat.USD
                 },

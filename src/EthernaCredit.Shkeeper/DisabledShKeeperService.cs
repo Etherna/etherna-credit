@@ -27,6 +27,7 @@ namespace Etherna.Credit.Shkeeper
 
         public Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,
+            string callbackUrl,
             string cryptoSymbol,
             string externalId,
             CancellationToken cancellationToken = default) =>

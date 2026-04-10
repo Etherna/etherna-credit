@@ -13,6 +13,7 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.BeeNet.Models;
+using Etherna.Credit.Areas.Api.InputModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace Etherna.Credit.Areas.Api
 {
     internal interface ICreditApiHandler
     {
-        Task<IResult> CreateCryptoInvoiceAsync(XDaiValue amount, string cryptoSymbol);
+        Task<IResult> CallbackCryptoPaymentAsync(string apiKey, CallbackPaymentRequestInput body, string secret);
+        Task<IResult> CreateCryptoInvoiceAsync(XDaiValue amount, string cryptoSymbol, HttpRequest request);
         Task<IResult> GetAvailablePaymentCryptosAsync();
         Task<IResult> GetCryptoInvoiceAsync(string id);
         Task<IResult> GetCurrentUserAddressAsync();
