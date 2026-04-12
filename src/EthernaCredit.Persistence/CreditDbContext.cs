@@ -41,10 +41,28 @@ namespace Etherna.Credit.Persistence
 
         // Properties.
         //repositories
-        public IRepository<CryptoPaymentRequest, string> CryptoPaymentRequests { get; } =
-            new DomainRepository<CryptoPaymentRequest, string>("cryptoPaymentRequests");
         public IRepository<OperationLogBase, string> OperationLogs { get; } =
             new DomainRepository<OperationLogBase, string>("logs");
+        public IRepository<ProcessedCryptoTransaction, string> ProcessedCryptoTransactions { get; } =
+            new DomainRepository<ProcessedCryptoTransaction, string>(
+                new RepositoryOptions<ProcessedCryptoTransaction>("processedCryptoTransactions")
+                {
+                    IndexBuilders =
+                    [
+                        (Builders<ProcessedCryptoTransaction>.IndexKeys.Ascending(t => t.TxId), new CreateIndexOptions<ProcessedCryptoTransaction> { Unique = true })
+                    ]
+                });
+
+        public IRepository<UserCryptoWallet, string> UserCryptoWallets { get; } =
+            new DomainRepository<UserCryptoWallet, string>(
+                new RepositoryOptions<UserCryptoWallet>("userCryptoWallets")
+                {
+                    IndexBuilders =
+                    [
+                        (Builders<UserCryptoWallet>.IndexKeys.Ascending(w => w.Author.Id).Ascending(w => w.Symbol), new CreateIndexOptions<UserCryptoWallet> { Unique = true }),
+                        (Builders<UserCryptoWallet>.IndexKeys.Ascending(w => w.Wallet), new CreateIndexOptions<UserCryptoWallet> { Unique = true })
+                    ]
+                });
         public IRepository<User, string> Users { get; } = new DomainRepository<User, string>(
             new RepositoryOptions<User>("users")
             {

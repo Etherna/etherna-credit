@@ -1,41 +1,40 @@
 // Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
-// 
+//
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
 // GNU Affero General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
-// 
+//
 // Etherna Credit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 // without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.BeeNet.Models;
-using System;
 
-namespace Etherna.Credit.Domain.Models
+namespace Etherna.Credit.Domain.Models.OperationLogs
 {
-    public class CryptoPaymentRequest : EntityModelBase<string>
+    public class CryptoDepositOperationLog : DepositOperationLog
     {
         // Constructors.
-        public CryptoPaymentRequest(
-            User author,
-            XDaiValue amount,
-            string symbol)
+        public CryptoDepositOperationLog(
+            XDaiValue amountFiat,
+            string amountCrypto,
+            string cryptoSymbol,
+            string author,
+            User user)
+            : base(amountFiat, author, user)
         {
-            Amount = amount;
-            Author = author;
-            Secret = Guid.NewGuid().ToString();
-            Symbol = symbol;
+            AmountCrypto = amountCrypto;
+            CryptoSymbol = cryptoSymbol;
         }
-        protected CryptoPaymentRequest() { }
+        protected CryptoDepositOperationLog() { }
 
         // Properties.
-        public virtual XDaiValue Amount { get; protected set; }
-        public virtual User Author { get; protected set; } = null!;
-        public virtual string Secret { get; protected set; } = null!;
-        public virtual string Symbol { get; protected set; } = null!;
+        public virtual string AmountCrypto { get; protected set; } = null!;
+        public virtual string CryptoSymbol { get; protected set; } = null!;
+        public override string OperationName => "CryptoDeposit";
     }
 }

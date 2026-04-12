@@ -17,15 +17,21 @@ using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Api.DtoModels;
 using Etherna.Credit.Areas.Api.InputModels;
 using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Events;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Services.Domain;
 using Etherna.Credit.Shkeeper;
+using Etherna.Credit.Shkeeper.Models;
+using Etherna.DomainEvents;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Etherna.Credit.Areas.Api
@@ -33,47 +39,85 @@ namespace Etherna.Credit.Areas.Api
     internal sealed class CreditApiHandler(
         ICreditDbContext dbContext,
         IEthernaOpenIdConnectClient ethernaOidcClient,
+        IEventDispatcher eventDispatcher,
         IShKeeperService shkeperService,
         IUserService userService)
         : ICreditApiHandler
     {
+        // Consts.
+        /// <summary>
+        /// Large static invoice amount that keeps the SHKeeper invoice permanently in PARTIAL status,
+        /// enabling the static address mode: one reusable deposit address per user per crypto.
+        /// </summary>
+        private static readonly XDaiValue StaticInvoiceAmount = 1_000_000_000M;
+
+        // Methods.
         public Task<IResult> CallbackCryptoPaymentAsync(string apiKey, CallbackPaymentRequestInput body, string secret) =>
             ExceptionHandler.RunAsync(async () =>
             {
-                throw new NotImplementedException();
-            });
-
-        public Task<IResult> CreateCryptoInvoiceAsync(XDaiValue amount, string cryptoSymbol, HttpRequest request) =>
-            ExceptionHandler.RunAsync(async () =>
-            {
-                // Verify auth and input.
-                var (author, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
-                var availableCryptos = await shkeperService.GetAvailableCryptosAsync();
-                if (!availableCryptos.ContainsKey(cryptoSymbol))
-                    return Results.BadRequest($"Crypto symbol {cryptoSymbol} not found");
+                // Compare Api key.
+                var validApiKey = CryptographicOperations.FixedTimeEquals(
+                    Encoding.UTF8.GetBytes(shkeperService.ApiKey),
+                    Encoding.UTF8.GetBytes(apiKey)
+                );
                 
-                // Create payment request on db.
-                var paymentRequest = new CryptoPaymentRequest(author, amount, cryptoSymbol);
-                await dbContext.CryptoPaymentRequests.CreateAsync(paymentRequest);
-                
-                // Create payment request on ShKeeper.
-                var shkeeperResponse = await shkeperService.CreateInvoiceAsync(
-                    amount,
-                    $"{request.Scheme}://{request.Host}/api/v0.3/payments/crypto/internal/callback/{paymentRequest.Secret}",
-                    cryptoSymbol,
-                    paymentRequest.Id);
+                // Get wallet record and verify confirm secret.
+                // ExternalId format: "{authorId}.{cryptoSymbol}" (see GetCryptoWalletAsync).
+                // ObjectIds are 24-char hex with no dots; crypto symbols use hyphens, never dots.
+                var dotIdx = body.ExternalId.IndexOf('.', StringComparison.InvariantCulture);
+                var authorId = dotIdx >= 0 ? body.ExternalId[..dotIdx] : string.Empty;
+                var symbol   = dotIdx >= 0 ? body.ExternalId[(dotIdx + 1)..] : string.Empty;
+                var userWallet = await dbContext.UserCryptoWallets.TryFindOneAsync(
+                    w => w.Author.Id == authorId && w.Symbol == symbol);
 
-                return Results.Json(new CryptoPaymentRequestDto(
-                    Id: paymentRequest.Id,
-                    CoinAmount: shkeeperResponse.CryptoAmount,
-                    CoinDisplayName: shkeeperResponse.DisplayName,
-                    CoinSymbol: cryptoSymbol,
-                    ExchangeRate: shkeeperResponse.ExchangeRate,
-                    RecalculateAfter: shkeeperResponse.RecalculateAfter,
-                    Status: shkeeperResponse.Status,
-                    UsdAmount: amount,
-                    Wallet: shkeeperResponse.Wallet
-                ));
+                // Use a dummy value when the wallet is not found to preserve constant-time comparison.
+                var storedSecret = userWallet?.ConfirmSecret ?? Guid.NewGuid().ToString();
+                var validSecret = CryptographicOperations.FixedTimeEquals(
+                    Encoding.UTF8.GetBytes(storedSecret),
+                    Encoding.UTF8.GetBytes(secret)
+                );
+
+                if (!validApiKey || !validSecret)
+                    return Results.NotFound();
+
+                // Process each transaction that triggered this callback.
+                // Multiple triggers can occur in a single callback.
+                foreach (var triggerTx in body.Transactions.Where(t => t.Trigger))
+                {
+                    // Determine the credited amount net of SHKeeper fees.
+                    // Can be negative when fees exceed the transaction amount: skip in that case.
+                    var creditedAmount = decimal.Parse(triggerTx.AmountFiatWithoutFee, CultureInfo.InvariantCulture);
+                    if (creditedAmount <= 0)
+                        continue;
+
+                    // Idempotency guard: skip if this transaction was already processed.
+                    var alreadyProcessed = await dbContext.ProcessedCryptoTransactions.TryFindOneAsync(
+                        t => t.TxId == triggerTx.TxId);
+                    if (alreadyProcessed is not null)
+                        continue;
+
+                    // Record the transaction as processed.
+                    // The unique index on TxId acts as a safety net for rare concurrent duplicates.
+                    var processedTx = new ProcessedCryptoTransaction(triggerTx.TxId, userWallet!);
+                    await dbContext.ProcessedCryptoTransactions.CreateAsync(processedTx);
+
+                    // Credit user balance.
+                    await userService.TryIncrementUserBalanceAsync(userWallet!.Author, creditedAmount, false);
+
+                    // Report log.
+                    var depositLog = new CryptoDepositOperationLog(
+                        creditedAmount,
+                        triggerTx.AmountCrypto,
+                        triggerTx.Crypto,
+                        "shkeeper",
+                        userWallet.Author);
+                    await dbContext.OperationLogs.CreateAsync(depositLog);
+
+                    // Dispatch event.
+                    await eventDispatcher.DispatchAsync(new UserDepositEvent(depositLog));
+                }
+
+                return Results.Accepted();
             });
 
         public Task<IResult> GetAvailablePaymentCryptosAsync() =>
@@ -83,29 +127,58 @@ namespace Etherna.Credit.Areas.Api
                 return Results.Json(cryptos.Values.Select(c => new PaymentCryptoDto(c.DisplayName, c.Symbol)));
             });
 
-        public Task<IResult> GetCryptoInvoiceAsync(string id) =>
+        public Task<IResult> GetCryptoWalletAsync(string cryptoSymbol, HttpRequest request) =>
             ExceptionHandler.RunAsync(async () =>
             {
-                // Verify authorization.
-                var invoiceDb = await dbContext.CryptoPaymentRequests.FindOneAsync(id);
-                var (userModel, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
-                if (!Equals(invoiceDb.Author, userModel))
-                    return Results.NotFound(); //hide existence when not authorized
-                
-                // Get info from shkeeper.
-                var invoiceShKeeper = await shkeperService.GetInvoiceAsync(id);
-                var invoiceDto = new CryptoInvoiceDto(
-                    UsdAmount: invoiceShKeeper.UsdAmount,
-                    UsdBalance: invoiceShKeeper.UsdBalance,
-                    Status: invoiceShKeeper.Status,
-                    Txs: invoiceShKeeper.Txs.Select(tx => new CryptoTxDto(
+                // Verify auth and input.
+                var (author, _) = await userService.FindUserAsync(await ethernaOidcClient.GetEtherAddressAsync());
+                var availableCryptos = await shkeperService.GetAvailableCryptosAsync();
+                if (!availableCryptos.ContainsKey(cryptoSymbol))
+                    return Results.BadRequest($"Crypto symbol {cryptoSymbol} not found");
+
+                // Find or create the static wallet record for this user/symbol combination.
+                // One persistent wallet per user per crypto is reused indefinitely (static address mode).
+                var externalId = $"{author.Id}.{cryptoSymbol}";
+                var userWallet = await dbContext.UserCryptoWallets.TryFindOneAsync(
+                    w => w.Author.Id == author.Id && w.Symbol == cryptoSymbol);
+
+                ShKeeperPaymentRequestResponse shkeeperResponse;
+                if (userWallet is null)
+                {
+                    var confirmSecret = Guid.NewGuid().ToString().Replace("-", "", StringComparison.InvariantCulture);
+                    shkeeperResponse = await shkeperService.CreateInvoiceAsync(
+                        StaticInvoiceAmount,
+                        $"{request.Scheme}://{request.Host}/api/v0.3/payments/crypto/internal/callback/{confirmSecret}",
+                        cryptoSymbol,
+                        externalId);
+                    userWallet = new UserCryptoWallet(author, confirmSecret, cryptoSymbol, shkeeperResponse.Wallet);
+                    await dbContext.UserCryptoWallets.CreateAsync(userWallet);
+                }
+                else
+                {
+                    // Refresh the invoice on SHKeeper (idempotent: same external_id reuses the same address).
+                    shkeeperResponse = await shkeperService.CreateInvoiceAsync(
+                        StaticInvoiceAmount,
+                        $"{request.Scheme}://{request.Host}/api/v0.3/payments/crypto/internal/callback/{userWallet.ConfirmSecret}",
+                        cryptoSymbol,
+                        externalId);
+                }
+
+                // Get transactions registered on this address.
+                var transactions = await shkeperService.GetInvoiceTxsAsync(externalId);
+
+                return Results.Json(new CryptoWalletDto(
+                    Wallet: userWallet.Wallet,
+                    CoinSymbol: cryptoSymbol,
+                    CoinDisplayName: shkeeperResponse.DisplayName,
+                    ExchangeRate: shkeeperResponse.ExchangeRate,
+                    RecalculateAfter: shkeeperResponse.RecalculateAfter,
+                    Txs: transactions.Select(tx => new CryptoTxDto(
                         TxId: tx.TxId,
                         Address: tx.Address,
                         Amount: tx.Amount,
                         Crypto: tx.Crypto,
-                        IsConfirmed: tx.IsConfirmed)));
-
-                return Results.Json(invoiceDto);
+                        IsConfirmed: tx.IsConfirmed))));
             });
 
         public Task<IResult> GetCurrentUserAddressAsync() =>

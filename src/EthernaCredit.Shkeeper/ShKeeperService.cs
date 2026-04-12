@@ -143,31 +143,19 @@ namespace Etherna.Credit.Shkeeper
             }
         }
 
-        public async Task<ShKeeperInvoice> GetInvoiceAsync(
+        public async Task<IEnumerable<CryptoTx>> GetInvoiceTxsAsync(
             string externalId,
             CancellationToken cancellationToken = default)
         {
             var result = await generatedClient.ApiV1InvoicesAsync(ApiKey, externalId, cancellationToken);
-            var invoice = result.Invoices.Single();
-            return new ShKeeperInvoice(
-                Status: invoice.Status switch
-                {
-                    InvoiceStatus.UNPAID => Domain.Models.InvoiceStatus.Unpaid,
-                    InvoiceStatus.PARTIAL => Domain.Models.InvoiceStatus.Partial,
-                    InvoiceStatus.PAID => Domain.Models.InvoiceStatus.Paid,
-                    InvoiceStatus.OVERPAID => Domain.Models.InvoiceStatus.Overpaid,
-                    _ => throw new InvalidOperationException()
-                },
-                Txs: invoice.Txs.Select(tx => new CryptoTx(
+            return result.Invoices.SelectMany(i => i.Txs)
+                .Select(tx => new CryptoTx(
                     Address: tx.Addr,
                     Amount: double.Parse(tx.Amount, CultureInfo.InvariantCulture),
                     Crypto: tx.Crypto,
                     IsConfirmed: tx.Status == TransactionStatus.CONFIRMED,
                     TxId: tx.Txid
-                )).ToArray(),
-                UsdAmount: XDaiValue.FromString(invoice.Amount_fiat),
-                UsdBalance: XDaiValue.FromString(invoice.Balance_fiat)
-            );
+                ));
         }
     }
 }

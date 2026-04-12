@@ -58,23 +58,14 @@ namespace Etherna.Credit.Areas.Api
                 .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status404NotFound);
 
-            builder.MapPost("payments/crypto/invoices",
+            builder.MapGet("payments/crypto/wallet/{cryptoSymbol}",
                     (ICreditApiHandler handler,
                             HttpRequest request,
-                            [FromQuery] decimal amount,
-                            [FromQuery] string cryptoSymbol) =>
-                        handler.CreateCryptoInvoiceAsync(amount, cryptoSymbol, request))
+                            [FromRoute] string cryptoSymbol) =>
+                        handler.GetCryptoWalletAsync(cryptoSymbol, request))
                 .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
-                .Produces<CryptoPaymentRequestDto>()
+                .Produces<CryptoWalletDto>()
                 .Produces(StatusCodes.Status400BadRequest);
-
-            builder.MapGet("payments/crypto/invoices/{id}",
-                    (ICreditApiHandler handler,
-                            [FromRoute] string id) =>
-                        handler.GetCryptoInvoiceAsync(id))
-                .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
-                .Produces<CryptoInvoiceDto>()
-                .Produces(StatusCodes.Status404NotFound);
 
             //serviceInteract
             builder.MapGet("serviceInteract/users/{address}/credit",

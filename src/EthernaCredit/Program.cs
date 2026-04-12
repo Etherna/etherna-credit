@@ -489,6 +489,8 @@ namespace Etherna.Credit
                 options.WithTitle("Etherna Credit API")
                     .WithOpenApiRoutePattern("/openapi/credit03.json")
                     .DisableAgent()
+                    .HideClientButton()
+                    .HideDeveloperTools()
                     .AddPreferredSecuritySchemes("OAuth")
                     .AddAuthorizationCodeFlow("OAuth", flow =>
                     {

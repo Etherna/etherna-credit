@@ -21,8 +21,9 @@ namespace Etherna.Credit.Domain
 {
     public interface ICreditDbContext : IDbContext
     {
-        IRepository<CryptoPaymentRequest, string> CryptoPaymentRequests { get; }
         IRepository<OperationLogBase, string> OperationLogs { get; }
+        IRepository<ProcessedCryptoTransaction, string> ProcessedCryptoTransactions { get; }
+        IRepository<UserCryptoWallet, string> UserCryptoWallets { get; }
         IRepository<User, string> Users { get; }
 
         IEventDispatcher EventDispatcher { get; }

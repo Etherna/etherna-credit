@@ -22,6 +22,8 @@ namespace Etherna.Credit.Shkeeper
 {
     public interface IShKeeperService
     {
+        string ApiKey { get; }
+        
         Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,
             string callbackUrl,
@@ -31,8 +33,8 @@ namespace Etherna.Credit.Shkeeper
         
         Task<IReadOnlyDictionary<string, PaymentCrypto>> GetAvailableCryptosAsync(
             CancellationToken cancellationToken = default);
-        
-        Task<ShKeeperInvoice> GetInvoiceAsync(
+
+        Task<IEnumerable<CryptoTx>> GetInvoiceTxsAsync(
             string externalId,
             CancellationToken cancellationToken = default);
     }
