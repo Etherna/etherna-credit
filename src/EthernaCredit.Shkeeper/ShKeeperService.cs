@@ -50,6 +50,7 @@ namespace Etherna.Credit.Shkeeper
 
             ApiKey = options.ApiKey;
             BaseUrl = new Uri(options.Url);
+            CustomCallbackBaseUrl = options.CustomCallbackBaseUrl;
             generatedClient = new ShKeeperGeneratedClient(this.httpClient) { BaseUrl = BaseUrl.ToString() };
         }
 
@@ -77,6 +78,7 @@ namespace Etherna.Credit.Shkeeper
         // Properties.
         public string ApiKey { get; }
         public Uri BaseUrl { get; }
+        public string? CustomCallbackBaseUrl { get; }
         
         // Methods.
         public async Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(

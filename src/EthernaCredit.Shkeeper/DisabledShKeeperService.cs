@@ -26,6 +26,7 @@ namespace Etherna.Credit.Shkeeper
         private const string ExceptionMessage = "SHKeeper is not configured.";
 
         public string ApiKey => throw new InvalidOperationException(ExceptionMessage);
+        public string CustomCallbackBaseUrl => throw new InvalidOperationException(ExceptionMessage);
 
         public Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,

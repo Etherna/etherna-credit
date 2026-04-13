@@ -143,12 +143,13 @@ namespace Etherna.Credit.Areas.Api
                     w => w.Author.Id == author.Id && w.Symbol == cryptoSymbol);
 
                 ShKeeperPaymentRequestResponse shkeeperResponse;
+                var callbackBaseUrl = shkeperService.CustomCallbackBaseUrl ?? $"{request.Scheme}://{request.Host}";
                 if (userWallet is null)
                 {
                     var confirmSecret = Guid.NewGuid().ToString().Replace("-", "", StringComparison.InvariantCulture);
                     shkeeperResponse = await shkeperService.CreateInvoiceAsync(
                         StaticInvoiceAmount,
-                        $"{request.Scheme}://{request.Host}/api/v0.3/payments/crypto/internal/callback/{confirmSecret}",
+                        $"{callbackBaseUrl}/api/v0.3/payments/crypto/internal/callback/{confirmSecret}",
                         cryptoSymbol,
                         externalId);
                     userWallet = new UserCryptoWallet(author, confirmSecret, cryptoSymbol, shkeeperResponse.Wallet);
@@ -159,7 +160,7 @@ namespace Etherna.Credit.Areas.Api
                     // Refresh the invoice on SHKeeper (idempotent: same external_id reuses the same address).
                     shkeeperResponse = await shkeperService.CreateInvoiceAsync(
                         StaticInvoiceAmount,
-                        $"{request.Scheme}://{request.Host}/api/v0.3/payments/crypto/internal/callback/{userWallet.ConfirmSecret}",
+                        $"{callbackBaseUrl}/api/v0.3/payments/crypto/internal/callback/{userWallet.ConfirmSecret}",
                         cryptoSymbol,
                         externalId);
                 }

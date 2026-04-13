@@ -17,6 +17,7 @@ namespace Etherna.Credit.Shkeeper
     public class ShKeeperOptions
     {
         public required string ApiKey { get; init; }
+        public string? CustomCallbackBaseUrl { get; init; }
         public required string Url { get; init; }
     }
 }

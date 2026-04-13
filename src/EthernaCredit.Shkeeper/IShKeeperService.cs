@@ -23,6 +23,7 @@ namespace Etherna.Credit.Shkeeper
     public interface IShKeeperService
     {
         string ApiKey { get; }
+        public string? CustomCallbackBaseUrl { get; }
         
         Task<ShKeeperPaymentRequestResponse> CreateInvoiceAsync(
             XDaiValue amount,
