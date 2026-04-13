@@ -16,16 +16,16 @@ namespace Etherna.Credit.Areas.Api.InputModels
 {
     public enum CallbackPaymentRequestFeePolicyInput
     {
-        [System.Runtime.Serialization.EnumMember(Value = @"NO_FEE")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("NO_FEE")]
         NoFee = 0,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"PERCENT_FEE")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("PERCENT_FEE")]
         PercentFee = 1,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"FIXED_FEE")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("FIXED_FEE")]
         FixedFee = 2,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"PERCENT_OR_MINIMAL_FIXED_FEE")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("PERCENT_OR_MINIMAL_FIXED_FEE")]
         PercentOrMinimalFixedFee = 3
     }
 }

@@ -16,7 +16,7 @@ namespace Etherna.Credit.Areas.Api.InputModels
 {
     public enum CallbackPaymentRequestFiatInput
     {
-        [System.Runtime.Serialization.EnumMember(Value = @"USD")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("USD")]
         Usd = 0,
     }
 }

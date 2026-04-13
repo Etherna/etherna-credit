@@ -16,13 +16,13 @@ namespace Etherna.Credit.Areas.Api.InputModels
 {
     public enum CallbackPaymentRequestStatusInput
     {
-        [System.Runtime.Serialization.EnumMember(Value = @"PARTIAL")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("PARTIAL")]
         Partial = 0,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"PAID")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("PAID")]
         Paid = 1,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"OVERPAID")]
+        [System.Text.Json.Serialization.JsonStringEnumMemberName("OVERPAID")]
         Overpaid = 2
     }
 }
