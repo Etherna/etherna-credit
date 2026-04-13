@@ -461,7 +461,8 @@ namespace Etherna.Credit
                 }
             });
 
-            app.UseHttpsRedirection();
+            if (!config.GetValue<bool>("DisableHttpsRedirection"))
+                app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
