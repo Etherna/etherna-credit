@@ -1,31 +1,31 @@
-﻿@page
-@using Etherna.BeeNet.Models
-@model Etherna.Credit.Areas.Manage.Pages.DepositModel
-@{
-    ViewData["Title"] = "Deposit";
-    ViewData["ActivePage"] = ManageNavPages.Deposit;
-}
-
-<h4>@ViewData["Title"]</h4>
-<div class="row">
-    <div class="col-md-6">
-        <p>How much do you want to load into your account? (Hint: it's free for now)</p>
-        <form id="deposit" asp-area="Deposit" asp-page="DepositProcess" method="post" class="form-horizontal">
-            <div>
-                <p>
-                    @foreach (var amount in new XDaiValue[] { 0.5, 1, 5, 10 })
-                    {
-                        <button type="submit"
-                                name="amount"
-                                class="btn btn-primary"
-                                value="@amount">@amount.ToFinancialString()</button>
-                    }
-                </p>
-            </div>
-        </form>
-    </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
-}
+﻿@* @page *@
+@* @using Etherna.BeeNet.Models *@
+@* @model Etherna.Credit.Areas.Manage.Pages.DepositModel *@
+@* @{ *@
+@*     ViewData["Title"] = "Deposit"; *@
+@*     ViewData["ActivePage"] = ManageNavPages.Deposit; *@
+@* } *@
+@* *@
+@* <h4>@ViewData["Title"]</h4> *@
+@* <div class="row"> *@
+@*     <div class="col-md-6"> *@
+@*         <p>How much do you want to load into your account? (Hint: it's free for now)</p> *@
+@*         <form id="deposit" asp-area="Deposit" asp-page="DepositProcess" method="post" class="form-horizontal"> *@
+@*             <div> *@
+@*                 <p> *@
+@*                     @foreach (var amount in new XDaiValue[] { 0.5, 1, 5, 10 }) *@
+@*                     { *@
+@*                         <button type="submit" *@
+@*                                 name="amount" *@
+@*                                 class="btn btn-primary" *@
+@*                                 value="@amount">@amount.ToFinancialString()</button> *@
+@*                     } *@
+@*                 </p> *@
+@*             </div> *@
+@*         </form> *@
+@*     </div> *@
+@* </div> *@
+@* *@
+@* @section Scripts { *@
+@*     <partial name="_ValidationScriptsPartial"/> *@
+@* } *@
