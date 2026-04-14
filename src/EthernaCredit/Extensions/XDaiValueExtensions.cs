@@ -38,7 +38,7 @@ namespace Etherna.Credit.Extensions
             int printedDecimals = 2,
             MidpointRounding roundMode = MidpointRounding.AwayFromZero,
             string? prefixSymbol = null,
-            string? suffixSymbol = " xDAI",
+            string? suffixSymbol = " USD",
             bool usePlusSign = false)
         {
             if (allowedDecimals < 0)
