@@ -86,7 +86,7 @@ namespace Etherna.Credit.Areas.Api
                 {
                     // Determine the credited amount net of SHKeeper fees.
                     // Can be negative when fees exceed the transaction amount: skip in that case.
-                    var creditedAmount = decimal.Parse(triggerTx.AmountFiatWithoutFee, CultureInfo.InvariantCulture);
+                    var creditedAmount = decimal.Parse(triggerTx.AmountFiat, CultureInfo.InvariantCulture);
                     if (creditedAmount <= 0)
                         continue;
 
@@ -107,7 +107,7 @@ namespace Etherna.Credit.Areas.Api
                     // Report log.
                     var depositLog = new CryptoDepositOperationLog(
                         creditedAmount,
-                        triggerTx.AmountCrypto,
+                        decimal.Parse(triggerTx.AmountCrypto, CultureInfo.InvariantCulture),
                         triggerTx.Crypto,
                         "shkeeper",
                         userWallet.Author);

@@ -17,6 +17,12 @@
                 <p>
                     @switch (log)
                     {
+                        case CryptoDepositOperationLog cryptoDeposit:
+                            <span><b>@log.OperationName</b> - @log.CreationDateTime</span>
+                            <br/>
+                            <span>@cryptoDeposit.AmountCrypto @cryptoDeposit.CryptoSymbol (at ~@((log.Amount / cryptoDeposit.AmountCrypto).ToFinancialString(allowedDecimals:4, suffixSymbol: " USD/"+ cryptoDeposit.CryptoSymbol)))</span>
+                            <br/>
+                            break;
                         case UpdateOperationLog update:
                             <span><b>@log.OperationName</b> - @log.CreationDateTime.Date.ToShortDateString()</span>
                             <br/>

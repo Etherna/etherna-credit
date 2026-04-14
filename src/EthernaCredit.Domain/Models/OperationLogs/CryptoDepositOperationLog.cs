@@ -21,7 +21,7 @@ namespace Etherna.Credit.Domain.Models.OperationLogs
         // Constructors.
         public CryptoDepositOperationLog(
             XDaiValue amountFiat,
-            string amountCrypto,
+            decimal amountCrypto,
             string cryptoSymbol,
             string author,
             User user)
@@ -33,7 +33,7 @@ namespace Etherna.Credit.Domain.Models.OperationLogs
         protected CryptoDepositOperationLog() { }
 
         // Properties.
-        public virtual string AmountCrypto { get; protected set; } = null!;
+        public virtual decimal AmountCrypto { get; protected set; }
         public virtual string CryptoSymbol { get; protected set; } = null!;
         public override string OperationName => "CryptoDeposit";
     }
