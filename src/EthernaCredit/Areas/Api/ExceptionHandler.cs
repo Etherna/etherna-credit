@@ -59,6 +59,7 @@ namespace Etherna.Credit.Areas.Api
                     
                     // Error code 503.
                     case BeeNetApiException:
+                    case NotSupportedException:
                         return ErrorResults.GetServiceUnavailableErrorResult();
                         
                     // Error code 500.
