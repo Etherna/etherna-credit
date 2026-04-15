@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,14 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-namespace Etherna.Credit.Services.Settings
+namespace Etherna.Credit.Services.Domain
 {
-    public class SsoServerSettings
+    public sealed class UserServiceOptions
     {
-        public string BaseUrl { get; set; } = default!;
-        public string LoginPath { get; set; } = default!;
-        public string LoginUrl => BaseUrl + LoginPath;
-        public string RegisterPath { get; set; } = default!;
-        public string RegisterUrl => BaseUrl + RegisterPath;
+        public decimal WelcomeCredit { get; init; }
     }
 }

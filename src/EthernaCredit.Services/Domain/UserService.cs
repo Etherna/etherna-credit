@@ -19,6 +19,7 @@ using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,14 +28,13 @@ namespace Etherna.Credit.Services.Domain
 {
     internal sealed class UserService(
         ICreditDbContext creditDbContext,
+        IOptions<UserServiceOptions> options,
         ISharedDbContext sharedDbContext)
         : IUserService
     {
-        // Consts.
-        private const decimal DefaultWelcomeCredit = 0.1M;
-
         // Fields.
         private readonly ICreditDbContextInternal creditDbContext = (ICreditDbContextInternal)creditDbContext;
+        private readonly UserServiceOptions options = options.Value;
 
         // Methods.
         public async Task<(User, UserSharedInfo)> FindUserAsync(EthAddress address) =>
@@ -53,7 +53,7 @@ namespace Etherna.Credit.Services.Domain
                 await creditDbContext.Users.CreateAsync(user);
 
                 // Create balance record.
-                var welcomeCredit = DefaultWelcomeCredit;
+                var welcomeCredit = options.WelcomeCredit;
                 var balance = new UserBalance(user, welcomeCredit);
                 await creditDbContext.UserBalances.CreateAsync(balance);
 

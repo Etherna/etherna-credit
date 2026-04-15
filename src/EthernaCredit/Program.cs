@@ -27,7 +27,7 @@ using Etherna.Credit.Domain;
 using Etherna.Credit.Extensions;
 using Etherna.Credit.Persistence;
 using Etherna.Credit.Services;
-using Etherna.Credit.Services.Settings;
+using Etherna.Credit.Services.Domain;
 using Etherna.Credit.Services.Tasks;
 using Etherna.Credit.Services.Tasks.Infrastructure.Cron;
 using Etherna.DomainEvents;
@@ -365,7 +365,7 @@ namespace Etherna.Credit
 
             // Configure setting.
             services.Configure<EmailSettings>(config.GetSection("Email") ?? throw new ServiceConfigurationException());
-            services.Configure<SsoServerSettings>(config.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
+            services.Configure<UserServiceOptions>(config.GetSection("Users") ?? throw new ServiceConfigurationException());
             
             // Configure api handler.
             services.AddScoped<ICreditApiHandler, CreditApiHandler>();
