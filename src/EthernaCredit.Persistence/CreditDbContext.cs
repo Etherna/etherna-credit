@@ -60,7 +60,7 @@ namespace Etherna.Credit.Persistence
                     IndexBuilders =
                     [
                         (Builders<UserCryptoWallet>.IndexKeys.Ascending(w => w.Author.Id).Ascending(w => w.Symbol), new CreateIndexOptions<UserCryptoWallet> { Unique = true }),
-                        (Builders<UserCryptoWallet>.IndexKeys.Ascending(w => w.Wallet), new CreateIndexOptions<UserCryptoWallet> { Unique = true })
+                        (Builders<UserCryptoWallet>.IndexKeys.Ascending(w => w.Wallets), new CreateIndexOptions<UserCryptoWallet> { Unique = true })
                     ]
                 });
         public IRepository<User, string> Users { get; } = new DomainRepository<User, string>(

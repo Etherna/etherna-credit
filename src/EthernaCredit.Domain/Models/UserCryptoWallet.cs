@@ -12,12 +12,17 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.MongODM.Core.Attributes;
 using System;
+using System.Collections.Generic;
 
 namespace Etherna.Credit.Domain.Models
 {
     public class UserCryptoWallet : EntityModelBase<string>
     {
+        // Fields.
+        private HashSet<string> _wallets = [];
+        
         // Constructors.
         public UserCryptoWallet(
             User author,
@@ -28,7 +33,7 @@ namespace Etherna.Credit.Domain.Models
             Author = author;
             ConfirmSecret = confirmSecret;
             Symbol = symbol;
-            Wallet = wallet;
+            _wallets.Add(wallet);
         }
         protected UserCryptoWallet() { }
 
@@ -36,6 +41,15 @@ namespace Etherna.Credit.Domain.Models
         public virtual User Author { get; protected set; } = null!;
         public virtual string ConfirmSecret { get; protected set; } = null!;
         public virtual string Symbol { get; protected set; } = null!;
-        public virtual string Wallet { get; protected set; } = null!;
+        public virtual IEnumerable<string> Wallets
+        {
+            get => _wallets;
+            protected set => _wallets = [..value ?? []];
+        }
+        
+        // Methods.
+        [PropertyAlterer(nameof(Wallets))]
+        public bool AddWallet(string wallet) =>
+            _wallets.Add(wallet);
     }
 }

@@ -163,13 +163,15 @@ namespace Etherna.Credit.Areas.Api
                         $"{callbackBaseUrl}/api/v0.3/payments/crypto/internal/callback/{userWallet.ConfirmSecret}",
                         cryptoSymbol,
                         externalId);
+                    if (userWallet.AddWallet(shkeeperResponse.Wallet))
+                        await dbContext.SaveChangesAsync();
                 }
 
                 // Get transactions registered on this address.
                 var transactions = await shkeperService.GetInvoiceTxsAsync(externalId);
 
                 return Results.Json(new CryptoWalletDto(
-                    Wallet: userWallet.Wallet,
+                    Wallet: shkeeperResponse.Wallet,
                     CoinSymbol: cryptoSymbol,
                     CoinDisplayName: shkeeperResponse.DisplayName,
                     ExchangeRate: shkeeperResponse.ExchangeRate,
