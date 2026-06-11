@@ -1,18 +1,19 @@
-//   Copyright 2021-present Etherna Sa
+// Copyright 2021-present Etherna SA
+// This file is part of Etherna Credit.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+// Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
+// GNU Affero General Public License as published by the Free Software Foundation,
+// either version 3 of the License, or (at your option) any later version.
 // 
-//       http://www.apache.org/licenses/LICENSE-2.0
+// Etherna Credit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Affero General Public License for more details.
 // 
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
+// You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
+// If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.ExecContext.AsyncLocal;
+using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Bson.Serialization;
 using Etherna.MongoDB.Driver;
 using Etherna.MongODM.Core;
@@ -31,14 +32,15 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-namespace Etherna.CreditSystem.Persistence.Helpers;
+namespace Etherna.Credit.Persistence.Helpers;
 
+#pragma warning disable CA1515
 public static class DbContextMockHelper
 {
     [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Need to keep objects after test construction")]
     public static void InitializeDbContextMock(DbContext dbContext, Mock<IMongoDatabase>? mongoDatabaseMock = null)
     {
-        ArgumentNullException.ThrowIfNull(dbContext, nameof(dbContext));
+        ArgumentNullException.ThrowIfNull(dbContext);
 
         // Setup dbContext dependencies for initialization.
         Mock<IDbDependencies> dbDependenciesMock = new();
@@ -63,8 +65,13 @@ public static class DbContextMockHelper
             .Returns(mongoDatabaseMock.Object);
 
         // Register static integration with drivers.
-        BsonSerializer.TryRegisterDiscriminatorConvention(typeof(object),
-            new HierarchicalProxyTolerantDiscriminatorConvention("_t", execContext));
+        try
+        {
+            BsonSerializer.RegisterDiscriminatorConvention(typeof(object),
+                new HierarchicalProxyTolerantDiscriminatorConvention("_t", execContext));
+        }
+        catch (BsonSerializationException)
+        { }
 
         BsonSerializer.SetSerializationContextAccessor(new SerializationContextAccessor(execContext));
 
@@ -84,8 +91,8 @@ public static class DbContextMockHelper
         IRepository<TModel, TKey> collection)
          where TModel : class, IEntityModel<TKey>
     {
-        ArgumentNullException.ThrowIfNull(mongoDatabaseMock, nameof(mongoDatabaseMock));
-        ArgumentNullException.ThrowIfNull(collection, nameof(collection));
+        ArgumentNullException.ThrowIfNull(mongoDatabaseMock);
+        ArgumentNullException.ThrowIfNull(collection);
 
         var collectionMock = new Mock<IMongoCollection<TModel>>();
 
@@ -99,7 +106,7 @@ public static class DbContextMockHelper
         Mock<IMongoCollection<TModel>> collectionMock,
         Func<FilterDefinition<TModel>, IEnumerable<TModel>> modelSelector)
     {
-        ArgumentNullException.ThrowIfNull(collectionMock, nameof(collectionMock));
+        ArgumentNullException.ThrowIfNull(collectionMock);
 
         // Setup collection.
         collectionMock.Setup(c => c.FindAsync(
@@ -131,3 +138,4 @@ public static class DbContextMockHelper
             });
     }
 }
+#pragma warning restore CA1515

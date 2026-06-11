@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Etherna.CreditSystem</RootNamespace>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Etherna.Credit</RootNamespace>
 
     <Authors>Etherna Sa</Authors>
-    <Description>Service implementing logic for manage user credits</Description>
+    <Description>Service implementing logic to manage user credits</Description>
 
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
@@ -15,21 +15,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Elastic.Serilog.Sinks" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
-    <PackageReference Include="MongODM" Version="0.24.0" />
-    <PackageReference Include="MongODM.AspNetCore.UI" Version="0.24.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
-    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <PackageReference Include="MongODM" Version="0.25.0-alpha.55" />
+    <PackageReference Include="MongODM.AspNetCore.UI" Version="0.25.0-alpha.55" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.16.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
-    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EthernaCredit.Domain\EthernaCredit.Domain.csproj" />
     <ProjectReference Include="..\EthernaCredit.Persistence\EthernaCredit.Persistence.csproj" />
     <ProjectReference Include="..\EthernaCredit.Services\EthernaCredit.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\COPYING" />
+    <None Include="..\..\README.md" />
   </ItemGroup>
 
   <Target Name="DeleteDist" AfterTargets="Clean">

@@ -1,47 +1,50 @@
-//   Copyright 2021-present Etherna Sa
+// Copyright 2021-present Etherna SA
+// This file is part of Etherna Credit.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+// Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
+// GNU Affero General Public License as published by the Free Software Foundation,
+// either version 3 of the License, or (at your option) any later version.
 // 
-//       http://www.apache.org/licenses/LICENSE-2.0
+// Etherna Credit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Affero General Public License for more details.
 // 
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
+// You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
+// If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.UserAgg;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Models;
+using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.Credit.Services.Domain;
+using Etherna.SwarmSdk.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Nethereum.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
+namespace Etherna.Credit.Areas.Admin.Pages.Users
 {
-    public class IndexModel : PageModel
+    public class IndexModel(
+        ISharedDbContext sharedDbContext,
+        IUserService userService)
+        : PageModel
     {
         // Models.
         public class InputModel
         {
             [Required]
             [Display(Name = "Ethereum address")]
-            public string FindAddress { get; set; } = default!;
+            public string FindAddress { get; set; } = null!;
         }
 
         public class UserDto
         {
-            public UserDto(User user, UserSharedInfo userSharedInfo, XDaiBalance balance)
+            public UserDto(User user, UserSharedInfo userSharedInfo, XDaiValue balance)
             {
-                ArgumentNullException.ThrowIfNull(user, nameof(user));
-                ArgumentNullException.ThrowIfNull(userSharedInfo, nameof(userSharedInfo));
+                ArgumentNullException.ThrowIfNull(user);
+                ArgumentNullException.ThrowIfNull(userSharedInfo);
 
                 Id = user.Id;
                 Balance = balance;
@@ -50,30 +53,17 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
             }
 
             public string Id { get; }
-            public XDaiBalance Balance { get; }
-            public string EtherAddress { get; }
+            public XDaiValue Balance { get; }
+            public EthAddress EtherAddress { get; }
             public bool HasUnlimitedCredit { get; }
         }
 
         // Consts.
         private const int PageSize = 20;
 
-        // Fields.
-        private readonly ISharedDbContext sharedDbContext;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public IndexModel(
-            ISharedDbContext sharedDbContext,
-            IUserService userService)
-        {
-            this.sharedDbContext = sharedDbContext;
-            this.userService = userService;
-        }
-
         // Properties.
         [BindProperty]
-        public InputModel Input { get; set; } = default!;
+        public InputModel Input { get; set; } = null!;
 
         public int CurrentPage { get; private set; }
         public long MaxPage { get; private set; }
@@ -92,7 +82,7 @@ namespace Etherna.CreditSystem.Areas.Admin.Pages.Users
                 await InitializeAsync(p);
                 return Page();
             }
-            if (!Input.FindAddress.IsValidEthereumAddressHexFormat())
+            if (!EthAddress.IsValidAddress(Input.FindAddress))
             {
                 ModelState.AddModelError(string.Empty, "The value is not a valid Ethereum address");
                 await InitializeAsync(p);

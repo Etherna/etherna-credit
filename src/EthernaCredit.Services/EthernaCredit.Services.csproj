@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <RootNamespace>Etherna.CreditSystem.Services</RootNamespace>
+    <RootNamespace>Etherna.Credit.Services</RootNamespace>
 
     <Authors>Etherna Sa</Authors>
 
@@ -18,10 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Etherna.Authentication.AspNetCore" Version="0.3.3" />
-    <PackageReference Include="Etherna.DomainEvents.AspNetCore" Version="1.4.0" />
-    <PackageReference Include="EthernaACR" Version="0.3.9" />
-    <PackageReference Include="EthernaServicesClient.Internal.AspNetCore" Version="0.3.2" />
+    <PackageReference Include="Etherna.Authentication.AspNetCore" Version="0.4.0-alpha.52" />
+    <PackageReference Include="Etherna.DomainEvents.AspNetCore" Version="1.5.0" />
+    <PackageReference Include="EthernaACR" Version="0.4.0-alpha.66" />
+    <PackageReference Include="EthernaSdk.Internal.AspNetCore" Version="0.4.0-alpha.228" />
+    <PackageReference Include="MongODM.Hangfire" Version="0.25.0-alpha.55" />
   </ItemGroup>
 
   <ItemGroup>

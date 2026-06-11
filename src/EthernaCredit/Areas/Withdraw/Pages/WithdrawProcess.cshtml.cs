@@ -1,63 +1,46 @@
-//   Copyright 2021-present Etherna Sa
+// Copyright 2021-present Etherna SA
+// This file is part of Etherna Credit.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+// Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
+// GNU Affero General Public License as published by the Free Software Foundation,
+// either version 3 of the License, or (at your option) any later version.
 // 
-//       http://www.apache.org/licenses/LICENSE-2.0
+// Etherna Credit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Affero General Public License for more details.
 // 
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
+// You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
+// If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Events;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Events;
+using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Services.Domain;
 using Etherna.DomainEvents;
+using Etherna.SwarmSdk.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Withdraw.Pages
+namespace Etherna.Credit.Areas.Withdraw.Pages
 {
-    public class WithdrawProcessModel : PageModel
+    public class WithdrawProcessModel(
+        ICreditDbContext dbContext,
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IEventDispatcher eventDispatcher,
+        IUserService userService)
+        : PageModel
     {
         // Consts.
-        public static readonly XDaiBalance MinimumWithdraw = 1.0M;
-
-        // Fields.
-        private readonly ICreditDbContext dbContext;
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IEventDispatcher eventDispatcher;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public WithdrawProcessModel(
-            ICreditDbContext dbContext,
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IEventDispatcher eventDispatcher,
-            IUserService userService)
-        {
-            this.dbContext = dbContext;
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.eventDispatcher = eventDispatcher;
-            this.userService = userService;
-        }
+        public static readonly XDaiValue MinimumWithdraw = 1.0M;
 
         // Properties.
         public bool SucceededResult { get; set; }
-        public XDaiBalance WithdrawAmount { get; set; }
+        public XDaiValue WithdrawAmount { get; set; }
 
         // Methods
-        public async Task OnGetAsync(XDaiBalance amount)
+        public async Task OnGetAsync(XDaiValue amount)
         {
-            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
-
             // Get data.
             WithdrawAmount = amount;
             WithdrawAmount = decimal.Truncate(WithdrawAmount.ToDecimal() * 100) / 100; //accept 2 digit precision
@@ -78,7 +61,10 @@ namespace Etherna.CreditSystem.Areas.Withdraw.Pages
                 return;
 
             // Report log.
-            var withdrawLog = new WithdrawOperationLog(-WithdrawAmount, userSharedInfo.EtherAddress, user);
+            var withdrawLog = new WithdrawOperationLog(
+                -WithdrawAmount,
+                userSharedInfo.EtherAddress.ToString(),
+                user);
             await dbContext.OperationLogs.CreateAsync(withdrawLog);
 
             // Dispatch event.
