@@ -1,48 +1,34 @@
-﻿//   Copyright 2021-present Etherna Sa
+﻿// Copyright 2021-present Etherna SA
+// This file is part of Etherna Credit.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+// Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
+// GNU Affero General Public License as published by the Free Software Foundation,
+// either version 3 of the License, or (at your option) any later version.
 // 
-//       http://www.apache.org/licenses/LICENSE-2.0
+// Etherna Credit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Affero General Public License for more details.
 // 
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
+// You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
+// If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.ACR.Services;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Events;
-using Etherna.CreditSystem.Services.Views.Emails;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Events;
+using Etherna.Credit.Services.Views.Emails;
 using Etherna.DomainEvents;
-using Etherna.ServicesClient.Internal;
+using Etherna.Sdk.Internal.Clients;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Services.EventHandlers
+namespace Etherna.Credit.Services.EventHandlers
 {
-    internal sealed class OnUserWithdrawThenSendEmailHandler : EventHandlerBase<UserWithdrawEvent>
+    internal sealed class OnUserWithdrawThenSendEmailHandler(
+        IEmailSender emailSender,
+        IRazorViewRenderer razorViewRenderer,
+        IEthernaInternalSsoClient serviceSsoClient,
+        ISharedDbContext sharedDbContext)
+        : EventHandlerBase<UserWithdrawEvent>
     {
-        // Fields.
-        private readonly IEmailSender emailSender;
-        private readonly IRazorViewRenderer razorViewRenderer;
-        private readonly IEthernaInternalSsoClient serviceSsoClient;
-        private readonly ISharedDbContext sharedDbContext;
-
-        // Constructor.
-        public OnUserWithdrawThenSendEmailHandler(
-            IEmailSender emailSender,
-            IRazorViewRenderer razorViewRenderer,
-            IEthernaInternalSsoClient serviceSsoClient,
-            ISharedDbContext sharedDbContext)
-        {
-            this.emailSender = emailSender;
-            this.razorViewRenderer = razorViewRenderer;
-            this.serviceSsoClient = serviceSsoClient;
-            this.sharedDbContext = sharedDbContext;
-        }
-
         // Methods.
         public override async Task HandleAsync(UserWithdrawEvent @event)
         {
@@ -51,7 +37,7 @@ namespace Etherna.CreditSystem.Services.EventHandlers
                 @event.OperationLog.User.SharedInfoId);
 
             // Get user email.
-            var contacts = await serviceSsoClient.ServiceInteract.ContactsAsync(userSharedInfo.EtherAddress);
+            var contacts = await serviceSsoClient.GetUserContactsAsync(userSharedInfo.EtherAddress);
             if (contacts.Email is null)
                 return;
 

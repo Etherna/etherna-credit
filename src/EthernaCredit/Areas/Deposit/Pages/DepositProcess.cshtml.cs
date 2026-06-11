@@ -1,23 +1,23 @@
-//   Copyright 2021-present Etherna Sa
+// Copyright 2021-present Etherna SA
+// This file is part of Etherna Credit.
 // 
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
+// Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
+// GNU Affero General Public License as published by the Free Software Foundation,
+// either version 3 of the License, or (at your option) any later version.
 // 
-//       http://www.apache.org/licenses/LICENSE-2.0
+// Etherna Credit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Affero General Public License for more details.
 // 
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License.
+// You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
+// If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.CreditSystem.Domain;
-using Etherna.CreditSystem.Domain.Events;
-using Etherna.CreditSystem.Domain.Models;
-using Etherna.CreditSystem.Domain.Models.OperationLogs;
-using Etherna.CreditSystem.Services.Domain;
+using Etherna.BeeNet.Models;
+using Etherna.Credit.Domain;
+using Etherna.Credit.Domain.Events;
+using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Services.Domain;
 using Etherna.DomainEvents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,31 +25,17 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Etherna.CreditSystem.Areas.Deposit.Pages
+namespace Etherna.Credit.Areas.Deposit.Pages
 {
-    public class DepositProcessModel : PageModel
+    public class DepositProcessModel(
+        ICreditDbContext dbContext,
+        IEthernaOpenIdConnectClient ethernaOidcClient,
+        IEventDispatcher eventDispatcher,
+        IUserService userService)
+        : PageModel
     {
-        // Fields.
-        private readonly ICreditDbContext dbContext;
-        private readonly IEthernaOpenIdConnectClient ethernaOidcClient;
-        private readonly IEventDispatcher eventDispatcher;
-        private readonly IUserService userService;
-
-        // Constructor.
-        public DepositProcessModel(
-            ICreditDbContext dbContext,
-            IEthernaOpenIdConnectClient ethernaOidcClient,
-            IEventDispatcher eventDispatcher,
-            IUserService userService)
-        {
-            this.dbContext = dbContext;
-            this.ethernaOidcClient = ethernaOidcClient;
-            this.eventDispatcher = eventDispatcher;
-            this.userService = userService;
-        }
-
         // Properties.
-        public XDaiBalance DepositAmount { get; set; }
+        public XDaiValue DepositAmount { get; set; }
         public bool SucceededResult { get; set; }
 
         // Methods
@@ -58,7 +44,7 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
 
         public async Task OnPostAsync(string amount)
         {
-            ArgumentNullException.ThrowIfNull(amount, nameof(amount));
+            ArgumentNullException.ThrowIfNull(amount);
 
             // Get data.
             DepositAmount = decimal.Parse(amount, CultureInfo.InvariantCulture);
@@ -80,7 +66,10 @@ namespace Etherna.CreditSystem.Areas.Deposit.Pages
             await userService.TryIncrementUserBalanceAsync(user, DepositAmount, false);
 
             // Report log.
-            var depositLog = new DepositOperationLog(DepositAmount, userSharedInfo.EtherAddress, user);
+            var depositLog = new DepositOperationLog(
+                DepositAmount,
+                userSharedInfo.EtherAddress.ToString(),
+                user);
             await dbContext.OperationLogs.CreateAsync(depositLog);
 
             // Dispatch event.
