@@ -13,12 +13,12 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.BeeNet.Models;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Events;
 using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Services.Domain;
 using Etherna.DomainEvents;
+using Etherna.SwarmSdk.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;

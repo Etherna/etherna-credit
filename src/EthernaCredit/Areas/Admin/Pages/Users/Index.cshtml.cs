@@ -12,14 +12,13 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.Credit.Services.Domain;
+using Etherna.SwarmSdk.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Nethereum.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -83,7 +82,7 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
                 await InitializeAsync(p);
                 return Page();
             }
-            if (!Input.FindAddress.IsValidEthereumAddressHexFormat())
+            if (!EthAddress.IsValidAddress(Input.FindAddress))
             {
                 ModelState.AddModelError(string.Empty, "The value is not a valid Ethereum address");
                 await InitializeAsync(p);

@@ -31,19 +31,13 @@ using System.Threading.Tasks;
 
 namespace Etherna.Credit.Persistence
 {
-    public class CreditDbContext : DbContext, ICreditDbContextInternal, IEventDispatcherDbContext
+    public class CreditDbContext(
+        IEventDispatcher eventDispatcher,
+        ILogger<CreditDbContext> logger)
+        : DbContext(logger), ICreditDbContextInternal, IEventDispatcherDbContext
     {
         // Consts.
         private const string SerializersNamespace = "Etherna.Credit.Persistence.ModelMaps.Credit";
-
-        // Constructor.
-        public CreditDbContext(
-            IEventDispatcher eventDispatcher,
-            ILogger<CreditDbContext> logger)
-            : base(logger)
-        {
-            EventDispatcher = eventDispatcher;
-        }
 
         // Properties.
         //repositories
@@ -69,7 +63,7 @@ namespace Etherna.Credit.Persistence
             });
 
         //other properties
-        public IEventDispatcher EventDispatcher { get; }
+        public IEventDispatcher EventDispatcher { get; } = eventDispatcher;
 
         // Protected properties.
         protected override IEnumerable<IModelMapsCollector> ModelMapsCollectors =>
