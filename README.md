@@ -6,7 +6,7 @@ Etherna Credit is the service that manages user credit across etherna services. 
 
 ## Issue reports
 
-If you've discovered a bug, or have an idea for a new feature, please report it to our issue manager based on Jira https://etherna.atlassian.net/projects/ECS.
+If you've discovered a bug, or have an idea for a new feature, please report it to our issue manager based on Jira https://etherna.atlassian.net/projects/EC.
 
 ## Questions? Problems?
 

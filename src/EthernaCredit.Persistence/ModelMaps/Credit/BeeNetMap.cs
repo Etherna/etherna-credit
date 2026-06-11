@@ -12,11 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
 using Etherna.Credit.Persistence.Serializers;
 using Etherna.MongoDB.Bson;
 using Etherna.MongODM.Core;
 using Etherna.MongODM.Core.Serialization;
+using Etherna.SwarmSdk.Models;
 
 namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {

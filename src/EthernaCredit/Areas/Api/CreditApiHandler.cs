@@ -13,7 +13,6 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Authentication;
-using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Api.DtoModels;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models;
@@ -21,9 +20,9 @@ using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Services.Domain;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
+using Etherna.SwarmSdk.Models;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

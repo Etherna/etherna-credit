@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
 using Etherna.Credit.Areas.Api.DtoModels;
 using Etherna.Credit.Configs;
 using Etherna.Credit.Extensions;
+using Etherna.SwarmSdk.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

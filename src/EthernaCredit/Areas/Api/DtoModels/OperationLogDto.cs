@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.BeeNet.Models;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.SwarmSdk.Models;
 using System;
 
 namespace Etherna.Credit.Areas.Api.DtoModels
