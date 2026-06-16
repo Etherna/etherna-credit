@@ -23,6 +23,7 @@ using Etherna.Authentication.AspNetCore;
 using Etherna.Credit.Areas.Api;
 using Etherna.Credit.Configs;
 using Etherna.Credit.Configs.Authorization;
+using Etherna.Credit.Configs.ModelBinding;
 using Etherna.Credit.Configs.MongODM;
 using Etherna.Credit.Configs.OpenApi;
 using Etherna.Credit.Domain;
@@ -208,7 +209,9 @@ namespace Etherna.Credit
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.DepositArea, "/");
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.ManageArea, "/");
                 options.Conventions.AuthorizeAreaFolder(CommonConsts.WithdrawArea, "/");
-            });
+            })
+            .AddMvcOptions(options =>
+                options.ModelBinderProviders.Insert(0, new XDaiValueModelBinderProvider()));
             services.ConfigureHttpJsonOptions(options =>
             {
                 options.SerializerOptions.Converters.Add(new EthAddressJsonConverter());

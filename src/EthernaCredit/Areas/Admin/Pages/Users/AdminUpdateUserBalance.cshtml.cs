@@ -37,7 +37,7 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
         public class InputModel
         {
             [Required]
-            public XDaiValue ChangeAmount { get; set; } //TODO: Use model binder
+            public XDaiValue ChangeAmount { get; set; }
             
             [Required]
             public string Reason { get; set; } = null!;

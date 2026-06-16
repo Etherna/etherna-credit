@@ -21,6 +21,10 @@ namespace Etherna.Credit.Extensions
 {
     public static class XDaiValueExtensions
     {
+        // Consts.
+        private const NumberStyles XDaiNumberStyles = NumberStyles.Number | NumberStyles.AllowExponent;
+
+        // Methods.
         /// <summary>
         /// Format a XDaiBalance to a financial string
         /// </summary>
@@ -88,6 +92,26 @@ namespace Etherna.Credit.Extensions
             strBuilder.Append(suffixSymbol);
 
             return strBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Try to parse an xDAI amount from its decimal string representation
+        /// (the same format used by JSON and BSON serialization).
+        /// </summary>
+        /// <param name="s">The string to parse</param>
+        /// <param name="formatProvider">An optional format provider (defaults to invariant culture)</param>
+        /// <param name="result">The parsed value, or default if parsing failed</param>
+        /// <returns>True if parsing succeeded, false otherwise</returns>
+        public static bool TryParse(string? s, IFormatProvider? formatProvider, out XDaiValue result)
+        {
+            if (decimal.TryParse(s, XDaiNumberStyles, formatProvider ?? CultureInfo.InvariantCulture, out var amount))
+            {
+                result = new XDaiValue(amount);
+                return true;
+            }
+
+            result = default;
+            return false;
         }
     }
 }

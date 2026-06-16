@@ -63,7 +63,7 @@ namespace Etherna.Credit.Areas.Api
             builder.MapPut("serviceInteract/users/{address}/credit/balance",
                     (ICreditApiHandler handler,
                             [FromRoute] EthAddress address,
-                            [FromQuery] XDaiValue amount,
+                            [FromQuery] XDaiValueDecimalParameter amount,
                             [FromQuery] string reason,
                             [FromQuery] bool isApplied = true) =>
                         handler.RegisterBalanceUpdateAsync(address, amount, isApplied, reason))
