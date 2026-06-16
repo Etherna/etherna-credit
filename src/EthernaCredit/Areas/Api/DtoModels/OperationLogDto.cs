@@ -1,4 +1,4 @@
-﻿// Copyright 2021-present Etherna SA
+// Copyright 2021-present Etherna SA
 // This file is part of Etherna Credit.
 // 
 // Etherna Credit is free software: you can redistribute it and/or modify it under the terms of the
@@ -12,42 +12,17 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.Credit.Domain.Models;
-using Etherna.Credit.Domain.Models.OperationLogs;
-using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.SwarmSdk.Models;
 using System;
 
 namespace Etherna.Credit.Areas.Api.DtoModels
 {
-    public class OperationLogDto
-    {
-        public OperationLogDto(OperationLogBase operationLog, UserSharedInfo userSharedInfo)
-        {
-            ArgumentNullException.ThrowIfNull(operationLog);
-            ArgumentNullException.ThrowIfNull(userSharedInfo);
-
-            Amount = operationLog.Amount;
-            Author = operationLog.Author;
-            CreationDateTime = operationLog.CreationDateTime;
-            OperationName = operationLog.OperationName;
-            UserAddress = userSharedInfo.EtherAddress;
-
-            switch (operationLog)
-            {
-                case UpdateOperationLog updateLog:
-                    IsApplied = updateLog.IsApplied;
-                    Reason = updateLog.Reason;
-                    break;
-            }
-        }
-
-        public XDaiValue Amount { get; }
-        public string Author { get; }
-        public DateTime CreationDateTime { get; }
-        public bool? IsApplied { get; }
-        public string OperationName { get; }
-        public string? Reason { get; }
-        public EthAddress UserAddress { get; }
-    }
+    public record OperationLogDto(
+        XDaiValue Amount,
+        string Author,
+        DateTime CreationDateTime,
+        bool? IsApplied,
+        string OperationName,
+        string? Reason,
+        EthAddress UserAddress);
 }

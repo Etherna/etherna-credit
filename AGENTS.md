@@ -133,6 +133,8 @@ Use principal-style section comments:
 
 ### Domain Entity Classes
 
+These conventions exist for the MongODM persistence layer and apply **only** to the MongODM-mapped entities in `EthernaCredit.Domain` (the `OperationLogBase` hierarchy, `User`, the `UserAgg` aggregates, the `ModelBase`/`EntityModelBase` bases). **Never** carry them over to DTOs, API/service classes, or any other non-domain class — those follow ordinary C# style.
+
 - `public abstract` for base classes (`ModelBase`, `EntityModelBase`, `OperationLogBase`)
 - `virtual` on all properties for MongODM proxy support
 - Use `public set` by default; use `protected set` only when the property requires validation or invariant enforcement
@@ -146,6 +148,12 @@ Use principal-style section comments:
 - `null!` (or `default!` for value-typed wrappers) for ORM-initialized properties: `public virtual string Name { get; protected set; } = null!;`
 - Collection expressions for nullable collection setters: `[..value ?? []]`
 - `[PropertyAlterer(nameof(MyProp))]` on every method, for each property the method modifies. This is a MongODM limitation for change tracking
+
+### DTOs
+
+- DTOs are immutable data carriers, **not** domain entities: they must not adopt any of the domain-entity conventions above (no `virtual` members, no `protected`/ORM parameterless constructor, no `null!`/`default!` initializers, no `protected set`).
+- Prefer a positional `record` with every value passed explicitly through its primary constructor (`public record OperationLogDto(XDaiValue Amount, string Author, …)`). Besides being simpler, this keeps OpenAPI nullability correct: System.Text.Json infers a reference type's nullability from the constructor parameter, whereas a get-only reference-type property not bound to a constructor parameter is emitted as nullable regardless of its `string`/`string?` annotation.
+- A DTO must never take a domain model as a constructor parameter. Map domain → DTO at the call site (the API handler), keeping the DTO free of any domain dependency.
 
 ## Async Patterns
 

@@ -17,6 +17,7 @@ using Etherna.Credit.Areas.Api.DtoModels;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
+using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.Credit.Services.Domain;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
@@ -58,7 +59,7 @@ namespace Etherna.Credit.Areas.Api
                     l => l.CreationDateTime,
                     page,
                     take);
-                return Results.Json(paginatedLogs.Elements.Select(l => new OperationLogDto(l, userSharedInfo)));
+                return Results.Json(paginatedLogs.Elements.Select(l => MapToOperationLogDto(l, userSharedInfo)));
             });
         
         public Task<IResult> GetServiceOpLogsWithUserAsync(
@@ -81,7 +82,7 @@ namespace Etherna.Credit.Areas.Api
                         .OrderBy(l => l.CreationDateTime)
                         .ToListAsync());
 
-                return Results.Json(result.Select(l => new OperationLogDto(l, userSharedInfo!)));
+                return Results.Json(result.Select(l => MapToOperationLogDto(l, userSharedInfo!)));
             });
 
         public Task<IResult> GetUserCreditAsync(EthAddress address) =>
@@ -135,5 +136,26 @@ namespace Etherna.Credit.Areas.Api
 
                 return Results.Ok();
             });
+
+        // Helpers.
+        private OperationLogDto MapToOperationLogDto(OperationLogBase operationLog, UserSharedInfo userSharedInfo)
+        {
+            bool? isApplied = null;
+            string? reason = null;
+            if (operationLog is UpdateOperationLog updateLog)
+            {
+                isApplied = updateLog.IsApplied;
+                reason = updateLog.Reason;
+            }
+
+            return new OperationLogDto(
+                operationLog.Amount,
+                operationLog.Author,
+                operationLog.CreationDateTime,
+                isApplied,
+                operationLog.OperationName,
+                reason,
+                userSharedInfo.EtherAddress);
+        }
     }
 }
