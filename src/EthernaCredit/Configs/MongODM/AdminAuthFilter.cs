@@ -12,10 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.Authentication;
 using Etherna.MongODM.AspNetCore.UI.Auth.Filters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Etherna.Credit.Configs.MongODM
@@ -24,12 +25,14 @@ namespace Etherna.Credit.Configs.MongODM
     {
         public async Task<bool> AuthorizeAsync(HttpContext? context)
         {
-            if (context?.User is null)
+            if (context?.User.Identity?.IsAuthenticated != true)
                 return false;
-            var authorizationService = context.RequestServices.GetService<IAuthorizationService>()!;
 
-            var result = await authorizationService.AuthorizeAsync(context.User, CommonConsts.RequireAdministratorRolePolicy);
-            return result.Succeeded;
+            // Verify role on claims, without db reads: keeps the dashboard reachable while a migration locks the db context.
+            var ethernaOidcClient = context.RequestServices.GetRequiredService<IEthernaOpenIdConnectClient>();
+            var roles = await ethernaOidcClient.TryGetRolesAsync();
+
+            return roles?.Contains(CommonConsts.AdministratorRoleName) == true;
         }
     }
 }

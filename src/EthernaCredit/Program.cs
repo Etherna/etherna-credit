@@ -35,6 +35,7 @@ using Etherna.Credit.Services.Tasks;
 using Etherna.Credit.Services.Tasks.Infrastructure.Cron;
 using Etherna.DomainEvents;
 using Etherna.MongODM;
+using Etherna.MongODM.AspNetCore.Extensions;
 using Etherna.MongODM.AspNetCore.UI;
 using Etherna.MongODM.Core.Options;
 using Etherna.Sdk.Internal.AspNetCore;
@@ -415,6 +416,7 @@ namespace Etherna.Credit
 
             services.AddMongODMAdminDashboard(new DashboardOptions
             {
+                AppPath = "/" + CommonConsts.AdminArea,
                 AuthFilters = [new AdminAuthFilter()],
                 BasePath = CommonConsts.DatabaseAdminPath
             });
@@ -479,6 +481,7 @@ namespace Etherna.Credit
                 CommonConsts.HangfireAdminPath,
                 new Hangfire.DashboardOptions
                 {
+                    AppPath = "/" + CommonConsts.AdminArea,
                     Authorization = [new Configs.Hangfire.AdminAuthFilter()]
                 });
 
