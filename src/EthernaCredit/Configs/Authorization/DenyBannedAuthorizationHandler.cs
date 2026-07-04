@@ -34,7 +34,16 @@ namespace Etherna.Credit.Configs.Authorization
 
             if (context.User.Identity?.IsAuthenticated == true)
             {
-                var sharedInfo = await userService.TryFindUserSharedInfoByAddressAsync(await ethernaOidcClient.GetEtherAddressAsync());
+                // Principals without an ether address, like machine principals authenticated with
+                // client credentials tokens missing the claim, have no user account to check: deny.
+                var etherAddress = await ethernaOidcClient.TryGetEtherAddressAsync();
+                if (etherAddress is null)
+                {
+                    context.Fail();
+                    return;
+                }
+
+                var sharedInfo = await userService.TryFindUserSharedInfoByAddressAsync(etherAddress);
                 if (sharedInfo is null)
                 {
                     context.Fail();
