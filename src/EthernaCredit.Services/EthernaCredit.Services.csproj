@@ -21,7 +21,7 @@
     <PackageReference Include="Etherna.Authentication.AspNetCore" Version="0.4.0" />
     <PackageReference Include="Etherna.DomainEvents.AspNetCore" Version="1.5.0" />
     <PackageReference Include="EthernaACR" Version="0.4.0-alpha.66" />
-    <PackageReference Include="EthernaSdk.Internal.AspNetCore" Version="0.4.0-alpha.236" />
+    <PackageReference Include="EthernaSdk.Internal.AspNetCore" Version="0.4.0-alpha.237" />
     <PackageReference Include="MongODM.Hangfire" Version="0.25.0-alpha.63" />
   </ItemGroup>
 
