@@ -13,8 +13,8 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Credit.Domain.Models.UserAgg;
-using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Repositories;
+using Etherna.Scrinium.Core;
+using Etherna.Scrinium.Core.Repositories;
 
 namespace Etherna.Credit.Domain
 {

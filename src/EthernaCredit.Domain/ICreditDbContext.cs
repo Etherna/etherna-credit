@@ -12,10 +12,10 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
-using Etherna.DomainEvents;
 using Etherna.Credit.Domain.Models;
-using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Repositories;
+using Etherna.DomainEvents;
+using Etherna.Scrinium.Core;
+using Etherna.Scrinium.Core.Repositories;
 
 namespace Etherna.Credit.Domain
 {

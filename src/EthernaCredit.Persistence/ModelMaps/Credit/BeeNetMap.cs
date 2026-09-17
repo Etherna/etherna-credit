@@ -14,20 +14,20 @@
 
 using Etherna.Credit.Persistence.Serializers;
 using Etherna.MongoDB.Bson;
-using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Serialization;
+using Etherna.Scrinium.Core;
+using Etherna.Scrinium.Core.Serialization;
 using Etherna.SwarmSdk.Models;
 
 namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
     internal sealed class BeeNetMap : IModelMapsCollector
     {
-        public void Register(IDbContext dbContext)
+        public void Register(IDbContextEngine dbContextEngine)
         {
-            dbContext.MapRegistry.AddCustomSerializerMap<EthAddress>( //v0.4.0
+            dbContextEngine.MapRegistry.AddCustomSerializerMap<EthAddress>( //v0.4.0
                 new EthAddressSerializer());
             
-            dbContext.MapRegistry.AddCustomSerializerMap<XDaiValue>( //v0.4.0
+            dbContextEngine.MapRegistry.AddCustomSerializerMap<XDaiValue>( //v0.4.0
                 new XDaiValueSerializer(BsonType.Decimal128));
         }
     }
