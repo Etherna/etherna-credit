@@ -33,6 +33,6 @@ namespace Etherna.Credit.Domain.Models.OperationLogs
 
         // Properties.
         public override string OperationName => "Admin update";
-        public virtual string Reason { get; protected set; } = default!;
+        public virtual string Reason { get; protected set; } = null!;
     }
 }

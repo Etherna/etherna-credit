@@ -37,7 +37,7 @@ namespace Etherna.Credit.Areas.Manage.Pages
 
         // Properties.
         [BindProperty]
-        public InputModel Input { get; set; } = default!;
+        public InputModel Input { get; set; } = null!;
         [TempData]
         public string? StatusMessage { get; set; }
 

@@ -32,6 +32,6 @@ namespace Etherna.Credit.Domain.Models.UserAgg
 
         // Properties.
         public virtual XDaiValue Credit { get; protected set; }
-        public virtual User User { get; protected set; } = default!;
+        public virtual User User { get; protected set; } = null!;
     }
 }

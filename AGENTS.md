@@ -96,7 +96,7 @@ Bugs and features are tracked in Jira project **EC** (https://etherna.atlassian.
 - One class per file, filename matches class name
 - Namespace mirrors folder structure exactly (under the `Etherna.Credit` root namespace)
 - Block-scoped namespaces: `namespace X { ... }` — NOT file-scoped
-- Using directives inside namespace block, always alphabetically ordered and kept to the minimum necessary
+- Using directives before the namespace block (never inside it), always alphabetically ordered and kept to the minimum necessary
 - No global usings
 
 ## Comments
@@ -168,7 +168,7 @@ These conventions exist for the MongODM persistence layer and apply **only** to 
 - `ArgumentNullException.ThrowIfNull(param)` for parameter validation
 - `is null` / `is not null` patterns
 - `??` and `??=` operators
-- Prefer `null` over `default` as default value for optional parameters
+- Prefer `null` over `default` wherever the type admits it: optional parameter defaults, late-init member initializers (`= null!`, not `= default!`), returns and assignments. Keep `default` only where `null` can't apply: non-nullable value types (e.g. `CancellationToken cancellationToken = default`) and unconstrained generic type parameters.
 
 ## Formatting
 
@@ -185,6 +185,7 @@ These conventions exist for the MongODM persistence layer and apply **only** to 
 - Prefer collection expressions over constructors to initialize any collection: `[]` not `new()`, `["a", "b"]` not `new List<string> { "a", "b" }`. Use a constructor only when a collection expression can't express the intent (e.g. presizing capacity with `new List<T>(capacity)`).
 - Target-typed `new()` when type is clear from context (for non-collection types)
 - Tuple deconstruction for multiple return values (e.g. `IUserService.FindUserAsync` returning `(User, UserSharedInfo)`)
+- Lock fields: prefer the dedicated `System.Threading.Lock` type (.NET 9+) over a plain `object` — more expressive, and the compiler enforces correct `lock` usage on it.
 
 ## LINQ
 

@@ -16,10 +16,10 @@ namespace Etherna.Credit.Services.Settings
 {
     public class SsoServerSettings
     {
-        public string BaseUrl { get; set; } = default!;
-        public string LoginPath { get; set; } = default!;
+        public string BaseUrl { get; set; } = null!;
+        public string LoginPath { get; set; } = null!;
         public string LoginUrl => BaseUrl + LoginPath;
-        public string RegisterPath { get; set; } = default!;
+        public string RegisterPath { get; set; } = null!;
         public string RegisterUrl => BaseUrl + RegisterPath;
     }
 }

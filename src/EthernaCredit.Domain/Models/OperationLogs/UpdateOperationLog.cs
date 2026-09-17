@@ -36,6 +36,6 @@ namespace Etherna.Credit.Domain.Models.OperationLogs
         // Properties.
         public virtual bool IsApplied { get;  protected set; }
         public override string OperationName => "Service update";
-        public virtual string Reason { get; protected set; } = default!;
+        public virtual string Reason { get; protected set; } = null!;
     }
 }
