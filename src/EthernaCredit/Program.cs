@@ -445,23 +445,7 @@ namespace Etherna.Credit
                 app.UseHsts();
             }
 
-            app.UseCors(builder =>
-            {
-                if (env.IsDevelopment())
-                {
-                    builder.SetIsOriginAllowed(_ => true)
-                           .AllowAnyHeader()
-                           .AllowAnyMethod()
-                           .AllowCredentials();
-                }
-                else
-                {
-                    builder.WithOrigins("https://etherna.io")
-                           .AllowAnyHeader()
-                           .AllowAnyMethod()
-                           .AllowCredentials();
-                }
-            });
+            app.UseCors(builder => builder.ConfigureCreditPolicy(config, env));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
