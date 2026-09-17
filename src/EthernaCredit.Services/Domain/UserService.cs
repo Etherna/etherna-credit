@@ -64,9 +64,6 @@ namespace Etherna.Credit.Services.Domain
                         welcomeCredit, userSharedInfo.EtherAddress.ToString(), user);
                     await creditDbContext.OperationLogs.CreateAsync(depositLog);
                 }
-
-                // Get again, because of https://etherna.atlassian.net/browse/MODM-83
-                user = await creditDbContext.Users.FindOneAsync(user.Id);
             }
 
             return (user, userSharedInfo);

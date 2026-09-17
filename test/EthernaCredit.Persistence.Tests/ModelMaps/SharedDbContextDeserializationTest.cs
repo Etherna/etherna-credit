@@ -17,8 +17,8 @@ using Etherna.Credit.Persistence.Helpers;
 using Etherna.MongoDB.Bson.IO;
 using Etherna.MongoDB.Bson.Serialization;
 using Etherna.MongoDB.Driver;
-using Etherna.MongODM.Core.Serialization.Serializers;
-using Etherna.MongODM.Core.Utility;
+using Etherna.Scrinium.Core.Serialization.Serializers;
+using Etherna.Scrinium.Core.Utility;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,6 @@ using Xunit;
 
 namespace Etherna.Credit.Persistence.ModelMaps
 {
-    [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable")]
     public class SharedDbContextDeserializationTest
     {
         // Fields.
@@ -95,7 +94,7 @@ namespace Etherna.Credit.Persistence.ModelMaps
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
-            var modelMapSerializer = new ModelMapSerializer<UserSharedInfo>(dbContext);
+            var modelMapSerializer = new ModelMapSerializer<UserSharedInfo>(dbContext.Engine);
             var deserializationContext = BsonDeserializationContext.CreateRoot(documentReader);
 
             // Action.

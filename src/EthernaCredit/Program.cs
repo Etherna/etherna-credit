@@ -24,8 +24,8 @@ using Etherna.Credit.Areas.Api;
 using Etherna.Credit.Configs;
 using Etherna.Credit.Configs.Authorization;
 using Etherna.Credit.Configs.ModelBinding;
-using Etherna.Credit.Configs.MongODM;
 using Etherna.Credit.Configs.OpenApi;
+using Etherna.Credit.Configs.Scrinium;
 using Etherna.Credit.Domain;
 using Etherna.Credit.Extensions;
 using Etherna.Credit.Persistence;
@@ -34,10 +34,10 @@ using Etherna.Credit.Services.Settings;
 using Etherna.Credit.Services.Tasks;
 using Etherna.Credit.Services.Tasks.Infrastructure.Cron;
 using Etherna.DomainEvents;
-using Etherna.MongODM;
-using Etherna.MongODM.AspNetCore.Extensions;
-using Etherna.MongODM.AspNetCore.UI;
-using Etherna.MongODM.Core.Options;
+using Etherna.Scrinium.AspNetCore.Extensions;
+using Etherna.Scrinium.AspNetCore.UI;
+using Etherna.Scrinium.Core.Options;
+using Etherna.Scrinium.Extensions;
 using Etherna.Sdk.Internal.AspNetCore;
 using Etherna.SwarmSdk.JsonConverters;
 using Hangfire;
@@ -67,7 +67,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using DashboardOptions = Etherna.MongODM.AspNetCore.UI.DashboardOptions;
+using DashboardOptions = Etherna.Scrinium.AspNetCore.UI.DashboardOptions;
 using IPNetwork = System.Net.IPNetwork;
 
 namespace Etherna.Credit
@@ -88,6 +88,12 @@ namespace Etherna.Credit
 
                 // Configs.
                 builder.Host.UseSerilog();
+                builder.Host.UseDefaultServiceProvider(options =>
+                {
+                    // Db contexts are scoped: a singleton capturing one would silently pin its identity map
+                    // for the process lifetime, so validate scopes in every environment.
+                    options.ValidateScopes = true;
+                });
 
                 ConfigureServices(builder);
 
@@ -384,7 +390,10 @@ namespace Etherna.Credit
             services.AddScoped<ICreditApiHandler, CreditApiHandler>();
 
             // Configure persistence.
-            services.AddMongODMWithHangfire(configureHangfireOptions: options =>
+            //open the domain events execution context in each job, like Scrinium does for its own
+            GlobalJobFilters.Filters.Add(new Configs.Hangfire.DomainEventsExecutionContextFilter());
+
+            services.AddScriniumWithHangfire(configureHangfireOptions: options =>
             {
                 options.ConnectionString = config["ConnectionStrings:HangfireDb"] ?? throw new ServiceConfigurationException();
                 options.StorageOptions = new MongoStorageOptions
@@ -395,7 +404,7 @@ namespace Etherna.Credit
                         BackupStrategy = new CollectionMongoBackupStrategy()
                     }
                 };
-            }, configureMongODMOptions: options =>
+            }, configureScriniumOptions: options =>
             {
                 options.DbMaintenanceQueueName = Queues.DB_MAINTENANCE;
             })
@@ -408,14 +417,21 @@ namespace Etherna.Credit
                 options =>
                 {
                     options.ConnectionString = config["ConnectionStrings:CreditDb"] ?? throw new ServiceConfigurationException();
+
+                    //a summary member read without a preload is a defect, not a query
+                    options.ImplicitLazyLoad = ReactionMode.Throw;
                 })
 
                 .AddDbContext<ISharedDbContext, SharedDbContext>(options =>
                 {
                     options.ConnectionString = config["ConnectionStrings:ServiceSharedDb"] ?? throw new ServiceConfigurationException();
+                    options.ImplicitLazyLoad = ReactionMode.Throw;
+
+                    //the SSO owns this database: any write, index or migration from here is denied
+                    options.IsReadOnly = true;
                 });
 
-            services.AddMongODMAdminDashboard(new DashboardOptions
+            services.AddScriniumAdminDashboard(new DashboardOptions
             {
                 AppPath = "/" + CommonConsts.AdminArea,
                 AuthFilters = [new AdminAuthFilter()],

@@ -16,19 +16,19 @@ using Etherna.Credit.Domain.Models;
 using Etherna.MongoDB.Bson;
 using Etherna.MongoDB.Bson.Serialization.IdGenerators;
 using Etherna.MongoDB.Bson.Serialization.Serializers;
-using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Serialization;
+using Etherna.Scrinium.Core;
+using Etherna.Scrinium.Core.Serialization;
 
 namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
     internal sealed class ModelBaseMap : IModelMapsCollector
     {
-        public void Register(IDbContext dbContext)
+        public void Register(IDbContextEngine dbContextEngine)
         {
             // register class maps.
-            dbContext.MapRegistry.AddModelMap<ModelBase>("92a5e4a2-6b0c-46b7-aac7-70380deda7b4");
-            dbContext.MapRegistry.AddModelMap<EntityModelBase>("155af6aa-92d1-4d8b-b000-5b5464f84dc7");
-            dbContext.MapRegistry.AddModelMap<EntityModelBase<string>>("a0fddc7f-b64d-43b0-a40d-389b3fb21b67",
+            dbContextEngine.MapRegistry.AddModelMap<ModelBase>("92a5e4a2-6b0c-46b7-aac7-70380deda7b4");
+            dbContextEngine.MapRegistry.AddModelMap<EntityModelBase>("155af6aa-92d1-4d8b-b000-5b5464f84dc7");
+            dbContextEngine.MapRegistry.AddModelMap<EntityModelBase<string>>("a0fddc7f-b64d-43b0-a40d-389b3fb21b67",
                 mm =>
                 {
                     mm.AutoMap();

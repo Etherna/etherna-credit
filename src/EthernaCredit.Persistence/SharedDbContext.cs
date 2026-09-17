@@ -15,10 +15,9 @@
 using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.Credit.Persistence.Repositories;
-using Etherna.MongoDB.Driver;
-using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Repositories;
-using Etherna.MongODM.Core.Serialization;
+using Etherna.Scrinium.Core;
+using Etherna.Scrinium.Core.Repositories;
+using Etherna.Scrinium.Core.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,18 +32,9 @@ namespace Etherna.Credit.Persistence
 
         // Properties.
         //repositories
-        public IRepository<UserSharedInfo, string> UsersInfo { get; } = new DomainRepository<UserSharedInfo, string>(
-            new RepositoryOptions<UserSharedInfo>("usersInfo")
-            {
-                IndexBuilders = new[]
-                {
-                    (Builders<UserSharedInfo>.IndexKeys.Ascending(u => u.EtherAddress),
-                     new CreateIndexOptions<UserSharedInfo> { Unique = true }),
-
-                    (Builders<UserSharedInfo>.IndexKeys.Ascending(u => u.EtherPreviousAddresses),
-                     new CreateIndexOptions<UserSharedInfo>()),
-                }
-            });
+        //no index builders: the SSO owns the collection and its indexes, this db context is read only
+        public IRepository<UserSharedInfo, string> UsersInfo { get; } =
+            new DomainRepository<UserSharedInfo, string>("usersInfo");
 
         // Protected properties.
         protected override IEnumerable<IModelMapsCollector> ModelMapsCollectors =>

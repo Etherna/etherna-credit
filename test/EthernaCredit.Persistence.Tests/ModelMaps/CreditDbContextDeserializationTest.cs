@@ -20,19 +20,17 @@ using Etherna.DomainEvents;
 using Etherna.MongoDB.Bson.IO;
 using Etherna.MongoDB.Bson.Serialization;
 using Etherna.MongoDB.Driver;
-using Etherna.MongODM.Core.Serialization.Serializers;
-using Etherna.MongODM.Core.Utility;
+using Etherna.Scrinium.Core.Serialization.Serializers;
+using Etherna.Scrinium.Core.Utility;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 
 namespace Etherna.Credit.Persistence.ModelMaps
 {
-    [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable")]
     public class CreditDbContextDeserializationTest
     {
         // Fields.
@@ -309,7 +307,7 @@ namespace Etherna.Credit.Persistence.ModelMaps
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
-            var modelMapSerializer = new ModelMapSerializer<OperationLogBase>(dbContext);
+            var modelMapSerializer = new ModelMapSerializer<OperationLogBase>(dbContext.Engine);
             var deserializationContext = BsonDeserializationContext.CreateRoot(documentReader);
             testElement.SetupAction(mongoDatabaseMock, dbContext);
 
@@ -355,7 +353,7 @@ namespace Etherna.Credit.Persistence.ModelMaps
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
-            var modelMapSerializer = new ModelMapSerializer<UserBalance>(dbContext);
+            var modelMapSerializer = new ModelMapSerializer<UserBalance>(dbContext.Engine);
             var deserializationContext = BsonDeserializationContext.CreateRoot(documentReader);
             testElement.SetupAction(mongoDatabaseMock, dbContext);
         
@@ -379,7 +377,7 @@ namespace Etherna.Credit.Persistence.ModelMaps
 
             // Setup.
             using var documentReader = new JsonReader(testElement.SourceDocument);
-            var modelMapSerializer = new ModelMapSerializer<User>(dbContext);
+            var modelMapSerializer = new ModelMapSerializer<User>(dbContext.Engine);
             var deserializationContext = BsonDeserializationContext.CreateRoot(documentReader);
             testElement.SetupAction(mongoDatabaseMock, dbContext);
         

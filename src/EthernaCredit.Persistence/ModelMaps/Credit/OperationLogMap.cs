@@ -14,29 +14,27 @@
 
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
-using Etherna.Credit.Persistence.Serializers;
-using Etherna.MongoDB.Bson;
-using Etherna.MongODM.Core;
-using Etherna.MongODM.Core.Extensions;
-using Etherna.MongODM.Core.Serialization;
+using Etherna.Scrinium.Core;
+using Etherna.Scrinium.Core.Extensions;
+using Etherna.Scrinium.Core.Serialization;
 
 namespace Etherna.Credit.Persistence.ModelMaps.Credit
 {
     internal sealed class OperationLogMap : IModelMapsCollector
     {
-        public void Register(IDbContext dbContext)
+        public void Register(IDbContextEngine dbContextEngine)
         {
-            dbContext.MapRegistry.AddModelMap<OperationLogBase>("780ae0cc-070a-4099-a4c0-0494304e4093", //dev (pre v0.3.0), published for WAM event
+            dbContextEngine.MapRegistry.AddModelMap<OperationLogBase>("780ae0cc-070a-4099-a4c0-0494304e4093", //dev (pre v0.3.0), published for WAM event
                 mm =>
                 {
                     mm.AutoMap();
 
                     // Set members with custom serializers.
-                    mm.SetMemberSerializer(l => l.User, UserMap.ReferenceSerializer(dbContext));
+                    mm.SetMemberSerializer(l => l.User, UserMap.ReferenceSerializer(dbContextEngine));
                 });
-            dbContext.MapRegistry.AddModelMap<AdminUpdateOperationLog>("3610fd2e-5f43-490b-bcfc-435a970a59cf"); //v0.3.12
-            dbContext.MapRegistry.AddModelMap<DepositOperationLog>("7fc7abe8-9a55-40a2-90ce-f3cba34bc005"); //dev (pre v0.3.0), published for WAM event
-            dbContext.MapRegistry.AddModelMap<UpdateOperationLog>("74e021d4-6d86-4deb-b952-0c328839cfe2",  //dev (pre v0.3.0), published for WAM event
+            dbContextEngine.MapRegistry.AddModelMap<AdminUpdateOperationLog>("3610fd2e-5f43-490b-bcfc-435a970a59cf"); //v0.3.12
+            dbContextEngine.MapRegistry.AddModelMap<DepositOperationLog>("7fc7abe8-9a55-40a2-90ce-f3cba34bc005"); //dev (pre v0.3.0), published for WAM event
+            dbContextEngine.MapRegistry.AddModelMap<UpdateOperationLog>("74e021d4-6d86-4deb-b952-0c328839cfe2",  //dev (pre v0.3.0), published for WAM event
                 mm =>
                 {
                     mm.AutoMap();
@@ -44,8 +42,8 @@ namespace Etherna.Credit.Persistence.ModelMaps.Credit
                     // Set default values.
                     mm.GetMemberMap(l => l.IsApplied).SetDefaultValue(true).SetIgnoreIfDefault(true);
                 });
-            dbContext.MapRegistry.AddModelMap<WelcomeCreditDepositOperationLog>("ba82b71f-1d41-45e2-a56b-d3293ea74c3a"); //v0.3.9
-            dbContext.MapRegistry.AddModelMap<WithdrawOperationLog>("b0ffe059-c985-4f3d-8677-238ab9551ec3"); //dev (pre v0.3.0), published for WAM event
+            dbContextEngine.MapRegistry.AddModelMap<WelcomeCreditDepositOperationLog>("ba82b71f-1d41-45e2-a56b-d3293ea74c3a"); //v0.3.9
+            dbContextEngine.MapRegistry.AddModelMap<WithdrawOperationLog>("b0ffe059-c985-4f3d-8677-238ab9551ec3"); //dev (pre v0.3.0), published for WAM event
         }
     }
 }

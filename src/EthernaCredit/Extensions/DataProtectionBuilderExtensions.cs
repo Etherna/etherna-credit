@@ -13,7 +13,7 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 using Etherna.Credit.Configs.SystemStore;
-using Etherna.MongODM.Core.Options;
+using Etherna.Scrinium.Core.Options;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.DependencyInjection;
