@@ -46,6 +46,10 @@ namespace Etherna.Credit.Areas.Admin.Pages.Users
         [Display(Name = "Previous ethereum addresses")]
         public IEnumerable<EthAddress> EtherPreviousAddresses { get; private set; } = [];
 
+        // Composed from strings: EthAddress converts implicitly from string, so an expression mixing
+        // the two is typed EthAddress and parses its own result as an address.
+        public string EtherPreviousAddressesText => string.Join('\n', EtherPreviousAddresses);
+
         [BindProperty]
         public InputModel Input { get; set; } = null!;
 
