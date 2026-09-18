@@ -2,9 +2,6 @@
 @model Etherna.Credit.Areas.Admin.Pages.Users.UserModel
 @{
     ViewData["Title"] = "User";
-
-    var etherPrevAddressesToString = Model.EtherPreviousAddresses.Any() ?
-        Model.EtherPreviousAddresses.Aggregate((a, b) => a.ToString() + '\n' + b) : "";
 }
 
 <div class="row">
@@ -52,7 +49,7 @@
                         <label asp-for="@Model.EtherPreviousAddresses" class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
                             <textarea type="text" disabled
-                                      asp-for="@etherPrevAddressesToString"
+                                      asp-for="@Model.EtherPreviousAddressesText"
                                       rows="@Math.Max(1, Model.EtherPreviousAddresses.Count())"
                                       class="form-control"></textarea>
                         </div>
