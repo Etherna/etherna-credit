@@ -18,8 +18,8 @@ using Etherna.Credit.Domain;
 using Etherna.Credit.Domain.Models;
 using Etherna.Credit.Domain.Models.OperationLogs;
 using Etherna.Credit.Domain.Models.UserAgg;
+using Etherna.Credit.Persistence.Extensions;
 using Etherna.Credit.Services.Domain;
-using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Etherna.SwarmSdk.Models;
 using Microsoft.AspNetCore.Http;
@@ -118,17 +118,10 @@ namespace Etherna.Credit.Areas.Api
                 }
 
                 // Create or update log.
-                var updatedLog = await dbContext.OperationLogs.AccessToCollectionAsync(collection =>
-                    collection.FindOneAndUpdateAsync(
-                        Builders<OperationLogBase>.Filter.OfType<UpdateOperationLog>(
-                            log => log.Author == clientId &&
-                                   log.CreationDateTime >= DateTime.Now.Date &&
-                                   log.IsApplied == isApplied &&
-                                   log.Reason == reason &&
-                                   log.User.Id == user.Id),
-                        Builders<OperationLogBase>.Update.Inc(log => log.Amount, amount)));
+                var hasUpdatedLog = await dbContext.OperationLogs.TryIncrementSameDayUpdateLogAsync(
+                    amount, clientId, isApplied, reason, user);
 
-                if (updatedLog is null) //if a previous log didn't exist
+                if (!hasUpdatedLog) //if a previous log didn't exist
                 {
                     var withdrawLog = new UpdateOperationLog(amount, clientId, isApplied, reason, user);
                     await dbContext.OperationLogs.CreateAsync(withdrawLog);
