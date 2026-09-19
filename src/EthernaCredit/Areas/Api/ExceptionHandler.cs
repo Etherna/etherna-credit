@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License along with Etherna Credit.
 // If not, see <https://www.gnu.org/licenses/>.
 
+using Etherna.MongoDB.Driver;
 using Etherna.Scrinium.Core.Exceptions;
 using Etherna.SwarmSdk.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -56,6 +57,13 @@ namespace Etherna.Credit.Areas.Api
                     case KeyNotFoundException:
                     case ScriniumEntityNotFoundException:
                         return ErrorResults.GetNotFoundErrorResult();
+
+                    // Error code 409.
+                    // A transaction that lost a write conflict with a concurrent one, after the retries
+                    // of the db context: the request is legitimate and the client can repeat it, so answer
+                    // a conflict instead of a server error.
+                    case MongoException mongoException when mongoException.HasErrorLabel("TransientTransactionError"):
+                        return ErrorResults.GetErrorResult(StatusCodes.Status409Conflict, "Concurrent write conflict, retry the request");
                     
                     // Error code 503.
                     case SwarmSdkApiException:
