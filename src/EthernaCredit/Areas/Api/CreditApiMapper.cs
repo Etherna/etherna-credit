@@ -91,7 +91,8 @@ namespace Etherna.Credit.Areas.Api
                             [FromQuery][Range(1, 1000)] int take = 50) =>
                         handler.GetCurrentUserLogsAsync(page, take))
                 .RequireAuthorization(CommonConsts.UserInteractApiScopePolicy)
-                .Produces<IEnumerable<OperationLogDto>>();
+                .Produces<IEnumerable<OperationLogDto>>()
+                .ProducesValidationProblem();
 #pragma warning restore CS0618 // Type or member is obsolete
         }
     }

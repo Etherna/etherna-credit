@@ -390,8 +390,8 @@ namespace Etherna.Credit
             services.Configure<EmailSettings>(config.GetSection("Email") ?? throw new ServiceConfigurationException());
             services.Configure<SsoServerSettings>(config.GetSection("SsoServer") ?? throw new ServiceConfigurationException());
             
-            // Configure api handler.
-            services.AddScoped<ICreditApiHandler, CreditApiHandler>();
+            // Configure api.
+            services.AddCreditApi();
 
             // Configure persistence.
             //open the domain events execution context in each job, like Scrinium does for its own
