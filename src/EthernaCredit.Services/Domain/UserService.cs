@@ -19,7 +19,7 @@ using Etherna.Credit.Domain.Models.UserAgg;
 using Etherna.MongoDB.Driver;
 using Etherna.MongoDB.Driver.Linq;
 using Etherna.SwarmSdk.Models;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -69,14 +69,9 @@ namespace Etherna.Credit.Services.Domain
             return (user, userSharedInfo);
         }
 
-        public async Task<UserSharedInfo> FindUserSharedInfoByAddressAsync(EthAddress address)
-        {
-            // Find user shared info.
-            return await sharedDbContext.UsersInfo.QueryElementsAsync(elements =>
-                elements.Where(u => u.EtherAddress == address ||                   //case: db and invoker are synced
-                                    u.EtherPreviousAddresses.Contains(address))    //case: db is ahead than invoker
-                        .FirstAsync());
-        }
+        public async Task<UserSharedInfo> FindUserSharedInfoByAddressAsync(EthAddress address) =>
+            await TryFindUserSharedInfoByAddressAsync(address) ??
+            throw new KeyNotFoundException($"User with address {address} not found");
 
         public async Task<XDaiValue> GetUserBalanceAsync(EthAddress address)
         {
@@ -104,8 +99,11 @@ namespace Etherna.Credit.Services.Domain
 
         public async Task<UserSharedInfo?> TryFindUserSharedInfoByAddressAsync(EthAddress address)
         {
-            try { return await FindUserSharedInfoByAddressAsync(address); }
-            catch (InvalidOperationException) { return null; }
+            // Find user shared info.
+            return await sharedDbContext.UsersInfo.QueryElementsAsync(elements =>
+                elements.Where(u => u.EtherAddress == address ||                   //case: db and invoker are synced
+                                    u.EtherPreviousAddresses.Contains(address))    //case: db is ahead than invoker
+                        .FirstOrDefaultAsync());
         }
 
         public async Task<bool> TryIncrementUserBalanceAsync(User user, XDaiValue amount, bool allowBalanceDecreaseNegative)
